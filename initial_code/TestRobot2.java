@@ -2,44 +2,40 @@
  * TestRobot interfaces to the (real or virtual) robot over a network
  * connection. It uses Java -> JSON -> HttpRequest -> Network -> DssHost32 ->
  * Lokarria(Robulab) -> Core -> MRDS4
- * 
+ *
  * @author Thomas Johansson, dept. of Computing Science, Umeå University, Umeå,
- *         Sweden Mail: thomasj@cs.umu.se
- * 
- *         Updated by Ola Ringdahl 2015-03-13, 2015-12-16, 2018-11-23
+ * Sweden Mail: thomasj@cs.umu.se
+ * <p>
+ * Updated by Ola Ringdahl 2015-03-13, 2015-12-16, 2018-11-23
  */
 public class TestRobot2 {
     private RobotCommunication robotcomm; // communication drivers
 
     /**
      * Create a robot connected to host "host" at port "port"
-     * 
-     * @param host
-     *            normally http://127.0.0.1
-     * @param port
-     *            normally 50000
+     *
+     * @param host normally http://127.0.0.1
+     * @param port normally 50000
      */
     public TestRobot2(String host, int port) {
-        robotcomm = new RobotCommunication(host, port);  
+        robotcomm = new RobotCommunication(host, port);
     }
+
     /**
      * This simple main program creates a robot, sets up some speed and turning
      * rate and then displays angle and position for 16 seconds.
-     * 
-     * @param args
-     *             not used
-     * @throws Exception
-     *             not caught
+     *
+     * @param args not used
+     * @throws Exception not caught
      */
     public static void main(String[] args) throws Exception {
-        System.out.println("Creating Robot");        
+        System.out.println("Creating Robot");
         //TestRobot2 robot = new TestRobot2("http://127.0.0.1", 50000);
-        TestRobot2 robot = new TestRobot2("http://bratwurst.cs.umu.se", 50000);            
-        try {            
+        TestRobot2 robot = new TestRobot2("http://bratwurst.cs.umu.se", 50000);
+        try {
             // Check for connection exception
             robot.run();
-        }   
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
             System.exit(-1);
         }
@@ -165,7 +161,7 @@ public class TestRobot2 {
 
     /**
      * Extract the robot bearing from the response
-     * 
+     *
      * @param lr
      * @return angle in degrees
      */
@@ -176,7 +172,7 @@ public class TestRobot2 {
 
     /**
      * Extract the position
-     * 
+     *
      * @param lr
      * @return coordinates
      */
@@ -186,7 +182,7 @@ public class TestRobot2 {
 
     /**
      * Get corresponding angles to each laser beam
-     * 
+     *
      * @param lpr
      * @return laser angles in radians
      */
