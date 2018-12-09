@@ -6,6 +6,7 @@ public class Map {
     public static final double SIZE_OF_CELL_IN_METER = 1.0;
     public static final double DEFAULT_GRID_VALUE = 0.5;
     public static final double MAX_GRID_VALUE = 1;
+    public static final double MAX_VALUE_LASERS = 40.0;
 
     public double[][] grid;
 
@@ -77,7 +78,7 @@ public class Map {
             Position echoInMap = toMapPositionNoLimits(obstacle);
             //Usage of toMapPositionNoLimits car même si la distance de l'echo est en dehors des limites on a 
             //quand même besoin de ces coordonnées pour trouver une ligne entre les 2 points.
-            updateLine(laserInMap, echoInMap, distance);
+            updateLine(laserInMap, echoInMap, distance < this.MAX_VALUE_LASERS);
         }
     }
 
@@ -86,7 +87,7 @@ public class Map {
                 laserPosition.getY() + (distance * Math.cos(angle)));
     }
 
-    private void updateLine(Position laserInMap, Position echoInMap, double distance) {
+    private void updateLine(Position laserInMap, Position echoInMap, boolean thereIsAnObstacle) {
         //Bresenham's line algorithm
         //
         //if distance >= 40 -> Pas d'obstacle, toute la ligne passe à 0
@@ -100,7 +101,7 @@ public class Map {
         int y = (int)laserInMap.getY();
         for (int x = (int)laserInMap.getX(); x < (int)echoInMap.getX() x++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                if (distance < 40 && x == (int)echoInMap.getX() && y == (int)echoInMap.getY()) {
+                if (thereIsAnObstacle && x == (int)echoInMap.getX() && y == (int)echoInMap.getY()) {
                     this.grid[x][y] = 1.0;
                 } else {
                     this.grid[x][y] = 0.0;
