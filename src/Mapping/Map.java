@@ -47,4 +47,12 @@ public class Map {
 
         return mapPos;
     }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
 }

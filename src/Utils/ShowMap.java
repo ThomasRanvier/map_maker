@@ -102,12 +102,12 @@ public class ShowMap extends JPanel {
      * @param robotCol is the current x-position (column) of the robot translated to
      *                 column in the grid.
      */
-    public synchronized void updateMap(float[][] grid, int robotRow,
+    public synchronized void updateMap(double[][] grid, int robotRow,
                                        int robotCol) {
         Color c;
         for (int col = 0; col < grid.length; col++) {
             for (int row = 0; row < grid[0].length; row++) {
-                float value = grid[col][row];
+                double value = grid[col][row];
                 // if value is <0 draw a gray pixel
                 // else mapping the value between 0.0 - 1.0 where 0.0 is black
                 // and 1.0 is white
