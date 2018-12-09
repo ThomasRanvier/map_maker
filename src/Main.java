@@ -16,14 +16,15 @@ class Main{
             System.out.println("Robot position on map: x: " + robotPositionInMap.getX() + ", y:" + robotPositionInMap.getY());
             System.out.println("Robot angle: " + robotAngle);
 
-            showmap.updateMap(map.getGrid(), robotYMap, robotXMap);
-
             robot.updateLasers();
             Position laserPosition robot.getLaserPosition();
             System.out.println("Lasers position: x: " + robotPosition.getX() + ", y:" + robotPosition.getY());
             double[] laserEchoes = robot.getLaserEchoes();
             double[] laserAngles = robot.getLaserAngles();
             System.out.println("Object at " + laserEchoes[56] + "m in " + laserAngles[56] * 180.0 / Math.PI + " degrees");
+            map.updateMap(laserPosition, laserEchoes, laserAngles)
+
+            showmap.updateMap(map.getGrid(), (int)robotPositionInMap.getY(), (int)robotPositionInMap.getX());
         }
     }
 }
