@@ -48,7 +48,7 @@ public class Map {
 
         return mapPos;
     }
-    
+
     public Position toMapPositionNoLimits (Position real_world_pos) {
         Position mapPos = real_world_pos.clone();
 
@@ -71,19 +71,19 @@ public class Map {
 
     public void updateMap(Position laserPosition, double[] laserEchoes, double[] laserAngles) {
         Position laserInMap = toMapPosition(laserPosition);
-        for (int i = 0; i < length(laserEchoes); i++) {
+        for (int i = 0; i < laserEchoes.length; i++) {
             double distance = laserEchoes[i];
             double angle = laserAngles[i];
             Position echo = getEchoPosition(laserPosition, distance, angle);
-            Position echoInMap = toMapPositionNoLimits(obstacle);
-            //Usage of toMapPositionNoLimits car même si la distance de l'echo est en dehors des limites on a 
+            Position echoInMap = toMapPositionNoLimits(echo);
+            //Usage of toMapPositionNoLimits car même si la distance de l'echo est en dehors des limites on a
             //quand même besoin de ces coordonnées pour trouver une ligne entre les 2 points.
             updateLine(laserInMap, echoInMap, distance < this.MAX_VALUE_LASERS);
         }
     }
 
     private Position getEchoPosition(Position laserPosition, double distance, double angle) {
-        return new Position(laserPosition.getX() + (distance * Math.sin(angle)), 
+        return new Position(laserPosition.getX() + (distance * Math.sin(angle)),
                 laserPosition.getY() + (distance * Math.cos(angle)));
     }
 
@@ -92,14 +92,14 @@ public class Map {
         //
         //if distance >= 40 -> Pas d'obstacle, toute la ligne passe à 0
         //if cell to update is not in boundaries stop the update
-        //if cell to update == echoInMap && cell to update -> 
+        //if cell to update == echoInMap && cell to update ->
         //if distance < 40 -> Il y a un obstacle
         //
         int dx = (int)echoInMap.getX() - (int)laserInMap.getX();
         int dy = (int)echoInMap.getY() - (int)laserInMap.getY();
         int D = 2 * dy - dx;
         int y = (int)laserInMap.getY();
-        for (int x = (int)laserInMap.getX(); x < (int)echoInMap.getX() x++) {
+        for (int x = (int)laserInMap.getX(); x < (int)echoInMap.getX(); x++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
                 if (thereIsAnObstacle && x == (int)echoInMap.getX() && y == (int)echoInMap.getY()) {
                     this.grid[x][y] = 1.0;

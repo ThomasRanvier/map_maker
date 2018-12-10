@@ -1,3 +1,6 @@
+import Communications.*;
+import Utils.Position;
+
 public class Robot {
     private RobotCommunication robotcomm; // communication drivers
     private LocalizationResponse lr;
@@ -24,12 +27,20 @@ public class Robot {
         dr.setAngularSpeed(angularSpeed);
         dr.setLinearSpeed(linearSpeed);
         System.out.println("Start to move robot");
-        int rc = robotcomm.putRequest(dr);
-        System.out.println("Response code " + rc);
+        try {
+            int rc = robotcomm.putRequest(dr);
+            System.out.println("Response code " + rc);
+        } catch (Exception e) {
+            System.err.println("Can't put request");
+        }
     }
 
-    public void udpateLocalization() {
-        robotcomm.getResponse(lr);
+    public void updateLocalization() {
+        try {
+            robotcomm.getResponse(lr);
+        } catch (Exception e) {
+            System.err.println("Can't update Localization");
+        }
     }
 
     /**
@@ -51,9 +62,13 @@ public class Robot {
         return lr.getPosition();
     }
 
-    public void udpateLasers() {
-        robotcomm.getResponse(ler);
-        robotcomm.getResponse(lpr);
+    public void updateLasers() {
+        try {
+            robotcomm.getResponse(ler);
+            robotcomm.getResponse(lpr);
+        } catch (Exception e) {
+            System.err.println("Can't update Lasers");
+        }
     }
 
     public double[] getLaserEchoes() {
@@ -75,9 +90,9 @@ public class Robot {
         double a = lr.getHeadingAngle() + lpr.getStartAngle();
         for (int i = 0; i < beamCount; i++) {
             if (a < -Math.PI)
-                a += 2 * Math.PI
+                a += 2 * Math.PI;
             if (a > Math.PI)
-                a -= 2 * Math.PI
+                a -= 2 * Math.PI;
             angles[i] = a;
             a += 1 * Math.PI / 180;
         }
