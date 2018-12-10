@@ -112,11 +112,11 @@ public class Map {
 
         for (int x = pos0.getXInt(); x != pos1.getXInt() + x_iterator; x+=x_iterator) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
-                    this.grid[x][y] = MAX_GRID_VALUE;
-                } else {
+                //if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
+                //    this.grid[x][y] = MAX_GRID_VALUE;
+                //} else {
                     this.grid[x][y] = 0.0;
-                }
+                //}
             } else {
                 break;
             }
@@ -138,11 +138,11 @@ public class Map {
 
         for (int y = pos0.getYInt(); x != pos1.getYInt() + y_iterator; y+=y_iterator) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
-                    this.grid[x][y] = MAX_GRID_VALUE;
-                } else {
+                //if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
+                //    this.grid[x][y] = MAX_GRID_VALUE;
+                //} else {
                     this.grid[x][y] = 0.0;
-                }
+                //}
             } else {
                 break;
             }
