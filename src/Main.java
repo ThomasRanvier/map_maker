@@ -35,13 +35,12 @@ class Main{
 
             robot.updateLasers();
             Position laserPosition = robot.getLaserPosition();
-            System.out.println("Lasers position: x: " + robotPosition.getX() + ", y:" + robotPosition.getY());
             double[] laserEchoes = robot.getLaserEchoes();
             double[] laserAngles = robot.getLaserAngles();
             System.out.println("Object at " + laserEchoes[56] + "m in " + laserAngles[56] * 180.0 / Math.PI + " degrees");
-            map.updateMap(laserPosition, laserEchoes, laserAngles);
+            map.updateMap(robotPosition, laserEchoes, laserAngles);
 
-            showmap.updateMap(map.grid, (int) robotPositionInMap.getY(), (int) robotPositionInMap.getX());
+            showmap.updateMap(map.grid, robotPositionInMap.getYInt(), robotPositionInMap.getXInt());
         }
     }
 }
