@@ -67,4 +67,13 @@ public class Position {
     public Position clone() {
         return new Position(this.getX(), this.getY(), this.getZ());
     }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
 }
