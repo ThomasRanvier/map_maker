@@ -110,7 +110,9 @@ public class Map {
                 this.updateLineHigh(pos0, pos1, thereIsAnObstacle);
         }
         if (thereIsAnObstacle && pos1.getXInt() >= 0 && pos1.getYInt() >= 0 && pos1.getXInt() < this.width && pos1.getYInt() < this.height) {
-            this.grid[pos1.getXInt()][pos1.getYInt()] = MAX_GRID_VALUE;
+            this.grid[pos1.getXInt()][pos1.getYInt()] += 0.01;
+            if (this.grid[pos1.getXInt()][pos1.getYInt()] > MAX_GRID_VALUE)
+                this.grid[pos1.getXInt()][pos1.getYInt()] = MAX_GRID_VALUE;
         }
     }
 
