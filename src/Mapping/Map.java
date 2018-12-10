@@ -150,7 +150,7 @@ public class Map {
         int D = 2 * dx - dy;
         int x = pos0.getXInt();
 
-        for (int y = pos0.getYInt(); x <= pos1.getYInt(); y++) {
+        for (int y = pos0.getYInt(); y <= pos1.getYInt(); y++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
                 if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
                     this.grid[x][y] = MAX_GRID_VALUE;
