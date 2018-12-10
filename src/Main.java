@@ -22,9 +22,9 @@ class Main{
         Map map = new Map(new Position(x_lower_left, y_lower_left), new Position(x_upper_right, y_upper_right));
         ShowMap showmap = new ShowMap(map.getHeight(), map.getWidth(), show_gui);
 
-        //robot.move(Math.PI * 0.2, 0.3);
+        robot.move(Math.PI * 0.2, 0.3);
 
-        //while (true) {
+        while (true) {
             robot.updateLocalization();
             Position robotPosition = robot.getRobotPosition();
             Position robotPositionInMap = map.toMapPosition(robotPosition);
@@ -41,7 +41,7 @@ class Main{
             System.out.println("Object at " + laserEchoes[56] + "m in " + laserAngles[56] * 180.0 / Math.PI + " degrees");
             map.updateMap(laserPosition, laserEchoes, laserAngles);
 
-            showmap.updateMap(map.grid, (int)robotPositionInMap.getY(), (int)robotPositionInMap.getX());
-        //}
+            showmap.updateMap(map.grid, (int) robotPositionInMap.getY(), (int) robotPositionInMap.getX());
+        }
     }
 }
