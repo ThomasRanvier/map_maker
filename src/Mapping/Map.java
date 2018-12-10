@@ -77,6 +77,7 @@ public class Map {
             double distance = laserEchoes[i];
             double angle = laserAngles[i];
             Position echo = getEchoPosition(laserPosition, distance, angle);
+            System.out.println("Robot=" + laserPosition + " - Echo=" + echo);
             Position echoInMap = toMapPositionNoLimits(echo);
             //Usage of toMapPositionNoLimits car même si la distance de l'echo est en dehors des limites on a
             //quand même besoin de ces coordonnées pour trouver une ligne entre les 2 points.
