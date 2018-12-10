@@ -99,7 +99,7 @@ public class Map {
         int dy = (int)echoInMap.getY() - (int)laserInMap.getY();
         int D = 2 * dy - dx;
         int y = (int)laserInMap.getY();
-        for (int x = (int)laserInMap.getX(); x < (int)echoInMap.getX(); x++) {
+        for (int x = (int)laserInMap.getX(); x <= (int)echoInMap.getX(); x++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
                 if (thereIsAnObstacle && x == (int)echoInMap.getX() && y == (int)echoInMap.getY()) {
                     this.grid[x][y] = MAX_GRID_VALUE;
