@@ -3,7 +3,9 @@ import Utils.Position;
 import Utils.ShowMap;
 
 class Main{
-    public static void main(String[] args) {
+    public static final int SLEEP_TIME = 50;
+
+    public static void main(String[] args) throws InterruptedException {
         String host = args[0];
         int port = Integer.parseInt(args[1]);
         int x_lower_left = -10, y_lower_left = -10, x_upper_right = 10, y_upper_right = 10;
@@ -37,10 +39,10 @@ class Main{
             Position laserPosition = robot.getLaserPosition();
             double[] laserEchoes = robot.getLaserEchoes();
             double[] laserAngles = robot.getLaserAngles();
-            System.out.println("Object at " + laserEchoes[56] + "m in " + laserAngles[56] * 180.0 / Math.PI + " degrees");
             map.updateMap(robotPosition, laserEchoes, laserAngles);
 
             showmap.updateMap(map.grid, robotPositionInMap.getYInt(), robotPositionInMap.getXInt());
+            Thread.sleep(SLEEP_TIME);
         }
     }
 }

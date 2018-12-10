@@ -95,7 +95,6 @@ public class RobotCommunication {
      */
     public Response getResponse(Response r) throws Exception {
         URL url = new URL(this.host + ":" + this.port + r.getPath());
-        System.out.println(url + " (this annoying message comes from RobotCommunication)");
 
         // open a connection to the web server and then get the resulting data
         URLConnection connection = url.openConnection();
