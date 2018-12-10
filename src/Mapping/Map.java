@@ -95,6 +95,7 @@ public class Map {
         //if cell to update == echoInMap && cell to update ->
         //if distance < 40 -> Il y a un obstacle
         //
+        System.out.println("Pos0 : " + pos0 + ", pos1 : " + pos1);
         if (Math.abs(pos1.getYInt() - pos0.getYInt()) < Math.abs(pos1.getXInt() - pos0.getXInt())) {
             this.updateLineLow(pos0, pos1, thereIsAnObstacle);
         } else {
