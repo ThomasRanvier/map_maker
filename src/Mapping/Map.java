@@ -76,7 +76,6 @@ public class Map {
             double angle = laserAngles[i];
             Position echo = getEchoPosition(laserPosition, distance, angle);
             Position echoInMap = toMapPositionNoLimits(echo);
-            System.out.println("LaserInMap : " + laserInMap + " - Distance : " + distance + " - Angle : " + angle + " - Echo : " + echo + " - echoInMap" + echoInMap);
             //Usage of toMapPositionNoLimits car même si la distance de l'echo est en dehors des limites on a
             //quand même besoin de ces coordonnées pour trouver une ligne entre les 2 points.
             updateLine(laserInMap, echoInMap, distance < MAX_VALUE_LASERS);
@@ -100,7 +99,10 @@ public class Map {
         int dy = (int)echoInMap.getY() - (int)laserInMap.getY();
         int D = 2 * dy - dx;
         int y = (int)laserInMap.getY();
-        for (int x = (int)laserInMap.getX(); x <= (int)echoInMap.getX(); x++) {
+        int x = laserInMap.getXInt();
+        int iterator = (laserInMap.getXInt() > echoInMap.getXInt())?-1:1;
+
+        while (x != echoInMap.getXInt()) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
                 if (thereIsAnObstacle && x == (int)echoInMap.getX() && y == (int)echoInMap.getY()) {
                     this.grid[x][y] = MAX_GRID_VALUE;
@@ -115,6 +117,8 @@ public class Map {
                 D -= 2 * dx;
             }
             D += 2 * dy;
+
+            x+=iterator;
         }
     }
 }
