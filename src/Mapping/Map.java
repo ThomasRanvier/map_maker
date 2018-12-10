@@ -42,11 +42,11 @@ public class Map {
             throw new IllegalArgumentException("The coordinate of the input position is not in the limit of the Map");
         }
 
-        double x = (real_world_pos.getX() - this.pos_lower_left.getX()) / SIZE_OF_CELL_IN_METER - 1;
+        double x = (this.pos_lower_left.getX() - real_world_pos.getX()) / SIZE_OF_CELL_IN_METER - 1;
         double y = (this.pos_upper_right.getY() - real_world_pos.getY()) / SIZE_OF_CELL_IN_METER - 1;
 
-        mapPos.setY((x < 0.0)?0.0:Math.floor(x));
-        mapPos.setX((y < 0.0)?0.0:Math.floor(y));
+        mapPos.setX((x < 0.0)?0.0:Math.floor(x));
+        mapPos.setY((y < 0.0)?0.0:Math.floor(y));
 
         return mapPos;
     }
@@ -54,11 +54,11 @@ public class Map {
     public Position toMapPositionNoLimits (Position real_world_pos) {
         Position mapPos = real_world_pos.clone();
 
-        double x = (real_world_pos.getX() - this.pos_lower_left.getX()) / SIZE_OF_CELL_IN_METER - 1;
+        double x = (this.pos_lower_left.getX() - real_world_pos.getX()) / SIZE_OF_CELL_IN_METER - 1;
         double y = (this.pos_upper_right.getY() - real_world_pos.getY()) / SIZE_OF_CELL_IN_METER - 1;
 
-        mapPos.setY((x < 0.0)?0.0:Math.floor(x));
-        mapPos.setX((y < 0.0)?0.0:Math.floor(y));
+        mapPos.setX((x < 0.0)?0.0:Math.floor(x));
+        mapPos.setY((y < 0.0)?0.0:Math.floor(y));
 
         return mapPos;
     }
