@@ -5,7 +5,7 @@ import Utils.Position;
 import java.util.Arrays;
 
 public class Map {
-    public static final double SIZE_OF_CELL_IN_METER = 0.5;
+    public static final double SIZE_OF_CELL_IN_METER = 1;
     public static final double DEFAULT_GRID_VALUE = 0.5;
     public static final double MAX_GRID_VALUE = 1;
     public static final double MAX_VALUE_LASERS = 40.0;
