@@ -24,7 +24,7 @@ class Main{
 
         //robot.move(Math.PI * 0.1, 0.3);
 
-        //while (true) {
+        while (true) {
             robot.updateLocalization();
             Position robotPosition = robot.getRobotPosition();
             Position robotPositionInMap = map.toMapPosition(robotPosition);
@@ -41,6 +41,6 @@ class Main{
             map.updateMap(robotPosition, laserEchoes, laserAngles);
 
             showmap.updateMap(map.grid, robotPositionInMap.getYInt(), robotPositionInMap.getXInt());
-        //}
+        }
     }
 }
