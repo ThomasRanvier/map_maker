@@ -22,7 +22,7 @@ class Main{
         Map map = new Map(new Position(x_lower_left, y_lower_left), new Position(x_upper_right, y_upper_right));
         ShowMap showmap = new ShowMap(map.getHeight(), map.getWidth(), show_gui);
 
-        robot.move(Math.PI * 0.1, 0.3);
+        //robot.move(Math.PI * 0.1, 0.3);
 
         while (true) {
             robot.updateLocalization();
