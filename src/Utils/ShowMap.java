@@ -124,7 +124,7 @@ public class ShowMap extends JPanel {
         // 6x6
         Graphics g = map.getGraphics();
         g.setColor(Color.RED);
-        g.fillRect((int) robotRow - robotSize / 2, (int) robotCol - robotSize
+        g.fillRect((int) robotCol - robotSize / 2, (int) robotRow - robotSize
                 / 2, robotSize, robotSize);
         // update the gui
         this.updateUI();
