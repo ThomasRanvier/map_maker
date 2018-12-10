@@ -121,13 +121,9 @@ public class Map {
         int D = 2 * dy - dx;
         int y = pos0.getYInt();
 
-        for (int x = pos0.getXInt(); x <= pos1.getXInt(); x++) {
+        for (int x = pos0.getXInt(); x < pos1.getXInt(); x++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
-                    this.grid[x][y] = MAX_GRID_VALUE;
-                } else {
-                    this.grid[x][y] = 0.0;
-                }
+                this.grid[x][y] = 0.0;
             } else {
                 break;
             }
@@ -136,6 +132,9 @@ public class Map {
                 D -= 2 * dx;
             }
             D += 2 * dy;
+        }
+        if (thereIsAnObstacle && pos1.getXInt() >= 0 && pos1.getYInt() >= 0 && pos1.getXInt() < this.width && pos1.getYInt() < this.height) {
+            this.grid[pos1.getXInt()][pos1.getYInt()] = MAX_GRID_VALUE;
         }
     }
 
@@ -150,21 +149,21 @@ public class Map {
         int D = 2 * dx - dy;
         int x = pos0.getXInt();
 
-        for (int y = pos0.getYInt(); y <= pos1.getYInt(); y++) {
+        for (int y = pos0.getYInt(); y < pos1.getYInt(); y++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
-                    this.grid[x][y] = MAX_GRID_VALUE;
-                } else {
-                    this.grid[x][y] = 0.0;
-                }
+                this.grid[x][y] = 0.0;
             } else {
-                break;
+                return;
             }
             if (D > 0) {
                 x+=x_iterator;
                 D -= 2 * dy;
             }
             D += 2 * dx;
+        }
+
+        if (thereIsAnObstacle && pos1.getXInt() >= 0 && pos1.getYInt() >= 0 && pos1.getXInt() < this.width && pos1.getYInt() < this.height) {
+            this.grid[pos1.getXInt()][pos1.getYInt()] = MAX_GRID_VALUE;
         }
     }
 
