@@ -95,16 +95,17 @@ public class Map {
         //if cell to update == echoInMap && cell to update ->
         //if distance < 40 -> Il y a un obstacle
         //
-        int dx = (int)echoInMap.getX() - (int)laserInMap.getX();
-        int dy = (int)echoInMap.getY() - (int)laserInMap.getY();
+        int dx = echoInMap.getXInt() - laserInMap.getXInt();
+        int dy = echoInMap.getYInt() - laserInMap.getYInt();
         int D = 2 * dy - dx;
-        int y = (int)laserInMap.getY();
+        int y = laserInMap.getYInt();
         int x = laserInMap.getXInt();
-        int iterator = (laserInMap.getXInt() > echoInMap.getXInt())?-1:1;
+        int x_iterator = (laserInMap.getXInt() > echoInMap.getXInt())?-1:1;
+        int y_iterator = (laserInMap.getYInt() > echoInMap.getYInt())?-1:1;
 
-        while (x != echoInMap.getXInt()) {
+        while (x != echoInMap.getXInt() + x_iterator) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                if (thereIsAnObstacle && x == (int)echoInMap.getX() && y == (int)echoInMap.getY()) {
+                if (thereIsAnObstacle && x == echoInMap.getXInt() && y == echoInMap.getYInt()) {
                     this.grid[x][y] = MAX_GRID_VALUE;
                 } else {
                     this.grid[x][y] = 0.0;
@@ -113,12 +114,12 @@ public class Map {
                 break;
             }
             if (D > 0) {
-                y++;
+                y+=y_iterator;
                 D -= 2 * dx;
             }
             D += 2 * dy;
 
-            x+=iterator;
+            x+=x_iterator;
         }
     }
 }
