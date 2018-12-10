@@ -2,6 +2,8 @@ package Mapping;
 
 import Utils.Position;
 
+import java.util.Arrays;
+
 public class Map {
     public static final double SIZE_OF_CELL_IN_METER = 0.5;
     public static final double DEFAULT_GRID_VALUE = 0.5;
@@ -87,7 +89,7 @@ public class Map {
                 laserPosition.getY() + (distance * Math.cos(angle)));
     }
 
-    private void updateLine(Position pos0, Position pos1, boolean thereIsAnObstacle) {
+    public void updateLine(Position pos0, Position pos1, boolean thereIsAnObstacle) {
         //Bresenham's line algorithm
         //
         //if distance >= 40 -> Pas d'obstacle, toute la ligne passe à 0
@@ -104,13 +106,16 @@ public class Map {
 
     private void updateLineLow(Position pos0, Position pos1, boolean thereIsAnObstacle) {
         int dx = pos1.getXInt() - pos0.getXInt();
-        int dy = Math.abs(pos1.getYInt() - pos0.getYInt());
+        int dy = pos1.getYInt() - pos0.getYInt();
+        int y_iterator = 1;
+        if (dy < 0) {
+            y_iterator = -1;
+            dy = -dy;
+        }
         int D = 2 * dy - dx;
         int y = pos0.getYInt();
-        int x_iterator = (pos1.getXInt() > pos0.getYInt())?-1:1;
-        int y_iterator = (pos0.getYInt() > pos1.getYInt())?-1:1;
 
-        for (int x = pos0.getXInt(); x != pos1.getXInt() + x_iterator; x+=x_iterator) {
+        for (int x = pos0.getXInt(); x <= pos1.getXInt(); x++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
                 if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
                     this.grid[x][y] = MAX_GRID_VALUE;
@@ -152,5 +157,17 @@ public class Map {
             }
             D += 2 * dx;
         }
+    }
+
+    @Override
+    public String toString() {
+        String output = "";
+        for (int i = 0; i < this.grid.length; i++) {
+            for (int j = 0; j < this.grid[i].length; j++) {
+                output += this.grid[i][j] + "\t";
+            }
+            output += "\n";
+        }
+        return output;
     }
 }

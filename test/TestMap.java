@@ -52,7 +52,20 @@ public class TestMap {
         assertDoesNotThrow(() -> map.toMapPosition(new Position(-2, 2)));
         assertDoesNotThrow(() -> map.toMapPosition(new Position(2, -2)));
         assertDoesNotThrow(() -> map.toMapPosition(new Position(2, 2)));
+    }
 
-
+    @Test
+    void updateMap() {
+        Map map = new Map(new Position(-2, -2), new Position(2, 2));
+        Position depart = map.toMapPosition(new Position(-2, 2));
+        Position arrive = map.toMapPosition(new Position(2, -2));
+        System.out.println(depart);
+        System.out.println(arrive);
+        map.updateLine(depart, arrive, true);
+        System.out.println(map);
+        for (int i = 0; i < map.grid.length - 1; i++) {
+            assertEquals(0.0, map.grid[i][i]);
+        }
+        assertEquals(Map.MAX_GRID_VALUE, map.grid[map.grid.length - 1][map.grid.length - 1]);
     }
 }
