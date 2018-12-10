@@ -78,7 +78,7 @@ public class Map {
             Position echoInMap = toMapPositionNoLimits(echo);
             //Usage of toMapPositionNoLimits car même si la distance de l'echo est en dehors des limites on a
             //quand même besoin de ces coordonnées pour trouver une ligne entre les 2 points.
-            updateLine(laserInMap, echoInMap, distance < this.MAX_VALUE_LASERS);
+            updateLine(laserInMap, echoInMap, distance < MAX_VALUE_LASERS);
         }
     }
 
@@ -99,10 +99,10 @@ public class Map {
         int dy = (int)echoInMap.getY() - (int)laserInMap.getY();
         int D = 2 * dy - dx;
         int y = (int)laserInMap.getY();
-        for (int x = (int)laserInMap.getX(); x < (int)echoInMap.getX(); x++) {
+        for (int x = (int)laserInMap.getX(); x <= (int)echoInMap.getX(); x++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
                 if (thereIsAnObstacle && x == (int)echoInMap.getX() && y == (int)echoInMap.getY()) {
-                    this.grid[x][y] = 1.0;
+                    this.grid[x][y] = MAX_GRID_VALUE;
                 } else {
                     this.grid[x][y] = 0.0;
                 }
