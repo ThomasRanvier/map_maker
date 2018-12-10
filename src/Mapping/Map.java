@@ -85,8 +85,8 @@ public class Map {
     }
 
     private Position getEchoPosition(Position laserPosition, double distance, double angle) {
-        return new Position(laserPosition.getX() + (distance * Math.sin(angle)),
-                laserPosition.getY() + (distance * Math.cos(angle)));
+        return new Position(laserPosition.getX() + (distance * Math.cos(angle)),
+                laserPosition.getY() + (distance * Math.sin(angle)));
     }
 
     public void updateLine(Position pos0, Position pos1, boolean thereIsAnObstacle) {
