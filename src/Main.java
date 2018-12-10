@@ -27,7 +27,7 @@ class Main{
         //robot.move(Math.PI * 0.1, 0.3);
 
         while (true) {
-            robot.updateLocalization();
+            robot.updateInformations();
             Position robotPosition = robot.getRobotPosition();
             Position robotPositionInMap = map.toMapPosition(robotPosition);
             double robotAngle = robot.getBearingAngle();
@@ -35,7 +35,6 @@ class Main{
             System.out.println("Robot position on map: x: " + robotPositionInMap.getX() + ", y:" + robotPositionInMap.getY());
             System.out.println("Robot angle: " + robotAngle);
 
-            robot.updateLasers();
             Position laserPosition = robot.getLaserPosition();
             double[] laserEchoes = robot.getLaserEchoes();
             double[] laserAngles = robot.getLaserAngles();

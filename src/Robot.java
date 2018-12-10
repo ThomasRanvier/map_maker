@@ -33,11 +33,13 @@ public class Robot {
         }
     }
 
-    public void updateLocalization() {
+    public void updateInformations() {
         try {
             robotcomm.getResponse(lr);
+            robotcomm.getResponse(ler);
+            robotcomm.getResponse(lpr);
         } catch (Exception e) {
-            System.err.println("Can't update Localization");
+            System.err.println("Can't update robot informations");
         }
     }
 
@@ -58,15 +60,6 @@ public class Robot {
      */
     public Position getRobotPosition() {
         return lr.getPosition();
-    }
-
-    public void updateLasers() {
-        try {
-            robotcomm.getResponse(ler);
-            robotcomm.getResponse(lpr);
-        } catch (Exception e) {
-            System.err.println("Can't update Lasers");
-        }
     }
 
     public double[] getLaserEchoes() {
