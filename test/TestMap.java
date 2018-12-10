@@ -55,17 +55,28 @@ public class TestMap {
     }
 
     @Test
-    void updateMap() {
+    void updateMapLow() {
         Map map = new Map(new Position(-2, -2), new Position(2, 2));
         Position depart = map.toMapPosition(new Position(-2, 2));
         Position arrive = map.toMapPosition(new Position(2, -2));
-        System.out.println(depart);
-        System.out.println(arrive);
         map.updateLine(depart, arrive, true);
         System.out.println(map);
         for (int i = 0; i < map.grid.length - 1; i++) {
             assertEquals(0.0, map.grid[i][i]);
         }
         assertEquals(Map.MAX_GRID_VALUE, map.grid[map.grid.length - 1][map.grid.length - 1]);
+    }
+
+    @Test
+    void updateMapHigh() {
+        Map map = new Map(new Position(-2, -2), new Position(2, 2));
+        Position depart = map.toMapPosition(new Position(2, -2));
+        Position arrive = map.toMapPosition(new Position(-2, 2));
+        map.updateLine(depart, arrive, true);
+        System.out.println(map);
+        for (int i = 1; i < map.grid.length; i++) {
+            assertEquals(0.0, map.grid[i][i]);
+        }
+        assertEquals(Map.MAX_GRID_VALUE, map.grid[0][0]);
     }
 }
