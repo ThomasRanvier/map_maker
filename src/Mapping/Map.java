@@ -97,11 +97,16 @@ public class Map {
         //if cell to update == echoInMap && cell to update ->
         //if distance < 40 -> Il y a un obstacle
         //
-        System.out.println("Pos0 : " + pos0 + ", pos1 : " + pos1);
         if (Math.abs(pos1.getYInt() - pos0.getYInt()) < Math.abs(pos1.getXInt() - pos0.getXInt())) {
-            this.updateLineLow(pos0, pos1, thereIsAnObstacle);
+            if (pos0.getXInt() > pos1.getXInt())
+                this.updateLineLow(pos1, pos0, thereIsAnObstacle);
+            else
+                this.updateLineLow(pos0, pos1, thereIsAnObstacle);
         } else {
-            this.updateLineHigh(pos0, pos1, thereIsAnObstacle);
+            if (pos0.getYInt() > pos1.getYInt())
+                this.updateLineHigh(pos1, pos0, thereIsAnObstacle);
+            else
+                this.updateLineHigh(pos0, pos1, thereIsAnObstacle);
         }
     }
 
@@ -118,11 +123,11 @@ public class Map {
 
         for (int x = pos0.getXInt(); x <= pos1.getXInt(); x++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                //if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
-                //    this.grid[x][y] = MAX_GRID_VALUE;
-                //} else {
+                if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
+                    this.grid[x][y] = MAX_GRID_VALUE;
+                } else {
                     this.grid[x][y] = 0.0;
-                //}
+                }
             } else {
                 break;
             }
@@ -135,20 +140,23 @@ public class Map {
     }
 
     private void updateLineHigh(Position pos0, Position pos1, boolean thereIsAnObstacle) {
-        int dx = Math.abs(pos1.getXInt() - pos0.getXInt());
+        int dx = pos1.getXInt() - pos0.getXInt();
         int dy = pos1.getYInt() - pos0.getYInt();
-        int D = 2 * dy - dx;
+        int x_iterator = 1;
+        if (dx < 0) {
+            x_iterator = -1;
+            dx = -dx;
+        }
+        int D = 2 * dx - dy;
         int x = pos0.getXInt();
-        int x_iterator = (pos1.getXInt() > pos0.getYInt())?-1:1;
-        int y_iterator = (pos0.getYInt() > pos1.getYInt())?-1:1;
 
-        for (int y = pos0.getYInt(); x != pos1.getYInt() + y_iterator; y+=y_iterator) {
+        for (int y = pos0.getYInt(); x <= pos1.getYInt(); y++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                //if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
-                //    this.grid[x][y] = MAX_GRID_VALUE;
-                //} else {
+                if (thereIsAnObstacle && x == pos1.getXInt() && y == pos1.getYInt()) {
+                    this.grid[x][y] = MAX_GRID_VALUE;
+                } else {
                     this.grid[x][y] = 0.0;
-                //}
+                }
             } else {
                 break;
             }
