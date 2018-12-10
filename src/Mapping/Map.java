@@ -79,8 +79,6 @@ public class Map {
             Position echo = getEchoPosition(laserPosition, distance, angle);
             System.out.println("Robot=" + laserPosition + " - Echo=" + echo + " - Distance=" + distance + " - Angle=" + angle);
             Position echoInMap = toMapPositionNoLimits(echo);
-            //Usage of toMapPositionNoLimits car même si la distance de l'echo est en dehors des limites on a
-            //quand même besoin de ces coordonnées pour trouver une ligne entre les 2 points.
             updateLine(laserInMap, echoInMap, distance < MAX_VALUE_LASERS);
         }
     }
@@ -90,14 +88,14 @@ public class Map {
                 laserPosition.getY() + (distance * Math.sin(angle)));
     }
 
+    /*
+     * Updates the values of the grid in a line between the two points, uses Bresenham's line algorithm.
+     *
+     * @param pos0 First point
+     * @param pos1 Second point
+     * @param thereIsAnObstacle True if the laser detected an obstacle, false otherwise
+     */
     public void updateLine(Position pos0, Position pos1, boolean thereIsAnObstacle) {
-        //Bresenham's line algorithm
-        //
-        //if distance >= 40 -> Pas d'obstacle, toute la ligne passe à 0
-        //if cell to update is not in boundaries stop the update
-        //if cell to update == echoInMap && cell to update ->
-        //if distance < 40 -> Il y a un obstacle
-        //
         if (Math.abs(pos1.getYInt() - pos0.getYInt()) < Math.abs(pos1.getXInt() - pos0.getXInt())) {
             if (pos0.getXInt() > pos1.getXInt())
                 this.updateLineLow(pos1, pos0, thereIsAnObstacle);

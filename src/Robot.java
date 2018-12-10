@@ -26,12 +26,10 @@ public class Robot {
     public void move(double angularSpeed, double linearSpeed) {
         dr.setAngularSpeed(angularSpeed);
         dr.setLinearSpeed(linearSpeed);
-        System.out.println("Start to move robot");
         try {
             int rc = robotcomm.putRequest(dr);
-            System.out.println("Response code " + rc);
         } catch (Exception e) {
-            System.err.println("Can't put request");
+            System.err.println("Can't put move request");
         }
     }
 
