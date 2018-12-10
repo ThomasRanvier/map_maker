@@ -107,14 +107,13 @@ public class ShowMap extends JPanel {
         Color c;
         for (int col = 0; col < grid.length; col++) {
             for (int row = 0; row < grid[0].length; row++) {
-                double value = grid[col][row];
+                int value = (int)Math.floor(Math.abs(grid[col][row] - 1) * 255);
                 // if value is <0 draw a gray pixel
                 // else mapping the value between 0.0 - 1.0 where 0.0 is black
                 // and 1.0 is white
                 if (value < 0) {
                     c = new Color(0.5f, 0.5f, 0.5f);
                 } else {
-                    value = Math.abs(value - 1);
                     c = new Color(value, value, value);
                 }
                 // setting pixel color for pixel col and row
