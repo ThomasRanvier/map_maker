@@ -129,7 +129,7 @@ public class Map {
 
         for (int x = pos0.getXInt(); x <= pos1.getXInt(); x++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                if (this.grid[x][y] != MAX_GRID_VALUE)
+                if (this.grid[x][y] == DEFAULT_GRID_VALUE)
                     this.grid[x][y] = 0.0;
             } else {
                 break;
@@ -155,7 +155,7 @@ public class Map {
 
         for (int y = pos0.getYInt(); y <= pos1.getYInt(); y++) {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                if (this.grid[x][y] != MAX_GRID_VALUE)
+                if (this.grid[x][y] == DEFAULT_GRID_VALUE)
                     this.grid[x][y] = 0.0;
             } else {
                 return;
