@@ -5,6 +5,7 @@ import Utils.ShowMap;
 
 class Main{
     public static final int SLEEP_TIME = 50;
+    public static final int LASERS_DISTANCE = 0.15;
 
     public static void main(String[] args) throws InterruptedException {
         String host = args[0];
@@ -40,7 +41,8 @@ class Main{
             while (robotAngleRad < -Math.PI)
                 robotAngleRad += Math.PI;
 
-            Position laserPosition = new Position(robotPosition.getX() + 0.15 * Math.cos(robotAngleRad), robotPosition.getY() + 0.15 * Math.sin(robotAngleRad));
+            Position laserPosition = new Position(robotPosition.getX() + LASERS_DISTANCE * Math.cos(robotAngleRad), 
+                    robotPosition.getY() + LASERS_DISTANCE * Math.sin(robotAngleRad));
 
             //Position laserPosition = robotPosition.add(robot.getLaserPosition());
             double[] laserEchoes = robot.getLaserEchoes();
