@@ -68,10 +68,10 @@ public class Mapper {
 
         for (int x = pos0.getXInt(); x <= pos1.getXInt(); x++) {
             if (x >= 0 && y >= 0 && x < this.map.width && y < this.map.height) {
-                if (this.map.grid[x][y] == Map.DEFAULT_GRID_VALUE)
+                if (this.map.grid[x][y] <= Map.DEFAULT_GRID_VALUE)
                     this.map.grid[x][y] = 0.0;
                 if (this.map.grid[x][y] > Map.DEFAULT_GRID_VALUE)
-                    this.map.grid[x][y] -= 0.05;
+                    this.map.grid[x][y] -= 0.1;
             } else {
                 break;
             }
@@ -96,10 +96,10 @@ public class Mapper {
 
         for (int y = pos0.getYInt(); y <= pos1.getYInt(); y++) {
             if (x >= 0 && y >= 0 && x < this.map.width && y < this.map.height) {
-                if (this.map.grid[x][y] == Map.DEFAULT_GRID_VALUE)
+                if (this.map.grid[x][y] <= Map.DEFAULT_GRID_VALUE)
                     this.map.grid[x][y] = 0.0;
                 if (this.map.grid[x][y] > Map.DEFAULT_GRID_VALUE)
-                    this.map.grid[x][y] -= 0.05;
+                    this.map.grid[x][y] -= 0.1;
             } else {
                 return;
             }

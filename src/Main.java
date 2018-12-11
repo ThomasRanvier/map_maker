@@ -42,7 +42,7 @@ class Main{
             double[] laserAngles = robot.getLaserAngles();
             mapper.updateMap(laserPosition, laserEchoes, laserAngles);
 
-            Thread.sleep(SLEEP_TIME);
+            //Thread.sleep(SLEEP_TIME);
         }
     }
 }
