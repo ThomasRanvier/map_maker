@@ -3,7 +3,7 @@ package Mapping;
 import Utils.Position;
 import Utils.ShowMap;
 
-class Mapper {
+public class Mapper {
     private Map map;
     private ShowMap showmap;
 
@@ -19,9 +19,9 @@ class Mapper {
             double angle = laserAngles[i];
             Position echoPosition = getEchoPosition(laserPosition, distance, angle);
             Position echoInMap = this.map.toMapPositionNoLimits(echoPosition);
-            updateLine(laserInMap, echoInMap, distance < MAX_VALUE_LASERS);
+            updateLine(laserInMap, echoInMap, distance < Map.MAX_VALUE_LASERS);
         }
-        this.showmap.updateMap(this.map.grid, laserInMap.getYInt, laserInMap.getXInt);
+        this.showmap.updateMap(this.map.grid, laserInMap.getYInt(), laserInMap.getXInt());
     }
 
     private Position getEchoPosition(Position laserPosition, double distance, double angle) {
@@ -39,23 +39,23 @@ class Mapper {
     public void updateLine(Position pos0, Position pos1, boolean thereIsAnObstacle) {
         if (Math.abs(pos1.getYInt() - pos0.getYInt()) < Math.abs(pos1.getXInt() - pos0.getXInt())) {
             if (pos0.getXInt() > pos1.getXInt())
-                this.updateLineLow(pos1, pos0, thereIsAnObstacle);
+                this.updateLineLow(pos1, pos0);
             else
-                this.updateLineLow(pos0, pos1, thereIsAnObstacle);
+                this.updateLineLow(pos0, pos1);
         } else {
             if (pos0.getYInt() > pos1.getYInt())
-                this.updateLineHigh(pos1, pos0, thereIsAnObstacle);
+                this.updateLineHigh(pos1, pos0);
             else
-                this.updateLineHigh(pos0, pos1, thereIsAnObstacle);
+                this.updateLineHigh(pos0, pos1);
         }
         if (thereIsAnObstacle && pos1.getXInt() >= 0 && pos1.getYInt() >= 0 && pos1.getXInt() < this.map.width && pos1.getYInt() < this.map.height) {
             this.map.grid[pos1.getXInt()][pos1.getYInt()] += 0.15;
-            if (this.map.grid[pos1.getXInt()][pos1.getYInt()] > this.map.MAX_GRID_VALUE)
-                this.map.grid[pos1.getXInt()][pos1.getYInt()] = this.map.MAX_GRID_VALUE;
+            if (this.map.grid[pos1.getXInt()][pos1.getYInt()] > Map.MAX_GRID_VALUE)
+                this.map.grid[pos1.getXInt()][pos1.getYInt()] = Map.MAX_GRID_VALUE;
         }
     }
 
-    private void updateLineLow(Position pos0, Position pos1, boolean thereIsAnObstacle) {
+    private void updateLineLow(Position pos0, Position pos1) {
         int dx = pos1.getXInt() - pos0.getXInt();
         int dy = pos1.getYInt() - pos0.getYInt();
         int y_iterator = 1;
@@ -68,9 +68,9 @@ class Mapper {
 
         for (int x = pos0.getXInt(); x <= pos1.getXInt(); x++) {
             if (x >= 0 && y >= 0 && x < this.map.width && y < this.map.height) {
-                if (this.map.grid[x][y] == this.map.DEFAULT_GRID_VALUE)
+                if (this.map.grid[x][y] == Map.DEFAULT_GRID_VALUE)
                     this.map.grid[x][y] = 0.0;
-                if (this.map.grid[x][y] > this.map.DEFAULT_GRID_VALUE)
+                if (this.map.grid[x][y] > Map.DEFAULT_GRID_VALUE)
                     this.map.grid[x][y] -= 0.05;
             } else {
                 break;
@@ -83,7 +83,7 @@ class Mapper {
         }
     }
 
-    private void updateLineHigh(Position pos0, Position pos1, boolean thereIsAnObstacle) {
+    private void updateLineHigh(Position pos0, Position pos1) {
         int dx = pos1.getXInt() - pos0.getXInt();
         int dy = pos1.getYInt() - pos0.getYInt();
         int x_iterator = 1;
@@ -96,9 +96,9 @@ class Mapper {
 
         for (int y = pos0.getYInt(); y <= pos1.getYInt(); y++) {
             if (x >= 0 && y >= 0 && x < this.map.width && y < this.map.height) {
-                if (this.map.grid[x][y] == this.map.DEFAULT_GRID_VALUE)
+                if (this.map.grid[x][y] == Map.DEFAULT_GRID_VALUE)
                     this.map.grid[x][y] = 0.0;
-                if (this.map.grid[x][y] > this.map.DEFAULT_GRID_VALUE)
+                if (this.map.grid[x][y] > Map.DEFAULT_GRID_VALUE)
                     this.map.grid[x][y] -= 0.05;
             } else {
                 return;
