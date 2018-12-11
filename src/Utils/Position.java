@@ -68,6 +68,10 @@ public class Position {
         return new Position(this.getX(), this.getY(), this.getZ());
     }
 
+    public Position add(Position toAdd) {
+        return new Position(this.getX() + toAdd.getX(), this.getY() + toAdd.getY(), this.getZ() + toAdd.getZ());
+    }
+
     @Override
     public String toString() {
         return "Position{" +

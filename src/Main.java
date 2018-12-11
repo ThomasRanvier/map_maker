@@ -1,4 +1,5 @@
 import Mapping.Map;
+import Mapping.Mapper;
 import Utils.Position;
 import Utils.ShowMap;
 
@@ -23,6 +24,7 @@ class Main{
         Robot robot = new Robot(host, port);
         Map map = new Map(new Position(x_lower_left, y_lower_left), new Position(x_upper_right, y_upper_right));
         ShowMap showmap = new ShowMap(map.getHeight(), map.getWidth(), show_gui);
+        Mapper mapper = new Mapper(map, showmap);
 
         //robot.move(Math.PI * 0.1, 0.3);
 
@@ -35,12 +37,11 @@ class Main{
             System.out.println("Robot position on map: x: " + robotPositionInMap.getX() + ", y:" + robotPositionInMap.getY());
             System.out.println("Robot angle: " + robotAngle);
 
-            Position laserPosition = robot.getLaserPosition();
+            Position laserPosition = robotPosition.add(robot.getLaserPosition());
             double[] laserEchoes = robot.getLaserEchoes();
             double[] laserAngles = robot.getLaserAngles();
-            map.updateMap(robotPosition, laserEchoes, laserAngles);
+            mapper.updateMap(laserPosition, laserEchoes, laserAngles);
 
-            showmap.updateMap(map.grid, robotPositionInMap.getYInt(), robotPositionInMap.getXInt());
             Thread.sleep(SLEEP_TIME);
         }
     }
