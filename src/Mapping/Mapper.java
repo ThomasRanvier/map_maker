@@ -14,7 +14,7 @@ public class Mapper {
 
     public void updateMap(Position laserPosition, double[] laserEchoes, double[] laserAngles) {
         Position laserInMap = this.map.toMapPosition(laserPosition);
-        for (int i = 0; i < laserEchoes.length; i++) {
+        for (int i = 0; i < laserEchoes.length; i+=2) {
             double distance = laserEchoes[i];
             double angle = laserAngles[i];
             Position echoPosition = getEchoPosition(laserPosition, distance, angle);
