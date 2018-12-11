@@ -129,6 +129,8 @@ public class Map {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
                 if (this.grid[x][y] == DEFAULT_GRID_VALUE)
                     this.grid[x][y] = 0.0;
+                if (this.grid[x][y] > DEFAULT_GRID_VALUE)
+                    this.grid[x][y] -= 0.05;
             } else {
                 break;
             }
@@ -155,6 +157,8 @@ public class Map {
             if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
                 if (this.grid[x][y] == DEFAULT_GRID_VALUE)
                     this.grid[x][y] = 0.0;
+                if (this.grid[x][y] > DEFAULT_GRID_VALUE)
+                    this.grid[x][y] -= 0.05;
             } else {
                 return;
             }
