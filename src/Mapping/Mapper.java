@@ -21,7 +21,7 @@ public class Mapper {
             Position echoInMap = this.map.toMapPositionNoLimits(echoPosition);
             updateLine(laserInMap, echoInMap, distance < Map.MAX_VALUE_LASERS);
         }
-        this.showmap.updateMap(this.map.grid, laserInMap.getYInt(), laserInMap.getXInt());
+        this.showmap.updateMap(this.map.grid, Map.MAX_GRID_VALUE, laserInMap.getYInt(), laserInMap.getXInt());
     }
 
     private Position getEchoPosition(Position laserPosition, double distance, double angle) {
@@ -49,7 +49,7 @@ public class Mapper {
                 this.updateLineHigh(pos0, pos1);
         }
         if (thereIsAnObstacle && pos1.getXInt() >= 0 && pos1.getYInt() >= 0 && pos1.getXInt() < this.map.width && pos1.getYInt() < this.map.height) {
-            this.map.grid[pos1.getXInt()][pos1.getYInt()] += 0.15;
+            this.map.grid[pos1.getXInt()][pos1.getYInt()] += 3;
             if (this.map.grid[pos1.getXInt()][pos1.getYInt()] > Map.MAX_GRID_VALUE)
                 this.map.grid[pos1.getXInt()][pos1.getYInt()] = Map.MAX_GRID_VALUE;
         }
@@ -68,10 +68,10 @@ public class Mapper {
 
         for (int x = pos0.getXInt(); x <= pos1.getXInt(); x++) {
             if (x >= 0 && y >= 0 && x < this.map.width && y < this.map.height) {
-                if (this.map.grid[x][y] > Map.DEFAULT_GRID_VALUE - 0.01 && this.map.grid[x][y] < Map.DEFAULT_GRID_VALUE + 0.01)
-                    this.map.grid[x][y] = 0.0;
-                if (this.map.grid[x][y] > Map.DEFAULT_GRID_VALUE && this.map.grid[x][y] < Map.MAX_GRID_VALUE - 0.06)
-                    this.map.grid[x][y] -= 0.05;
+                this.map.grid[x][y] -= 1;
+                if (this.map.grid[x][y] < 0) {
+                    this.map.grid[x][y] = 0;
+                }
             } else {
                 break;
             }
@@ -96,10 +96,10 @@ public class Mapper {
 
         for (int y = pos0.getYInt(); y <= pos1.getYInt(); y++) {
             if (x >= 0 && y >= 0 && x < this.map.width && y < this.map.height) {
-                if (this.map.grid[x][y] > Map.DEFAULT_GRID_VALUE - 0.01 && this.map.grid[x][y] < Map.DEFAULT_GRID_VALUE + 0.01)
-                    this.map.grid[x][y] = 0.0;
-                if (this.map.grid[x][y] > Map.DEFAULT_GRID_VALUE && this.map.grid[x][y] < Map.MAX_GRID_VALUE - 0.06)
-                    this.map.grid[x][y] -= 0.05;
+                this.map.grid[x][y] -= 1;
+                if (this.map.grid[x][y] < 0) {
+                    this.map.grid[x][y] = 0;
+                }
             } else {
                 return;
             }

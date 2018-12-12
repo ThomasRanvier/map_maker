@@ -2,15 +2,13 @@ package Mapping;
 
 import Utils.Position;
 
-import java.util.Arrays;
-
 public class Map {
     public static final double SIZE_OF_CELL_IN_METER = 1;
-    public static final double DEFAULT_GRID_VALUE = 0.5;
-    public static final double MAX_GRID_VALUE = 1;
+    public static final int DEFAULT_GRID_VALUE = 7;
+    public static final int MAX_GRID_VALUE = 15;
     public static final double MAX_VALUE_LASERS = 40.0;
 
-    public double[][] grid;
+    public int[][] grid;
 
     protected int width;
     protected int height;
@@ -23,7 +21,7 @@ public class Map {
         this.pos_upper_right = pos_upper_right;
         this.width = (int)((pos_upper_right.getX() - pos_lower_left.getX()) / SIZE_OF_CELL_IN_METER);
         this.height = (int)((pos_upper_right.getY() - pos_lower_left.getY()) / SIZE_OF_CELL_IN_METER);
-        this.grid = new double[width][height];
+        this.grid = new int[width][height];
 
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
