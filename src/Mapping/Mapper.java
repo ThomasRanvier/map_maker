@@ -49,7 +49,7 @@ public class Mapper {
                 this.updateLineHigh(pos0, pos1);
         }
         if (thereIsAnObstacle && pos1.getXInt() >= 0 && pos1.getYInt() >= 0 && pos1.getXInt() < this.map.width && pos1.getYInt() < this.map.height) {
-            this.map.grid[pos1.getXInt()][pos1.getYInt()] += 0.15;
+            this.map.grid[pos1.getXInt()][pos1.getYInt()] += 0.1;
             if (this.map.grid[pos1.getXInt()][pos1.getYInt()] > Map.MAX_GRID_VALUE)
                 this.map.grid[pos1.getXInt()][pos1.getYInt()] = Map.MAX_GRID_VALUE;
         }
