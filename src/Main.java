@@ -5,7 +5,7 @@ import Utils.ShowMap;
 
 class Main{
     public static final int SLEEP_TIME = 50;
-    public static final int LASERS_DISTANCE = 0.15;
+    public static final float LASERS_DISTANCE = 0.15;
 
     public static void main(String[] args) throws InterruptedException {
         String host = args[0];
