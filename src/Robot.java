@@ -50,7 +50,7 @@ public class Robot {
      */
     public double getBearingAngle() {
         double angle = lr.getHeadingAngle();
-        return angle * 180 / Math.PI;
+        return angle;
     }
 
     /**
