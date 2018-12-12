@@ -80,10 +80,12 @@ public class Robot {
         double[] angles = new double[beamCount];
         double a = lr.getHeadingAngle() + lpr.getStartAngle();
         for (int i = 0; i < beamCount; i++) {
+            /*
             if (a < -Math.PI)
                 a += 2 * Math.PI;
             if (a > Math.PI)
                 a -= 2 * Math.PI;
+                */
             angles[i] = a;
             a += 1 * Math.PI / 180;
         }
