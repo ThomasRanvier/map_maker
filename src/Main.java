@@ -35,14 +35,8 @@ class Main{
             Position robotPositionInMap = map.toMapPosition(robotPosition);
             double robotAngle = robot.getBearingAngle();
 
-            double robotAngleRad = robotAngle * 1 / (180 / Math.PI);
-            while (robotAngleRad > Math.PI)
-                robotAngleRad -= Math.PI;
-            while (robotAngleRad < -Math.PI)
-                robotAngleRad += Math.PI;
-
-            Position laserPosition = new Position(robotPosition.getX() + LASERS_DISTANCE * Math.cos(robotAngleRad), 
-                    robotPosition.getY() + LASERS_DISTANCE * Math.sin(robotAngleRad));
+            Position laserPosition = new Position(robotPosition.getX() + LASERS_DISTANCE * Math.cos(robotAngle),
+                    robotPosition.getY() + LASERS_DISTANCE * Math.sin(robotAngle));
 
             //Position laserPosition = robotPosition.add(robot.getLaserPosition());
             double[] laserEchoes = robot.getLaserEchoes();
