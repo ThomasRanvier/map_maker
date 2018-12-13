@@ -85,7 +85,7 @@ public class Robot {
                 a += 2 * Math.PI;
             if (a > Math.PI)
                 a -= 2 * Math.PI;
-                */
+            */
             angles[i] = a;
             a += 1 * Math.PI / 180;
         }
