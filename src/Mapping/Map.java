@@ -4,11 +4,11 @@ import Utils.Position;
 
 public class Map {
     public static final double SIZE_OF_CELL_IN_METER = 1;
-    public static final int DEFAULT_GRID_VALUE = 7;
-    public static final int MAX_GRID_VALUE = 15;
+    public static final double DEFAULT_GRID_VALUE = 0.5;
+    public static final int MAX_GRID_VALUE = 1;
     public static final double MAX_VALUE_LASERS = 40.0;
 
-    public int[][] grid;
+    public double[][] grid;
 
     protected int width;
     protected int height;
@@ -30,7 +30,7 @@ public class Map {
         }
     }
 
-    public Position toMapPosition (Position real_world_pos) {
+    public Position toMapPosition(Position real_world_pos) {
         Position mapPos = real_world_pos.clone();
 
         if (real_world_pos.getX() < this.pos_lower_left.getX()
@@ -49,7 +49,7 @@ public class Map {
         return mapPos;
     }
 
-    public Position toMapPositionNoLimits (Position real_world_pos) {
+    public Position toMapPositionNoLimits(Position real_world_pos) {
         Position mapPos = real_world_pos.clone();
 
         double x = (real_world_pos.getX() - this.pos_lower_left.getX()) / SIZE_OF_CELL_IN_METER - 1;
@@ -59,6 +59,12 @@ public class Map {
         mapPos.setY((y < 0.0)?0.0:Math.floor(y));
 
         return mapPos;
+    }
+
+    public Position toRealWorldPosition(Position cell) {
+        if (cell.getX() < 0 || cell.getX() >= this.width || cell.getY() < 0 || cell.getY() >= this.height)
+            throw new IllegalArgumentException("The coordinate of the input position is not in the limit of the Map");
+        return new Position(this.pos_lower_left.getX() + (cell.getX() * SIZE_OF_CELL_IN_METER), this.pos_lower_left.getY() + (cell.getY() * SIZE_OF_CELL_IN_METER));
     }
 
     public int getWidth() {
