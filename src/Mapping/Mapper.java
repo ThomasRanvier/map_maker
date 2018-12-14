@@ -12,21 +12,12 @@ public class Mapper {
         this.showmap = showmap;
     }
 
-    public void updateMap(Position laserPosition, double[] laserEchoes, double[] laserAngles) {
+    public void updateMap(Position laserPosition, Laser[] lasers) {
         Position laserInMap = this.map.toMapPosition(laserPosition);
-        for (int i = 0; i < laserEchoes.length; i++) {
-            double distance = laserEchoes[i];
-            double angle = laserAngles[i];
-            Position echoPosition = getEchoPosition(laserPosition, distance, angle);
-            Position echoInMap = this.map.toMapPositionNoLimits(echoPosition);
-            updateLine(laserInMap, echoInMap, distance);
+        for (int i = 0; i < lasers.length; i+=2) {
+            updateLine(laserInMap, lasers[i].getGridPosition(this.map), lasers[i].distance);
         }
         this.showmap.updateMap(this.map.grid, laserInMap.getYInt(), laserInMap.getXInt());
-    }
-
-    private Position getEchoPosition(Position laserPosition, double distance, double angle) {
-        return new Position(laserPosition.getX() + (distance * Math.cos(angle)),
-                laserPosition.getY() + (distance * Math.sin(angle)));
     }
 
     private double bayesianProbability(double occupiedProbablity, double previousProbability) {

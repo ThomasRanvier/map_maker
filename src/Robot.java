@@ -1,4 +1,5 @@
 import Communications.*;
+import Mapping.Laser;
 import Utils.Position;
 
 public class Robot {
@@ -67,7 +68,24 @@ public class Robot {
     }
 
     public Position getLaserPosition() {
-        return lpr.getPosition();
+        return new Position(
+                this.getRobotPosition().getX() + Main.LASERS_DISTANCE * Math.cos(this.getBearingAngle()),
+                this.getRobotPosition().getY() + Main.LASERS_DISTANCE * Math.sin(this.getBearingAngle())
+        );
+    }
+
+    public Laser[] getLasers() {
+        double[] lasersEchoes = this.getLaserEchoes();
+        double[] lasersAngles = this.getLaserAngles();
+        Laser[] lasers = new Laser[lasersEchoes.length];
+
+        Position laserPosition = this.getLaserPosition();
+
+        for (int i = 0; i < lasersEchoes.length; i++) {
+            lasers[i] = new Laser(laserPosition, lasersEchoes[i], lasersAngles[i]);
+        }
+
+        return lasers;
     }
 
     /**

@@ -31,19 +31,9 @@ class Main{
 
         while (true) {
             robot.updateInformations();
-            Position robotPosition = robot.getRobotPosition();
-            Position robotPositionInMap = map.toMapPosition(robotPosition);
-            double robotAngle = robot.getBearingAngle();
 
-            Position laserPosition = new Position(robotPosition.getX() + LASERS_DISTANCE * Math.cos(robotAngle),
-                    robotPosition.getY() + LASERS_DISTANCE * Math.sin(robotAngle));
+            mapper.updateMap(robot.getLaserPosition(), robot.getLasers());
 
-            //Position laserPosition = robotPosition.add(robot.getLaserPosition());
-            double[] laserEchoes = robot.getLaserEchoes();
-            double[] laserAngles = robot.getLaserAngles();
-            mapper.updateMap(laserPosition, laserEchoes, laserAngles);
-
-            //Thread.sleep(SLEEP_TIME);
         }
     }
 }
