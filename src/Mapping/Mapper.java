@@ -56,10 +56,10 @@ public class Mapper {
                 this.updateLineHigh(pos0, pos1);
         }
         if (thereIsAnObstacle && pos1.getXInt() >= 0 && pos1.getYInt() >= 0 && pos1.getXInt() < this.map.width && pos1.getYInt() < this.map.height) {
-            double occupiedProbablity = getOccupiedProbability(distance);
+            double occupiedProbability = getOccupiedProbability(distance);
             if (this.map.grid[pos1.getXInt()][pos1.getYInt()] <= 0.7)
                 this.map.grid[pos1.getXInt()][pos1.getYInt()] += 0.01;
-            this.map.grid[pos1.getXInt()][pos1.getYInt()] = bayesianProbability(occupiedProbablity, this.map.grid[pos1.getXInt()][pos1.getYInt()]);
+            this.map.grid[pos1.getXInt()][pos1.getYInt()] = bayesianProbability(occupiedProbability, this.map.grid[pos1.getXInt()][pos1.getYInt()]);
         }
     }
 
@@ -79,8 +79,8 @@ public class Mapper {
                 Position pos0InRealWorld = this.map.toRealWorldPosition(pos0);
                 Position pos1InRealWorld = this.map.toRealWorldPosition(pos1);
                 double distance = Math.sqrt(Math.pow(pos0InRealWorld.getX() - pos1InRealWorld.getX(), 2) + Math.pow(pos0InRealWorld.getY() - pos1InRealWorld.getY(), 2));
-                double occupiedProbablity = getOccupiedProbability(distance);
-                this.map.grid[x][y] = bayesianProbability(1 - occupiedProbablity, this.map.grid[x][y]);
+                double occupiedProbability = getOccupiedProbability(distance);
+                this.map.grid[x][y] = bayesianProbability(1 - occupiedProbability, this.map.grid[x][y]);
             } else {
                 break;
             }
@@ -108,8 +108,8 @@ public class Mapper {
                 Position pos0InRealWorld = this.map.toRealWorldPosition(pos0);
                 Position pos1InRealWorld = this.map.toRealWorldPosition(pos1);
                 double distance = Math.sqrt(Math.pow(pos0InRealWorld.getX() - pos1InRealWorld.getX(), 2) + Math.pow(pos0InRealWorld.getY() - pos1InRealWorld.getY(), 2));
-                double occupiedProbablity = getOccupiedProbability(distance);
-                this.map.grid[x][y] = bayesianProbability(1 - occupiedProbablity, this.map.grid[x][y]);
+                double occupiedProbability = getOccupiedProbability(distance);
+                this.map.grid[x][y] = bayesianProbability(1 - occupiedProbability, this.map.grid[x][y]);
             } else {
                 return;
             }
@@ -122,6 +122,6 @@ public class Mapper {
     }
 
     private double getOccupiedProbability(double distance) {
-        return (((Map.MAX_VALUE_LASERS - distance) / Map.MAX_VALUE_LASERS) + 1) / 2;
+        return (((Map.MAX_VALUE_LASERS - distance) / Map.MAX_VALUE_LASERS) + 1) / 2 * 0.98;
     }
 }
