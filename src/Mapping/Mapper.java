@@ -79,7 +79,7 @@ public class Mapper {
                 Position pos0InRealWorld = this.map.toRealWorldPosition(pos0);
                 Position pos1InRealWorld = this.map.toRealWorldPosition(pos1);
                 double distance = Math.sqrt(Math.pow(pos0InRealWorld.getX() - pos1InRealWorld.getX(), 2) + Math.pow(pos0InRealWorld.getY() - pos1InRealWorld.getY(), 2));
-                if (distance < MAX_VALUE_LASERS - 10) {
+                if (distance < Map.MAX_VALUE_LASERS - 10) {
                     double occupiedProbability = getOccupiedProbability(distance);
                     this.map.grid[x][y] = bayesianProbability(1 - occupiedProbability, this.map.grid[x][y]);
                 }
@@ -110,7 +110,7 @@ public class Mapper {
                 Position pos0InRealWorld = this.map.toRealWorldPosition(pos0);
                 Position pos1InRealWorld = this.map.toRealWorldPosition(pos1);
                 double distance = Math.sqrt(Math.pow(pos0InRealWorld.getX() - pos1InRealWorld.getX(), 2) + Math.pow(pos0InRealWorld.getY() - pos1InRealWorld.getY(), 2));
-                if (distance < MAX_VALUE_LASERS - 10) {
+                if (distance < Map.MAX_VALUE_LASERS - 10) {
                     double occupiedProbability = getOccupiedProbability(distance);
                     this.map.grid[x][y] = bayesianProbability(1 - occupiedProbability, this.map.grid[x][y]);
                 }
