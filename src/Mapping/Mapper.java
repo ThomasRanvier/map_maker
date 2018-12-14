@@ -31,8 +31,8 @@ public class Mapper {
 
     private double bayesianProbability(double occupiedProbablity, double previousProbability) {
         double emptyProbability = 1 - occupiedProbablity;
-        double emptyPreviousProbability = 1 - previousProbablity;
-        return (occupiedProbablity * previousProbablity) / (occupiedProbablity * previousProbablity + emptyProbability * emptyPreviousProbability);
+        double emptyPreviousProbability = 1 - previousProbability;
+        return (occupiedProbablity * previousProbability) / (occupiedProbablity * previousProbability + emptyProbability * emptyPreviousProbability);
     }
 
     /*
@@ -43,7 +43,7 @@ public class Mapper {
      * @param thereIsAnObstacle True if the laser detected an obstacle, false otherwise
      */
     public void updateLine(Position pos0, Position pos1, double distance) {
-        boolean thereIsAnObstacle = (distance < MAX_VALUE_LASERS);
+        boolean thereIsAnObstacle = (distance < Map.MAX_VALUE_LASERS);
         if (Math.abs(pos1.getYInt() - pos0.getYInt()) < Math.abs(pos1.getXInt() - pos0.getXInt())) {
             if (pos0.getXInt() > pos1.getXInt())
                 this.updateLineLow(pos1, pos0);
@@ -57,9 +57,9 @@ public class Mapper {
         }
         if (thereIsAnObstacle && pos1.getXInt() >= 0 && pos1.getYInt() >= 0 && pos1.getXInt() < this.map.width && pos1.getYInt() < this.map.height) {
             double occupiedProbablity = getOccupiedProbability(distance);
-            if (this.map.grid[x][y] <= 0.7)
-                this.map.grid[x][y] += 0.01;
-            this.map.grid[x][y] = bayesianProbability(occupiedProbablity, this.map.grid[x][y]);
+            if (this.map.grid[pos1.getXInt()][pos1.getYInt()] <= 0.7)
+                this.map.grid[pos1.getXInt()][pos1.getYInt()] += 0.01;
+            this.map.grid[pos1.getXInt()][pos1.getYInt()] = bayesianProbability(occupiedProbablity, this.map.grid[pos1.getXInt()][pos1.getYInt()]);
         }
     }
 
@@ -122,6 +122,6 @@ public class Mapper {
     }
 
     private double getOccupiedProbability(double distance) {
-        return (((MAX_VALUE_LASERS - distance) / MAX_VALUE_LASERS) + 1) / 2;
+        return (((Map.MAX_VALUE_LASERS - distance) / Map.MAX_VALUE_LASERS) + 1) / 2;
     }
 }

@@ -21,7 +21,7 @@ public class Map {
         this.pos_upper_right = pos_upper_right;
         this.width = (int)((pos_upper_right.getX() - pos_lower_left.getX()) / SIZE_OF_CELL_IN_METER);
         this.height = (int)((pos_upper_right.getY() - pos_lower_left.getY()) / SIZE_OF_CELL_IN_METER);
-        this.grid = new int[width][height];
+        this.grid = new double[width][height];
 
         for (int x = 0; x < this.width; x++) {
             for (int y = 0; y < this.height; y++) {
