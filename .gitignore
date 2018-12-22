@@ -2,3 +2,10 @@
 .idea
 map_maker.iml
 **/*.class
+.env
+*.aux
+*.loa
+*.log
+*.out
+*.toc
+
