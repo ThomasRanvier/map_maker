@@ -20,7 +20,7 @@ class Mapper:
             angle = robot_pos.angle + laser.angle
             laser_hit = Position(laser_pos_x + laser.echoe * cos(angle), laser_pos_y + laser.echoe * sin(angle))
             hit_cell = self.__map.to_grid_pos(laser_hit)
-            cells = list(bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y))
+            cells = bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y)
             for cell in cells:
                 if is_in_bound(cell):
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:

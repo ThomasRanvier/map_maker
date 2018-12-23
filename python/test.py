@@ -1,5 +1,6 @@
 from mapping.map import Map
 from utils.position import Position
+from utils.utils import bresenham_line
 
 def map_to_grid_pos():
     print('Test: map_to_grid_pos')
@@ -37,8 +38,35 @@ def map_to_real_pos():
     assert(real_pos.x == 4.5 and real_pos.y == 4.5)
     print('OK')
 
+def utils_bresenham_line():
+    print('Test: utils_bresenham_line')
+    line = bresenham_line(0, 0, 5, 5)
+    assert(line[0].x == 0 and line[0].y == 0)
+    assert(line[1].x == 1 and line[1].y == 1)
+    assert(line[2].x == 2 and line[2].y == 2)
+    assert(line[3].x == 3 and line[3].y == 3)
+    assert(line[4].x == 4 and line[4].y == 4)
+    assert(line[5].x == 5 and line[5].y == 5)
+    line = bresenham_line(5, 5, 0, 0)
+    assert(line[0].x == 5 and line[0].y == 5)
+    assert(line[1].x == 4 and line[1].y == 4)
+    assert(line[2].x == 3 and line[2].y == 3)
+    assert(line[3].x == 2 and line[3].y == 2)
+    assert(line[4].x == 1 and line[4].y == 1)
+    assert(line[5].x == 0 and line[5].y == 0)
+    line = bresenham_line(2, 5, 8, 9)
+    assert(line[0].x == 2 and line[0].y == 5)
+    assert(line[1].x == 3 and line[1].y == 6)
+    assert(line[2].x == 4 and line[2].y == 6)
+    assert(line[3].x == 5 and line[3].y == 7)
+    assert(line[4].x == 6 and line[4].y == 8)
+    assert(line[5].x == 7 and line[5].y == 8)
+    assert(line[6].x == 8 and line[6].y == 9)
+    print('OK')
+
 if __name__ == '__main__':
     map_to_grid_pos()
     map_to_real_pos()
+    utils_bresenham_line()
     print('End of tests')
     print('OK')
