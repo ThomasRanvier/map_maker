@@ -24,3 +24,11 @@ class Map:
 
     def is_in_bound(self, grid_pos):
         return 0 <= grid_pos.x < self.__grid_width and 0 <= grid_pos.y < self.__grid_height
+
+    @property
+    def grid_width(self):
+        return self.__grid_width
+
+    @property
+    def grid_height(self):
+        return self.__grid_height

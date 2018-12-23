@@ -1,4 +1,4 @@
-from mapper.map import Map
+from mapping.map import Map
 from utils.position import Position
 
 def map_to_grid_pos():

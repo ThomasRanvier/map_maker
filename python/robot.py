@@ -22,7 +22,7 @@ class Robot:
             return None
 
     @property
-    def pose(self):
+    def position(self):
         mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/localization')
         response = mrds.getresponse()
