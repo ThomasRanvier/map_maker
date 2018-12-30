@@ -14,11 +14,11 @@ class Mapper:
     def udpate(self, robot_pos, lasers):
         lasers_pos_x = robot_pos.x + self.__lasers_distance * cos(robot_pos.angle)
         lasers_pos_y = robot_pos.y + self.__lasers_distance * sin(robot_pos.angle)
-        lasers_cell = self.__map.to_grid_pos(Position(laser_pos_x, laser_pos_y))
+        lasers_cell = self.__map.to_grid_pos(Position(lasers_pos_x, lasers_pos_y))
         real_lasers_cell = self.__map.to_real_pos(lasers_cell)
         for laser in lasers:
             angle = robot_pos.angle + laser.angle
-            laser_hit = Position(laser_pos_x + laser.echoe * cos(angle), laser_pos_y + laser.echoe * sin(angle))
+            laser_hit = Position(lasers_pos_x + laser.echoe * cos(angle), lasers_pos_y + laser.echoe * sin(angle))
             hit_cell = self.__map.to_grid_pos(laser_hit)
             cells = bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y)
             for cell in cells:
