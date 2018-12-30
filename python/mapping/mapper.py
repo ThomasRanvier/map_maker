@@ -4,12 +4,13 @@ from mapping.map import Map
 from utils.position import Position
 
 class Mapper:
-    def __init__(self, map_to_update, lasers_distance = 0.15, p_max = 0.98, min_increase = 0.01, max_distance = 40):
+    def __init__(self, map_to_update, lasers_distance = 0.15, p_max = 0.98, min_increase = 0.01, increase = 0.05, max_distance = 40):
         self.__map = map_to_update
         self.__lasers_distance = lasers_distance
         self.__max_distance = max_distance
         self.__p_max = p_max
         self.__min_increase = min_increase
+        self.__increase = increase
         
     def update(self, robot_pos, lasers):
         lasers_pos_x = robot_pos.x + self.__lasers_distance * cos(robot_pos.angle)
@@ -29,8 +30,7 @@ class Mapper:
             for cell in cells:
                 if self.__map.is_in_bound(cell):
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
-                        
-                        self.__map.grid[hit_cell.x][hit_cell.y] += 0.02
+                        self.__map.grid[hit_cell.x][hit_cell.y] += self.__increase
                         if self.__map.grid[hit_cell.x][hit_cell.y] > 1.0:
                             self.__map.grid[hit_cell.x][hit_cell.y] = 1.0
                         """
@@ -41,7 +41,7 @@ class Mapper:
                             self.__map.grid[hit_cell.x][hit_cell.y] = self.__bayesian_probability(occupied_probability, self.__map.grid[hit_cell.x][hit_cell.y])"""
                     else:
                         
-                        self.__map.grid[cell.x][cell.y] -= 0.02
+                        self.__map.grid[cell.x][cell.y] -= self.__increase
                         if self.__map.grid[cell.x][cell.y] < 0.0:
                             self.__map.grid[cell.x][cell.y] = 0.0
                         """
