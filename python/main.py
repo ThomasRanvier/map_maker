@@ -19,4 +19,4 @@ if __name__ == '__main__':
 
     while True:
         mapper.update(robot.position, robot.lasers)
-        show_map.update(robot.position)
+        show_map.update(robot_map.to_grid_pos(robot.position))
