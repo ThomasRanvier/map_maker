@@ -4,11 +4,10 @@ from mapping.map import Map
 from utils.position import Position
 
 class Mapper:
-    def __init__(self, map_to_update, lasers_distance = 0.15, min_increase = 0.01, increase = 0.1, max_distance = 40, safe_distance_obstacle = 5, safe_distance_empty = 10):
+    def __init__(self, map_to_update, lasers_distance = 0.15, increase = 0.1, max_distance = 40, safe_distance_obstacle = 5, safe_distance_empty = 10):
         self.__map = map_to_update
         self.__lasers_distance = lasers_distance
         self.__max_distance = max_distance
-        self.__min_increase = min_increase
         self.__increase = increase
         self.__safe_distance_obstacle = safe_distance_obstacle
         self.__safe_distance_empty = safe_distance_empty
@@ -25,16 +24,18 @@ class Mapper:
             cells = bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y)
             for cell in cells:
                 if self.__map.is_in_bound(cell):
-                    inc = max(self.__min_increase, self.__increase * (1 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)))
+                    inc = self.__increase * (1.0 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0))
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
+                        increment_in_regard_of_distance = self.__increase * (1.0 - (laser.echoe / self.__max_distance))
                         if laser.echoe < self.__max_distance - self.__safe_distance_obstacle:
-                            self.__map.grid[hit_cell.x][hit_cell.y] += inc
+                            self.__map.grid[hit_cell.x][hit_cell.y] += (inc / self.__increase) * (increment_in_regard_of_distance / self.__increase) * self.__increase
                             if self.__map.grid[hit_cell.x][hit_cell.y] > 1.0:
                                 self.__map.grid[hit_cell.x][hit_cell.y] = 1.0
                     else:
                         real_cell = self.__map.to_real_pos(cell)
                         distance = hypot(real_cell.x - real_lasers_cell.x, real_cell.y - real_lasers_cell.y)
+                        increment_in_regard_of_distance = self.__increase * (1.0 - (distance / self.__max_distance))
                         if distance < self.__max_distance - self.__safe_distance_empty:
-                            self.__map.grid[cell.x][cell.y] -= inc
+                            self.__map.grid[hit_cell.x][hit_cell.y] -= (inc / self.__increase) * (increment_in_regard_of_distance / self.__increase) * self.__increase
                             if self.__map.grid[cell.x][cell.y] < 0.0:
                                 self.__map.grid[cell.x][cell.y] = 0.0
