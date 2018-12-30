@@ -8,7 +8,7 @@ robot = Robot(url)
 robot.post_speed(0.3, 0.3)
 
 while True:
-    robot_pos = robot.pose
+    robot_pos = robot.position
     lasers = robot.lasers
     print('Robot pos: ' + robot_pos)
     distance_to_laser = 0.15
