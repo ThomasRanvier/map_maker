@@ -26,8 +26,9 @@ class Mapper:
                 if self.__map.is_in_bound(cell):
                     inc = 1.0 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
-                        increment_in_regard_of_distance = self.__increase * (1.0 - (laser.echoe / self.__max_distance))
                         if laser.echoe < self.__max_distance - self.__safe_distance_obstacle:
+                            increment_in_regard_of_distance = self.__increase * (1.0 - (laser.echoe / self.__max_distance))
+                            print(inc, increment_in_regard_of_distance)
                             self.__map.grid[hit_cell.x][hit_cell.y] += inc * increment_in_regard_of_distance * self.__increase
                             if self.__map.grid[hit_cell.x][hit_cell.y] > 1.0:
                                 self.__map.grid[hit_cell.x][hit_cell.y] = 1.0
