@@ -3,7 +3,7 @@ from math import hypot, cos, sin, pi
 from mapping.map import Map
 from utils.position import Position
 
-class Mapper:
+class Cartographer:
     def __init__(self, map_to_update, lasers_distance = 0.15, increment = 0.1, max_distance = 40, safe_distance_obstacle = 5, safe_distance_empty = 10):
         self.__map = map_to_update
         self.__lasers_distance = lasers_distance
