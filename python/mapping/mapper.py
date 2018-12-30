@@ -4,7 +4,7 @@ from mapping.map import Map
 from utils.position import Position
 
 class Mapper:
-    def __init__(self, map_to_update, lasers_distance = 0.15, p_max = 0.98, min_increase = 0.01, increase = 0.1, max_distance = 40):
+    def __init__(self, map_to_update, lasers_distance = 0.15, p_max = 0.98, min_increase = 0.02, increase = 0.15, max_distance = 40):
         self.__map = map_to_update
         self.__lasers_distance = lasers_distance
         self.__max_distance = max_distance
