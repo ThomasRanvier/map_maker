@@ -21,19 +21,22 @@ For all those cells we compute an increment that is added or subtracted to them 
 \begin{enumerate}
     \item First we compute an increment factor in regard of the value of the cell:
         $$
-        inc\_factor\_iro\_certainty = 1 - (abs(cell_value - 0.5) * 2)
+        inc\_factor\_iro\_certainty = 1 - (abs(cell_value - 0.5) \cdot 2)
         $$
     \item Then we compute an increment factor in regard of the distance between the robot and the cell to update:
         $$
-        inc\_factor\_iro\_dist = 1.5 * (1 - abs(distance / max\_lasers\_distance))
+        inc\_factor\_iro\_dist = 1.5 \cdot (1 - abs(distance / max\_lasers\_distance))
         $$
     \item The final increment is computed by multiplying the two factors with a defined increment value (we used 0.1):
         $$
-        final\_increment = inc\_factor\_iro\_certainty * inc\_factor\_iro\_dist * increment
+        final\_increment = inc\_factor\_iro\_certainty \cdot inc\_factor\_iro\_dist \cdot increment
         $$
     \item The final increment is added to the cell if the cell corresponds to the cell hit by the laser and that the distance of the echoe is below the maximum laser distance.
         Otherwise it is subtracted.
 \end{enumerate}
+
+The certainty factor is useful because it will make the cells that are near $0$ and near $1$ harder to change than the cells near $0.5$, the effect is that the cells defined as obstacle will have to be seen as empty for a long time before being changed and inversely.
+The distance factor is useful because it will make the cells near the robot update more easily than the cells far away, since the further away the cell is from the robot the less precise the laser information is.
 
 This is the factory map built moving the robot by hand using the cartographer described above.
 
