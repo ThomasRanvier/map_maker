@@ -2,6 +2,7 @@ from robot import Robot
 from mapping.mapper import Mapper
 from mapping.map import Map
 from mapping.show_map import ShowMap
+from utils.position import Position
 
 if __name__ == '__main__':
     url = 'http://localhost:50000'
