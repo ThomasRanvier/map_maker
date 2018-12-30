@@ -5,10 +5,9 @@ from utils.utils import orientation_to_angle
 from math import pi
 
 class Robot:
-    self.HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
-
     def __init__(self, url):
         self.__url = url
+        self.HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
 
     def post_speed(self, angular_speed, linear_speed):
         params = json.dumps({'TargetAngularSpeed': angular_speed, 'TargetLinearSpeed': linear_speed})
