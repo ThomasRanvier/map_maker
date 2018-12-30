@@ -22,7 +22,7 @@ class Mapper:
             hit_cell = self.__map.to_grid_pos(laser_hit)
             cells = bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y)
             for cell in cells:
-                if is_in_bound(cell):
+                if self.__map.is_in_bound(cell):
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
                         if laser.echoe < self.__max_distance:
                             occupied_probability = self.__occupied_probability(laser.echoe)
