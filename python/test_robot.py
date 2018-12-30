@@ -21,4 +21,4 @@ while True:
         laser_hit_y = laser_pos_y + laser.echoe * sin(angle)
         print('Laser hit: x: ' + str(laser_hit_x) + ' y: ' + str(laser_hit_y))
     print('\n\n\n\n')
-    time.sleep(1)
+    time.sleep(5)
