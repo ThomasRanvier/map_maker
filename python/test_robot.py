@@ -10,7 +10,7 @@ robot.post_speed(0.3, 0.3)
 while True:
     robot_pos = robot.position
     lasers = robot.lasers
-    print('Robot pos: ' + robot_pos)
+    print(robot_pos)
     distance_to_laser = 0.15
     laser_pos_x = robot_pos.x + distance_to_laser * cos(robot_pos.angle)
     laser_pos_y = robot_pos.y + distance_to_laser * sin(robot_pos.angle)
