@@ -40,7 +40,7 @@ def orientation_to_angle(orientation):
         angle -= 2.0 * pi
     while angle < -pi:
         angle += 2.0 * pi
-    return 
+    return angle
 
 def heading(q):
     return rotate(q, {'X': 1.0, 'Y': 0.0, "Z": 0.0})
