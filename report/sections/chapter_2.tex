@@ -1,17 +1,15 @@
-\section{Structure of the program}
-
 Our program is divided in two main modules, the mapping module and the planning module.
 The role of the first one is to build the map of the environment of the robot using the echoes of the lasers.
 The role of the second one is to plan the path that the robot must follow in order to explore the world.
 
-\subsection{Mapping}
+\section{Mapping}
 
 The first point on which we worked was to find a way of building a map of the environment of the robot using the lasers echoes.
 
 To do so we created a class 'Map' that contains a grid of values between $0$ and $1$.
 Those values represent probability that there is an obstacle on that cell.
 
-To update this grid we use the echoes of the lasers.
+To update this grid we created a class 'Cartographer' that uses the echoes of the lasers.
 For each laser echoe we compute the distance between the robot cell and the cell hit by the laser in the grid.
 Then we use the 'Bresenham' algorithm to update all the cells in between the two above.
 For all those cells we compute an increment that is added or subtracted to them using the following procedure:
@@ -33,7 +31,19 @@ For all those cells we compute an increment that is added or subtracted to them 
         Otherwise it is subtracted.
 \end{enumerate}
 
-\subsection{Planning}
+This is the factory map built moving the robot by hand using the cartographer described above.
+
+\FloatBarrier
+\begin{figure}
+    \centering\includegraphics[width=\textwidth]{explored_map_by_hand.png}
+    \label{fig:explored_map_by_hand}
+    \caption{Explored map by hand}
+\end{figure}
+\FloatBarrier
+
+The mapping module also contains the 'ShowMap' class which is used to display the built map.
+
+\section{Planning}
 
 TODO
 
