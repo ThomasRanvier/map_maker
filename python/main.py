@@ -6,7 +6,7 @@ from utils.position import Position
 
 if __name__ == '__main__':
     url = 'localhost:50000'
-    size_of_cell_in_meter = 0.25
+    size_of_cell_in_meter = 1.0
     scale = 1 / size_of_cell_in_meter
 
     robot = Robot(url)
