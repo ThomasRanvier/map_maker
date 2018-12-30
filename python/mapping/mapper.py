@@ -20,9 +20,9 @@ class Mapper:
         real_lasers_cell = self.__map.to_real_pos(lasers_cell)
         robot_angle = robot_pos.angle
         while robot_angle > pi:
-            robot_angle -= 2 * pi
+            robot_angle -= pi
         while robot_angle < -pi:
-            robot_angle += 2 * pi
+            robot_angle += pi
         for laser in lasers:
             angle = robot_angle + laser.angle
             laser_hit = Position(lasers_pos_x + laser.echoe * cos(angle), lasers_pos_y + laser.echoe * sin(angle))
