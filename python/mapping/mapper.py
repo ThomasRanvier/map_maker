@@ -30,11 +30,14 @@ class Mapper:
                 if self.__map.is_in_bound(cell):
                     inc = max(self.__min_increase, self.__increase * (1 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)))
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
-                        if laser.echoe < self.__max_distance:
+                        if laser.echoe < self.__max_distance - 5:
                             self.__map.grid[hit_cell.x][hit_cell.y] += inc
                             if self.__map.grid[hit_cell.x][hit_cell.y] > 1.0:
                                 self.__map.grid[hit_cell.x][hit_cell.y] = 1.0
                     else:
-                        self.__map.grid[cell.x][cell.y] -= inc
-                        if self.__map.grid[cell.x][cell.y] < 0.0:
-                            self.__map.grid[cell.x][cell.y] = 0.0
+                        real_cell = self.__map.to_real_pos(cell)
+                        distance = hypot(real_cell.x - real_lasers_cell.x, real_cell.y - real_lasers_cell.y)
+                        if distance < self.__max_distance - 10:
+                            self.__map.grid[cell.x][cell.y] -= inc
+                            if self.__map.grid[cell.x][cell.y] < 0.0:
+                                self.__map.grid[cell.x][cell.y] = 0.0
