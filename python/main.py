@@ -5,7 +5,7 @@ from mapping.show_map import ShowMap
 from utils.position import Position
 
 if __name__ == '__main__':
-    url = 'http://localhost:50000'
+    url = 'localhost:50000'
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
     laser_max_distance = 0.15

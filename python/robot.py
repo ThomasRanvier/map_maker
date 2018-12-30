@@ -5,13 +5,15 @@ from utils.utils import orientation_to_angle
 from math import pi
 
 class Robot:
+    self.HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
+
     def __init__(self, url):
         self.__url = url
 
     def post_speed(self, angular_speed, linear_speed):
         params = json.dumps({'TargetAngularSpeed': angular_speed, 'TargetLinearSpeed': linear_speed})
         mrds = http.client.HTTPConnection(self.__url)
-        mrds.request('POST', '/lokarria/differentialdrive', params, HEADERS)
+        mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
         response = mrds.getresponse()
         status = response.status
         response.close()
