@@ -24,11 +24,11 @@ class Mapper:
             for cell in cells:
                 if self.__map.is_in_bound(cell):
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
-                        #if laser.echoe < self.__max_distance:
-                        occupied_probability = self.__occupied_probability(laser.echoe)
-                        if not self.__map.grid[hit_cell.x][hit_cell.y] >= 0.7:
-                            occupied_probability += self.__min_increase
-                        self.__map.grid[hit_cell.x][hit_cell.y] = self.__bayesian_probability(occupied_probability, self.__map.grid[hit_cell.x][hit_cell.y])
+                        if laser.echoe <= self.__max_distance:
+                            occupied_probability = self.__occupied_probability(laser.echoe)
+                            if not self.__map.grid[hit_cell.x][hit_cell.y] >= 0.7:
+                                occupied_probability += self.__min_increase
+                            self.__map.grid[hit_cell.x][hit_cell.y] = self.__bayesian_probability(occupied_probability, self.__map.grid[hit_cell.x][hit_cell.y])
                     else:
                         real_cell = self.__map.to_real_pos(cell)
                         distance = hypot(real_cell.x - real_lasers_cell.x, real_cell.y - real_lasers_cell.y)    
