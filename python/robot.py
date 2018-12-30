@@ -5,7 +5,7 @@ from utils.utils import orientation_to_angle
 from math import pi
 
 class Robot:
-    def __init__(url):
+    def __init__(self, url):
         self.__url = url
 
     def post_speed(self, angular_speed, linear_speed):
