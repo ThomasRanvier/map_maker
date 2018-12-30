@@ -4,7 +4,7 @@ from mapping.map import Map
 from utils.position import Position
 
 class Mapper:
-    def __init__(self, map_to_update, lasers_distance = 0.15, min_increase = 0.04, increase = 0.15, max_distance = 40):
+    def __init__(self, map_to_update, lasers_distance = 0.15, min_increase = 0.01, increase = 0.1, max_distance = 40):
         self.__map = map_to_update
         self.__lasers_distance = lasers_distance
         self.__max_distance = max_distance
@@ -28,7 +28,7 @@ class Mapper:
             cells = bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y)
             for cell in cells:
                 if self.__map.is_in_bound(cell):
-                    inc = max(self.__min_increase, self.__increase * (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0 * self.__increase))
+                    inc = max(self.__min_increase, self.__increase * (1 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
                         if laser.echoe < self.__max_distance:
                             self.__map.grid[hit_cell.x][hit_cell.y] += inc
