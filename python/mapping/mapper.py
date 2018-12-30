@@ -24,18 +24,18 @@ class Mapper:
             cells = bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y)
             for cell in cells:
                 if self.__map.is_in_bound(cell):
-                    increment_factor_in_regard_of_certainty = 1.0 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)
+                    inc_factor_iro_certainty = 1.0 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
                         if laser.echoe < self.__max_distance - self.__safe_distance_obstacle:
-                            increment_factor_in_regard_of_distance = 1.5 * (1.0 - (laser.echoe / self.__max_distance))
-                            self.__map.grid[cell.x][cell.y] += increment_factor_in_regard_of_certainty * increment_factor_in_regard_of_distance * self.__increment
+                            inc_factor_iro_dist = 1.5 * (1.0 - (laser.echoe / self.__max_distance))
+                            self.__map.grid[cell.x][cell.y] += inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment
                             if self.__map.grid[cell.x][cell.y] > 1.0:
                                 self.__map.grid[cell.x][cell.y] = 1.0
                     else:
                         real_cell = self.__map.to_real_pos(cell)
                         distance = hypot(real_cell.x - real_lasers_cell.x, real_cell.y - real_lasers_cell.y)
                         if distance < self.__max_distance - self.__safe_distance_empty:
-                            increment_factor_in_regard_of_distance = 1.5 * (1.0 - (distance / self.__max_distance))
-                            self.__map.grid[cell.x][cell.y] -= increment_factor_in_regard_of_certainty * increment_factor_in_regard_of_distance * self.__increment
+                            inc_factor_iro_dist = 1.5 * (1.0 - (distance / self.__max_distance))
+                            self.__map.grid[cell.x][cell.y] -= inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment
                             if self.__map.grid[cell.x][cell.y] < 0.0:
                                 self.__map.grid[cell.x][cell.y] = 0.0
