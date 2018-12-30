@@ -1,4 +1,4 @@
-class laser:
+class Laser:
     def __init__(self, echoe, angle):
         self.echoe = echoe
         self.angle = angle
