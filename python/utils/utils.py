@@ -35,7 +35,12 @@ def bresenham_line(x1, y1, x2, y2):
 
 def orientation_to_angle(orientation):
     head = heading(orientation)
-    return atan2(head['Y'], head['X'])
+    angle = atan2(head['Y'], head['X'])
+    while angle > pi:
+        angle -= 2.0 * pi
+    while angle < -pi:
+        angle += 2.0 * pi
+    return 
 
 def heading(q):
     return rotate(q, {'X': 1.0, 'Y': 0.0, "Z": 0.0})
