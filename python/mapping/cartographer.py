@@ -4,10 +4,11 @@ from mapping.map import Map
 from utils.position import Position
 
 class Cartographer:
-    def __init__(self, map_to_update, lasers_distance = 0.15, increment = 0.1, max_distance = 40, safe_distance_obstacle = 5, safe_distance_empty = 10):
+    def __init__(self, map_to_update, lasers_distance = 0.15, min_increment = 0.005, increment = 0.1, max_distance = 40, safe_distance_obstacle = 5, safe_distance_empty = 10):
         self.__map = map_to_update
         self.__lasers_distance = lasers_distance
         self.__max_distance = max_distance
+        self.__min_increment = min_increment
         self.__increment = increment
         self.__safe_distance_obstacle = safe_distance_obstacle
         self.__safe_distance_empty = safe_distance_empty
@@ -28,7 +29,7 @@ class Cartographer:
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
                         if laser.echoe < self.__max_distance - self.__safe_distance_obstacle:
                             inc_factor_iro_dist = 1.5 * (1.0 - (laser.echoe / self.__max_distance))
-                            self.__map.grid[cell.x][cell.y] += inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment
+                            self.__map.grid[cell.x][cell.y] += max(self.__min_increment, inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment)
                             if self.__map.grid[cell.x][cell.y] > 1.0:
                                 self.__map.grid[cell.x][cell.y] = 1.0
                     else:
@@ -36,6 +37,6 @@ class Cartographer:
                         distance = hypot(real_cell.x - real_lasers_cell.x, real_cell.y - real_lasers_cell.y)
                         if distance < self.__max_distance - self.__safe_distance_empty:
                             inc_factor_iro_dist = 1.5 * (1.0 - (distance / self.__max_distance))
-                            self.__map.grid[cell.x][cell.y] -= inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment
+                            self.__map.grid[cell.x][cell.y] -= max(self.__min_increment, inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment)
                             if self.__map.grid[cell.x][cell.y] < 0.0:
                                 self.__map.grid[cell.x][cell.y] = 0.0
