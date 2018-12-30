@@ -1,7 +1,8 @@
 from robot import Robot
+from math import cos, sin
 import time
 
-url = 'http://localhost:50000'
+url = 'localhost:50000'
 
 robot = Robot(url)
 robot.post_speed(0.3, 0.3)
