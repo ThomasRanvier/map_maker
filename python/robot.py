@@ -30,8 +30,8 @@ class Robot:
         if (response.status == 200):
             pose_data = response.read()
             response.close()
-            pos = json.loads(pose_data.decode())
-            return Position(pos['Pose']['X'], pos['Pose']['Y'], pos['Pose']['Z'], orientation_to_angle(pos['Orientation']))
+            pos = json.loads(pose_data.decode())['Pose']
+            return Position(pos['Position']['X'], pos['Position']['Y'], pos['Position']['Z'], orientation_to_angle(pos['Orientation']))
         else:
             print('Impossible to get the robot pose')
             return None
