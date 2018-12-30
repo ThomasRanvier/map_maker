@@ -1,5 +1,5 @@
 from utils.utils import bresenham_line
-from math import hypot
+from math import hypot, cos, sin
 from mapping.map import Map
 from utils.position import Position
 
