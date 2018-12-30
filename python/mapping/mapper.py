@@ -4,11 +4,10 @@ from mapping.map import Map
 from utils.position import Position
 
 class Mapper:
-    def __init__(self, map_to_update, lasers_distance = 0.15, p_max = 0.98, min_increase = 0.02, increase = 0.15, max_distance = 40):
+    def __init__(self, map_to_update, lasers_distance = 0.15, min_increase = 0.04, increase = 0.15, max_distance = 40):
         self.__map = map_to_update
         self.__lasers_distance = lasers_distance
         self.__max_distance = max_distance
-        self.__p_max = p_max
         self.__min_increase = min_increase
         self.__increase = increase
         
@@ -51,7 +50,7 @@ class Mapper:
                         if distance <= self.__max_distance - 10:
                             occupied_probability = self.__occupied_probability(distance)
                             self.__map.grid[cell.x][cell.y] = self.__bayesian_probability(occupied_probability, self.__map.grid[cell.x][cell.y])"""
-
+"""
     def __bayesian_probability(self, occupied_probability, previous_probabilty):
         empty_probability = 1 - occupied_probability
         empty_previous_probability = 1 - previous_probabilty
@@ -59,4 +58,5 @@ class Mapper:
                 (occupied_probability * previous_probabilty + empty_probability * empty_previous_probability))
     
     def __occupied_probability(self, distance):
-        return ((self.__max_distance - distance) / self.__max_distance) / 2 * self.__p_max
+        return ((self.__max_distance - distance) / self.__max_distance) / 2
+        """
