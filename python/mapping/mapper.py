@@ -34,29 +34,7 @@ class Mapper:
                             self.__map.grid[hit_cell.x][hit_cell.y] += inc
                             if self.__map.grid[hit_cell.x][hit_cell.y] > 1.0:
                                 self.__map.grid[hit_cell.x][hit_cell.y] = 1.0
-                        """
-                        if laser.echoe <= self.__max_distance - 5:
-                            occupied_probability = self.__occupied_probability(laser.echoe)
-                            if not self.__map.grid[hit_cell.x][hit_cell.y] >= 0.7:
-                                occupied_probability += self.__min_increase
-                            self.__map.grid[hit_cell.x][hit_cell.y] = self.__bayesian_probability(1 - occupied_probability, self.__map.grid[hit_cell.x][hit_cell.y])"""
                     else:
                         self.__map.grid[cell.x][cell.y] -= inc
                         if self.__map.grid[cell.x][cell.y] < 0.0:
                             self.__map.grid[cell.x][cell.y] = 0.0
-                        """
-                        real_cell = self.__map.to_real_pos(cell)
-                        distance = hypot(real_cell.x - real_lasers_cell.x, real_cell.y - real_lasers_cell.y)    
-                        if distance <= self.__max_distance - 10:
-                            occupied_probability = self.__occupied_probability(distance)
-                            self.__map.grid[cell.x][cell.y] = self.__bayesian_probability(occupied_probability, self.__map.grid[cell.x][cell.y])"""
-"""
-    def __bayesian_probability(self, occupied_probability, previous_probabilty):
-        empty_probability = 1 - occupied_probability
-        empty_previous_probability = 1 - previous_probabilty
-        return ((occupied_probability * previous_probabilty) / 
-                (occupied_probability * previous_probabilty + empty_probability * empty_previous_probability))
-    
-    def __occupied_probability(self, distance):
-        return ((self.__max_distance - distance) / self.__max_distance) / 2
-        """
