@@ -18,5 +18,5 @@ if __name__ == '__main__':
     show_map = ShowMap(robot_map)
 
     while True:
-        mapper.udpate(robot.position, robot.lasers)
-        show_map.udpate(robot.position)
+        mapper.update(robot.position, robot.lasers)
+        show_map.update(robot.position)

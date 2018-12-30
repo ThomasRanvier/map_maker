@@ -11,7 +11,7 @@ class Mapper:
         self.__p_max = p_max
         self.__min_increase = min_increase
         
-    def udpate(self, robot_pos, lasers):
+    def update(self, robot_pos, lasers):
         lasers_pos_x = robot_pos.x + self.__lasers_distance * cos(robot_pos.angle)
         lasers_pos_y = robot_pos.y + self.__lasers_distance * sin(robot_pos.angle)
         lasers_cell = self.__map.to_grid_pos(Position(lasers_pos_x, lasers_pos_y))
