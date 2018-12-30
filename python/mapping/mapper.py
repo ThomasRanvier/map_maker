@@ -30,9 +30,10 @@ class Mapper:
             for cell in cells:
                 if self.__map.is_in_bound(cell):
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
-                        self.__map.grid[hit_cell.x][hit_cell.y] += self.__increase
-                        if self.__map.grid[hit_cell.x][hit_cell.y] > 1.0:
-                            self.__map.grid[hit_cell.x][hit_cell.y] = 1.0
+                        if laser.echoe < self.__max_distance:
+                            self.__map.grid[hit_cell.x][hit_cell.y] += self.__increase
+                            if self.__map.grid[hit_cell.x][hit_cell.y] > 1.0:
+                                self.__map.grid[hit_cell.x][hit_cell.y] = 1.0
                         """
                         if laser.echoe <= self.__max_distance - 5:
                             occupied_probability = self.__occupied_probability(laser.echoe)
@@ -40,7 +41,6 @@ class Mapper:
                                 occupied_probability += self.__min_increase
                             self.__map.grid[hit_cell.x][hit_cell.y] = self.__bayesian_probability(occupied_probability, self.__map.grid[hit_cell.x][hit_cell.y])"""
                     else:
-                        
                         self.__map.grid[cell.x][cell.y] -= self.__increase
                         if self.__map.grid[cell.x][cell.y] < 0.0:
                             self.__map.grid[cell.x][cell.y] = 0.0
