@@ -28,7 +28,7 @@ class Mapper:
             cells = bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y)
             for cell in cells:
                 if self.__map.is_in_bound(cell):
-                    inc = max(self.__min_increase, self.__increase * (1 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)
+                    inc = max(self.__min_increase, self.__increase * (1 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)))
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
                         if laser.echoe < self.__max_distance:
                             self.__map.grid[hit_cell.x][hit_cell.y] += inc
