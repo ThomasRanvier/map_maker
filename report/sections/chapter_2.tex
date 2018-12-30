@@ -2,12 +2,16 @@ Our program is divided in two main modules, the mapping module and the planning 
 The role of the first one is to build the map of the environment of the robot using the echoes of the lasers.
 The role of the second one is to plan the path that the robot must follow in order to explore the world.
 
+To communicate with the MRDS server we created a class named 'Robot', it is used as an interface to send and receive informations to and from the MRDS server easily.
+The received informations are directly adapted to our needs and stored using our 'Position' and 'Laser' datastructures in this class.
+
 \section{Mapping}
 
 The first point on which we worked was to find a way of building a map of the environment of the robot using the lasers echoes.
 
 To do so we created a class 'Map' that contains a grid of values between $0$ and $1$.
 Those values represent probability that there is an obstacle on that cell.
+All the values are initialized to $0.5$ which is the average value between $0$ and $1$ since we do not know if there is an obstacle or not at that place.
 
 To update this grid we created a class 'Cartographer' that uses the echoes of the lasers.
 For each laser echoe we compute the distance between the robot cell and the cell hit by the laser in the grid.
