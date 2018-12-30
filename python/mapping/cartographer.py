@@ -8,7 +8,7 @@ class Cartographer:
         self.__map = map_to_update
         self.__lasers_distance = lasers_distance
         self.__max_distance = max_distance
-        self.__min_increment = min_increment
+        #self.__min_increment = min_increment
         self.__increment = increment
         self.__safe_distance_obstacle = safe_distance_obstacle
         self.__safe_distance_empty = safe_distance_empty
@@ -25,18 +25,22 @@ class Cartographer:
             cells = bresenham_line(lasers_cell.x, lasers_cell.y, hit_cell.x, hit_cell.y)
             for cell in cells:
                 if self.__map.is_in_bound(cell):
-                    inc_factor_iro_certainty = 1.0 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)
+                    #inc_factor_iro_certainty = 1.0 - (abs(self.__map.grid[cell.x][cell.y] - 0.5) * 2.0)
                     if cell.x == hit_cell.x and cell.y == hit_cell.y:
                         if laser.echoe < self.__max_distance - self.__safe_distance_obstacle:
+                            inc_test_certainty = 0.025 if self.__map.grid[cell.x][cell.y] < 0.5 else self.__increment
                             inc_factor_iro_dist = 1.5 * (1.0 - (laser.echoe / self.__max_distance))
-                            self.__map.grid[cell.x][cell.y] += max(self.__min_increment, inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment)
+                            self.__map.grid[cell.x][cell.y] += inc_factor_iro_dist * inc_test_certainty
+                            #max(self.__min_increment, inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment)
                             if self.__map.grid[cell.x][cell.y] > 1.0:
                                 self.__map.grid[cell.x][cell.y] = 1.0
                     else:
                         real_cell = self.__map.to_real_pos(cell)
                         distance = hypot(real_cell.x - real_lasers_cell.x, real_cell.y - real_lasers_cell.y)
                         if distance < self.__max_distance - self.__safe_distance_empty:
+                            inc_test_certainty = 0.025 if self.__map.grid[cell.x][cell.y] > 0.5 else self.__increment
                             inc_factor_iro_dist = 1.5 * (1.0 - (distance / self.__max_distance))
-                            self.__map.grid[cell.x][cell.y] -= max(self.__min_increment, inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment)
+                            self.__map.grid[cell.x][cell.y] -= inc_factor_iro_dist * inc_test_certainty
+                            #max(self.__min_increment, inc_factor_iro_certainty * inc_factor_iro_dist * self.__increment)
                             if self.__map.grid[cell.x][cell.y] < 0.0:
                                 self.__map.grid[cell.x][cell.y] = 0.0
