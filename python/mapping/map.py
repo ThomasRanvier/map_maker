@@ -11,7 +11,7 @@ class Map:
         self.__grid_width = int(self.__real_width * scale)
         self.__real_height = upper_right_pos.y - lower_left_pos.y 
         self.__grid_height = int(self.__real_height * scale)
-        self.grid = np.full((self.__grid_width, self.__grid_height), 0.5)
+        self.grid = np.full((self.__grid_width, self.__grid_height), 1)
 
     def to_grid_pos(self, real_pos):
         x = int((real_pos.x - self.__lower_left_pos.x) * self.__scale)
