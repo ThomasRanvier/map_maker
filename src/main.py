@@ -26,15 +26,13 @@ if __name__ == '__main__':
     delay = 2
 
     while True:
-        if goal_point != None:
-            print('dist: ' + str(distance_2(robot_map.to_grid_pos(robot_pos), goal_point)))
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
         show_map.update(robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
-        if time.time() - start >= delay or (goal_point != None and distance_2(robot_map.to_grid_pos(robot_pos), goal_point) <= 4):
+        if time.time() - start >= delay or (goal_point != None and distance_2(robot_map.to_grid_pos(robot_pos), goal_point) <= 16):
             goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
             #path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
-            delay = 20
+            delay = 200000
 

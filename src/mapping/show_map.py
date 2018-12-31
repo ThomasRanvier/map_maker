@@ -39,7 +39,7 @@ class ShowMap:
         self.__ax.set_yticks([])
         self.__ax.plot(robot_pos.x, self.__map.grid_height - 1 - robot_pos.y, 'rs', markersize=self.__robot_size)
         if goal_point != None:
-            self.__ax.plot(goal_point.x, self.__map.grid_height - 1 - goal_point.y, 'bh', markersize=4)
+            self.__ax.plot(goal_point.x, self.__map.grid_height - 1 - goal_point.y, 'bh', markersize=8)
         if path != None:
             for point in path:
                 self.__ax.plot(point.x, self.__map.grid_height - 1 - point.y, 'g+', markersize=2)
@@ -48,7 +48,7 @@ class ShowMap:
             for frontier in frontiers:
                 for point in frontier:
                     color = ['gh', 'ch', 'mh', 'yh', 'kh']
-                    self.__ax.plot(point.x, self.__map.grid_height - 1 - point.y, color[index % 5], markersize=2)
+                    self.__ax.plot(point.x, self.__map.grid_height - 1 - point.y, color[index % 5], markersize=1)
                 index += 1
         self.__fig.canvas.draw()
         elapsed_time = time.time() - self.__start_time
