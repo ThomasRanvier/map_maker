@@ -4,6 +4,7 @@ from mapping.map import Map
 from mapping.show_map import ShowMap
 from planning.goal_planner import GoalPlanner
 from utils.position import Position
+from utils.utils import distance_2
 import time
 
 if __name__ == '__main__':
@@ -12,22 +13,24 @@ if __name__ == '__main__':
     scale = 1 / size_of_cell_in_meter
 
     robot = Robot(url)
-    lower_left_pos = Position(-50.0, -50.0)
-    upper_right_pos = Position(50.0, 50.0)
+    lower_left_pos = Position(-100.0, -100.0)
+    upper_right_pos = Position(100.0, 100.0)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
     goal_planner = GoalPlanner(robot_map)
     cartographer = Cartographer(robot_map)
     show_map = ShowMap(robot_map)
     frontiers = None
     goal_point = None
-    start = 0
+    path = None
+    start = time.time() + 8.0
 
     while True:
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
         show_map.update(robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
-        if time.time() - start >= 10:
+        if time.time() - start >= 10 or (goal_point != None and distance_2(robot_map.to_grid_pos(robot_pos), goal_point) <= 4):
             goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
+            #path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
 
