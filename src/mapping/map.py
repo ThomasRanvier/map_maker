@@ -50,7 +50,7 @@ class Map:
                 cell = Position(x, y)
                 if self.is_unknown(cell):
                     for neighbour in von_neumann_neighbourhood(cell, self.grid_width, self.grid_height):
-                        if neighbour not in frontiers and self.grid[neighbour.x][neighbour.y] <= 0.4:#is_empty(neighbour):
+                        if neighbour not in frontiers and self.is_empty(neighbour):
                             frontiers.append(neighbour)
         return frontiers
 
@@ -65,12 +65,10 @@ class Map:
     def get_divided_frontiers(self):
         frontiers = self.__get_frontiers()
         divided_frontiers = [frontiers]
-        """
         while frontiers:
             current_frontier = []
             cell = frontiers.pop(0)
             current_frontier.append(cell)
             self.__build_frontier(frontiers, current_frontier, cell)
             divided_frontiers.append(current_frontier)
-        """
         return divided_frontiers
