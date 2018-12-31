@@ -23,12 +23,8 @@ if __name__ == '__main__':
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
         show_map.update(robot_map.to_grid_pos(robot_pos))
-        print(str(i))
-
-    time.sleep(2)
 
     frontiers = robot_map.get_divided_frontiers()
-    show_map.update(robot_map.to_grid_pos(robot.position), frontiers=frontiers)
 
     while True:
-        pass
+        show_map.update(robot_map.to_grid_pos(robot.position), frontiers=frontiers)

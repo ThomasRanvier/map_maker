@@ -30,10 +30,10 @@ class Map:
         return self.grid[grid_pos.x][grid_pos.y] == 0.5
 
     def is_obstacle(self, grid_pos):
-        return self.grid[grid_pos.x][grid_pos.y] >= 0.8
+        return self.grid[grid_pos.x][grid_pos.y] > 0.5
 
     def is_empty(self, grid_pos):
-        return self.grid[grid_pos.x][grid_pos.y] <= 0.2
+        return self.grid[grid_pos.x][grid_pos.y] < 0.5
 
     @property
     def grid_width(self):
