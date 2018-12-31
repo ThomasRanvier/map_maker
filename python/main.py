@@ -18,7 +18,7 @@ if __name__ == '__main__':
     show_map = ShowMap(robot_map)
 
     #while True:
-    for _ in range(200):
+    for _ in range(25):
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
