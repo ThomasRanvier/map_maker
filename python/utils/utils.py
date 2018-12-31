@@ -33,6 +33,38 @@ def bresenham_line(x1, y1, x2, y2):
         points.reverse()
     return points
 
+def von_neumann_neighbourhood(cell, grid_width, grid_height):
+    neighbours = []
+    if cell.x > 0:
+        neighbours.append(Position(cell.x - 1, cell.y))
+    if cell.y > 0:
+        neighbours.append(Position(cell.x, cell.y - 1))
+    if cell.x < grid_width - 1:
+        neighbours.append(Position(cell.x + 1, cell.y))
+    if cell.y < grid_height - 1:
+        neighbours.append(Position(cell.x, cell.y + 1))
+    return neighbours
+
+def moore_neighbourhood(cell, grid_width, grid_height):
+    neighbours = []
+    if cell.x > 0:
+        neighbours.append(Position(cell.x - 1, cell.y))
+    if cell.y > 0:
+        neighbours.append(Position(cell.x, cell.y - 1))
+    if cell.x < grid_width - 1:
+        neighbours.append(Position(cell.x + 1, cell.y))
+    if cell.y < grid_height - 1:
+        neighbours.append(Position(cell.x, cell.y + 1))
+    if cell.x > 0 and cell.y > 0:
+        neighbours.append(Position(cell.x - 1, cell.y - 1))
+    if cell.x > 0 and cell.y < grid_height - 1:
+        neighbours.append(Position(cell.x - 1, cell.y + 1))
+    if cell.x < grid_width - 1 and cell.y > 0:
+        neighbours.append(Position(cell.x + 1, cell.y - 1))
+    if cell.x < grid_width - 1 and cell.y < grid_height - 1:
+        neighbours.append(Position(cell.x + 1, cell.y + 1))
+    return neighbours
+
 def orientation_to_angle(orientation):
     head = heading(orientation)
     angle = atan2(head['Y'], head['X'])

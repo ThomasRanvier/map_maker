@@ -25,7 +25,7 @@ class ShowMap:
         self.__save()
         self.__start_time = time.time()
 
-    def update(self, robot_pos, goal_pos = None, path = None):
+    def update(self, robot_pos, goal_pos = None, path = None, frontiers = None):
         import matplotlib.pyplot as plt
         plt.pause(0.02)
         grid = np.matrix(self.__map.grid)
@@ -44,7 +44,14 @@ class ShowMap:
             self.__ax.plot(x, self.__map.grid_height - 1 - y, 'bh', markersize=4)
         if path != None:
             for point in path:
-                self.__ax.plot(point.x, point.y, 'g+', markersize=2)
+                self.__ax.plot(point.x, self.__map.grid_height - 1 - point.y, 'g+', markersize=2)
+        if frontiers != None:
+            index = 0
+            for frontier in frontiers:
+                for point in frontier:
+                    color = ['bh', 'gh', 'ch', 'mh', 'yh', 'bh']
+                    self.__ax.plot(point.x, self.__map.grid_height - 1 - point.y, color[index % 6], markersize=4)
+                index += 1
         self.__fig.canvas.draw()
         elapsed_time = time.time() - self.__start_time
         if elapsed_time >= self.__save_map_time:

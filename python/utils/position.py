@@ -16,3 +16,9 @@ class Position:
         if self.angle != None:
             string += ' angle: ' + str(self.angle)
         return string
+
+    def __eq__(self, other):
+        is_equal = False
+        if isinstance(other, Position):
+            is_equal = (other.x == self.x and other.y == self.y and other.z == self.z and other.angle == self.angle)
+        return is_equal
