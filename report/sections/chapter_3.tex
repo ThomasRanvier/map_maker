@@ -157,7 +157,27 @@ This is the pseudocode of the algorithm:
 \end{algorithm}
 \FloatBarrier
 
-This are the frontiers detected with this new algorithm in a test and a real case, in the real case we only displayed the frontiers with more than 20 points in it.
+Those are the frontiers detected with this new algorithm in a test and a real case, in the real case we only displayed the frontiers with more than 20 points in it.
+
+\FloatBarrier
+\begin{figure}
+    \centering\includegraphics[width=0.5\textwidth]{frontiers_wfd.png}
+    \label{fig:frontiers_wfd}
+    \caption{Frontiers test map WFD}
+\end{figure}
+\FloatBarrier
+\begin{figure}
+    \centering\includegraphics[width=\textwidth]{frontiers_wfd_real_map.png}
+    \label{fig:frontiers_wfd_real_map}
+    \caption{Frontiers real map WFD}
+\end{figure}
+\FloatBarrier
+
+The main difference with our naive approach is of course the efficiency of this last method, it can almost instantaneously find the frontiers in the real map.
+
+\subsection{Choosing the goal point}
+
+Now that we are able to find the frontiers we have to first choose which frontier we want to go to and then what point in this frontier we should choose.
 
 \section{Build the path}
 
