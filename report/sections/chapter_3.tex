@@ -14,6 +14,10 @@ Then the first thing to do in order to determine the next goal point is to detec
 
 \subsection{Detect the frontiers}
 
+At first we thought that a naive approach could be enough for this part, but we later noticed that it was not efficient enough.
+
+\subsubsection{First naive approach}
+
 To detect the frontiers we go through all the unexplored cells of the grid and if that cell has an explored empty cell in its Von Neumann neighbourhood we know it is part of a frontier.
 The Von Neumann neighbourhood is composed of the four adjacent cells around a cell.
 Once we went through the whole grid we have a list of all the cells that are on a frontier, the next step is to divide them into several regions.
@@ -89,6 +93,71 @@ However, the function gave a very good result as we can see below:
     \caption{Frontiers real map}
 \end{figure}
 \FloatBarrier
+
+\subsubsection{Final approach, using the Wavefront Frontier Detector algorithm}
+
+We found this algorithm in a scientific paper, happily there was a very comprehensible pseudocode in the paper that we simply followed to implement it in our project.
+
+This is the pseudocode of the algorithm:
+
+\FloatBarrier
+\begin{algorithm}
+    \caption{Wavefront Frontier Detector}
+    \label{wavefront_frontier_detector}
+    \begin{algorithmic}[1]
+        \State $queue\_m \gets []$
+        \State $queue\_m.append(robot\_cell)$
+        \State $frontiers \gets []$
+        \State $map\_open \gets set([])$
+        \State $map\_close \gets set([])$
+        \State $frontier\_open \gets set([])$
+        \State $frontier\_close \gets set([])$
+        \State $map\_open.add(robot\_cell)$
+        \While{$queue\_m$ \textbf{is not empty}}
+            \State $p \gets queue\_m.pop(0)$
+            \If{$p$ \textbf{in} $map\_close$}
+                \State \textbf{continue}
+            \EndIf
+            \If{$is\_frontier\_point(p)$}
+                \State $queue\_f = []$
+                \State $frontier \gets set([])$
+                \State $queue\_f.append(p)$
+                \State $frontier\_open.add(p)$
+                \While{$queue\_f$ \textbf{is not empty}}
+                    \State $q \gets queue\_f.pop(0)$
+                    \If{$q$ \textbf{in} $map\_close$ \textbf{and} $q$ \textbf{in} $frontier\_close$}
+                        \State \textbf{continue}
+                    \EndIf
+                    \If{$is\_frontier\_point(q)$}
+                        \State $frontier.add(q)$
+                        \For{$w$ \textbf{in} $moore\_neighbourhood(q)$}
+                            \If{$w$ \textbf{not in} $frontier\_open$ \textbf{and} $w$ \textbf{not in} $map\_close$ \textbf{and} $w$ \textbf{not in} $frontier\_close$}
+                                \State $queue\_f.append(w)$
+                                \State $frontier\_open.add(w)$
+                            \EndIf
+                        \EndFor
+                    \EndIf
+                    \State $frontier\_close.add(q)$
+                \EndWhile
+                \State $frontiers.append(frontier)$
+                \For{$cell$ \textbf{in} $frontier$}
+                    \State $map\_close.add(cell)$
+                \EndFor
+            \EndIf
+            \For{$v$ \textbf{in} $moore\_neighbourhood(p)$}
+                \If{$v$ \textbf{not in} $map\_open$ \textbf{and} $v$ \textbf{not in} $map\_close$ \textbf{and} $has\_open\_neighbour(v)$}
+                    \State $queue\_m.append(v)$
+                    \State $map\_open.add(v)$
+                \EndIf
+            \EndFor
+            \State $map\_close.add(p)$
+        \EndWhile
+        \State \textbf{return} $frontiers$
+    \end{algorithmic}
+\end{algorithm}
+\FloatBarrier
+
+This are the frontiers detected with this new algorithm in a test and a real case, in the real case we only displayed the frontiers with more than 20 points in it.
 
 \section{Build the path}
 

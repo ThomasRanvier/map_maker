@@ -8,7 +8,7 @@ robot_pos = Position(9, 9)
 lower_left_pos = Position(-5.0, -5.0)
 upper_right_pos = Position(5.0, 5.0)
 test_map = Map(lower_left_pos, upper_right_pos, 1.0)
-goal_planner = GoalPlanner(test_map)
+goal_planner = GoalPlanner(test_map, 0)
 show_map = ShowMap(test_map, True)
 
 for x in range(test_map.grid_width):
