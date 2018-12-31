@@ -26,6 +26,8 @@ if __name__ == '__main__':
     delay = 2
 
     while True:
+        if goal_point != None:
+            print('dist: ' + str(distance_2(robot_map.to_grid_pos(robot_pos), goal_point)))
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
