@@ -25,7 +25,7 @@ class ShowMap:
         self.__save()
         self.__start_time = time.time()
 
-    def update(self, robot_pos, goal_pos = None, path = None, frontiers = None):
+    def update(self, robot_pos, goal_point = None, path = None, frontiers = None):
         import matplotlib.pyplot as plt
         plt.pause(0.02)
         grid = np.matrix(self.__map.grid)
@@ -38,10 +38,8 @@ class ShowMap:
         self.__ax.set_xticks([])
         self.__ax.set_yticks([])
         self.__ax.plot(robot_pos.x, self.__map.grid_height - 1 - robot_pos.y, 'rs', markersize=self.__robot_size)
-        if goal_pos != None:
-            x = goal_pos.x
-            y = goal_pos.y
-            self.__ax.plot(x, self.__map.grid_height - 1 - y, 'bh', markersize=4)
+        if goal_point != None:
+            self.__ax.plot(goal_point.x, self.__map.grid_height - 1 - goal_point.y, 'bh', markersize=4)
         if path != None:
             for point in path:
                 self.__ax.plot(point.x, self.__map.grid_height - 1 - point.y, 'g+', markersize=2)
