@@ -1,3 +1,5 @@
+from utils.position import Position
+
 class PathPlanner:
     def __init__(self, robot_map):
         self.__map = robot_map
