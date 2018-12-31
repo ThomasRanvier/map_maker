@@ -50,7 +50,7 @@ class Map:
                 cell = Position(x, y)
                 if self.is_unknown(cell):
                     for neighbour in von_neumann_neighbourhood(cell, self.grid_width, self.grid_height):
-                        if neighbour not in frontiers and self.is_empty(neighbour):
+                        if neighbour not in frontiers and self.grid[neighbour.x][neighbour.y] <= 0.1:#is_empty(neighbour):
                             frontiers.append(neighbour)
         return frontiers
 
