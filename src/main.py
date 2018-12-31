@@ -11,6 +11,7 @@ if __name__ == '__main__':
     url = 'localhost:50000'
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
+    distance_to_trigger_goal_m = 6
 
     robot = Robot(url)
     lower_left_pos = Position(-100.0, -100.0)
@@ -30,7 +31,12 @@ if __name__ == '__main__':
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
         show_map.update(robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
-        if time.time() - start >= delay or (goal_point != None and distance_2(robot_map.to_grid_pos(robot_pos), goal_point) <= 16):
+        goal_reached = False
+        if goal_point != None:
+            dist_2 = distance_2(robot_map.to_grid_pos(robot_pos), goal_point)
+            trigger_2 = (distance_to_trigger_goal_m * (1.0 / size_of_cell_in_meter))**2
+            goal_reached = (dist_2 <= trigger_2)
+        if time.time() - start >= delay or goal_reached:
             goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
             #path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
