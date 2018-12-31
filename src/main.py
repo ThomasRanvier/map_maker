@@ -27,7 +27,7 @@ if __name__ == '__main__':
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
         show_map.update(robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
-        if time.time() - start >= 5:
+        if time.time() - start >= 10:
             goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
             start = time.time()
 
