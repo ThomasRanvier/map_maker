@@ -2,8 +2,9 @@ from utils.position import Position
 from utils.utils import von_neumann_neighbourhood, moore_neighbourhood
 
 class GoalPlanner:
-    def __init__(self, robot_map):
+    def __init__(self, robot_map, min_frontier_points = 25):
         self.__map = robot_map
+        self.__min_frontier_points = min_frontier_points
 
     def get_frontiers(self, robot_pos):
         """
@@ -38,7 +39,8 @@ class GoalPlanner:
                                 queue_f.append(w)
                                 frontier_open.add(w)    
                     frontier_close.add(q)
-                frontiers.append(frontier)
+                if len(frontier) >= self.__min_frontier_points:
+                    frontiers.append(frontier)
                 for cell in frontier:
                     map_close.add(cell)
             for v in moore_neighbourhood(p, self.__map.grid_width, self.__map.grid_height):
