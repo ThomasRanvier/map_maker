@@ -36,7 +36,7 @@ class Cartographer:
                         real_cell = self.__map.to_real_pos(cell)
                         distance = hypot(real_cell.x - real_lasers_cell.x, real_cell.y - real_lasers_cell.y)
                         if distance < self.__max_distance - self.__safe_distance_empty:
-                            inc_test_certainty = self.__min_increment if self.__map.grid[cell.x][cell.y] > 0.5 else self.__increment
+                            inc_iro_certainty = self.__min_increment if self.__map.grid[cell.x][cell.y] > 0.5 else self.__increment
                             inc_factor_iro_dist = 1.5 * (1.0 - (distance / self.__max_distance))
                             self.__map.grid[cell.x][cell.y] -= inc_factor_iro_dist * inc_iro_certainty
                             if self.__map.grid[cell.x][cell.y] < 0.0:
