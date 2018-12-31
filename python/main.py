@@ -3,6 +3,7 @@ from mapping.cartographer import Cartographer
 from mapping.map import Map
 from mapping.show_map import ShowMap
 from utils.position import Position
+import time
 
 if __name__ == '__main__':
     url = 'localhost:50000'
@@ -16,6 +17,15 @@ if __name__ == '__main__':
     cartographer = Cartographer(robot_map)
     show_map = ShowMap(robot_map)
 
-    while True:
-        cartographer.update(robot.position, robot.lasers)
-        show_map.update(robot_map.to_grid_pos(robot.position))
+    #while True:
+    for _ in range(200):
+        robot_pos = robot.position
+        robot_lasers = robot.lasers
+        cartographer.update(robot_pos, robot_lasers)
+        show_map.update(robot_map.to_grid_pos(robot_pos))
+
+    print('Stop the robot')
+    time.sleep(2)
+
+    frontiers = robot_map.get_divided_frontiers()
+    show_map.update(robot_map.to_grid_pos(robot.position), frontiers=frontiers)
