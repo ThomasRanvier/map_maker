@@ -49,8 +49,8 @@ class ShowMap:
             index = 0
             for frontier in frontiers:
                 for point in frontier:
-                    color = ['bh', 'gh', 'ch', 'mh', 'yh', 'bh']
-                    self.__ax.plot(point.x, self.__map.grid_height - 1 - point.y, color[index % 6], markersize=4)
+                    color = ['gh', 'ch', 'mh', 'yh', 'kh']
+                    self.__ax.plot(point.x, self.__map.grid_height - 1 - point.y, color[index % 5], markersize=2)
                 index += 1
         self.__fig.canvas.draw()
         elapsed_time = time.time() - self.__start_time

@@ -33,6 +33,9 @@ def bresenham_line(x1, y1, x2, y2):
         points.reverse()
     return points
 
+def distance_2(pos_1, pos_2):
+    return (pos_2.x - pos_1.x)**2 + (pos_2.y - pos_1.y)**2
+
 def von_neumann_neighbourhood(cell, grid_width, grid_height):
     neighbours = []
     if cell.x > 0:

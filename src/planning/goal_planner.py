@@ -1,12 +1,45 @@
 from utils.position import Position
-from utils.utils import von_neumann_neighbourhood, moore_neighbourhood
+from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2
+from math import inf
 
 class GoalPlanner:
     def __init__(self, robot_map, min_frontier_points = 20):
         self.__map = robot_map
         self.__min_frontier_points = min_frontier_points
 
-    def get_frontiers(self, robot_pos):
+    def get_goal_point(self, robot_pos):
+        frontiers = self.__get_frontiers(robot_pos)
+        if frontiers:
+            closest_frontier = self.__find_closest_frontier(frontiers, robot_pos)
+            goal_point = self.__find_centroid(closest_frontier)
+            return (goal_point, frontiers)
+        return (None, None)
+
+    def __find_centroid(self, frontier):
+        count = 0.0
+        x_sum = 0.0
+        y_sum = 0.0
+        for point in frontier:
+            x_sum += point.x
+            y_sum += point.y
+            count += 1.0
+        return Position(x_sum / count, y_sum / count)
+
+    def __find_closest_frontier(self, frontiers, robot_pos):
+        closest_frontier = frontiers[0]
+        if len(frontiers) == 1:
+            return closest_frontier
+        robot_cell = self.__map.to_grid_pos(Position(robot_pos.x, robot_pos.y))
+        min_distance = inf
+        for frontier in frontiers:
+            for point in frontier:
+                dist = distance_2(robot_cell, point)
+                if dist < min_distance:
+                    min_distance = dist
+                    closest_frontier = frontier
+        return closest_frontier
+
+    def __get_frontiers(self, robot_pos):
         """
         https://arxiv.org/pdf/1806.03581.pdf
         """

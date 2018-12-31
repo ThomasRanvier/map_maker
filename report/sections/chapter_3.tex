@@ -178,6 +178,11 @@ The main difference with our naive approach is of course the efficiency of this 
 \subsection{Choosing the goal point}
 
 Now that we are able to find the frontiers we have to first choose which frontier we want to go to and then what point in this frontier we should choose.
+To do so we determined that we should always try to explore the closest frontier, that way the robot will not have to cross through the entire map again and again.
+
+To determine the goal point to go to we decided to choose a point that would be around the middle of the frontier, to do so we have to find the centroid of the selected frontier.
+
+The process of finding the frontiers and a goal point is done every 10 seconds or every time the robot reaches the goal point, that way when the frontier moves the robot will follow it.
 
 \section{Build the path}
 

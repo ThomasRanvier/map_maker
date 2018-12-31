@@ -19,14 +19,15 @@ if __name__ == '__main__':
     cartographer = Cartographer(robot_map)
     show_map = ShowMap(robot_map)
     frontiers = None
-    start = time.time()
+    goal_point = None
+    start = 0
 
     while True:
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
-        show_map.update(robot_map.to_grid_pos(robot_pos), frontiers=frontiers)
+        show_map.update(robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
         if time.time() - start >= 5:
-            frontiers = goal_planner.get_frontiers(robot_pos)
+            goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
             start = time.time()
 
