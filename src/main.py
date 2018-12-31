@@ -9,12 +9,12 @@ from utils.utils import distance_2
 from multiprocessing import Queue, Process
 import time
 
-def run_show_map(queue_show_map, robot_map, show_map_sleep_time):
-    show_map = ShowMap(robot_map)
+def run_show_map(queue_show_map, grid, show_map_sleep_time):
+    show_map = ShowMap(grid)
     while True:
         while not queue_show_map.empty():
-            robot_pos, frontiers, goal_point, path = queue_show_map.get()
-        show_map.update(robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point, path=path)
+            robot_map, robot_pos, frontiers, goal_point, path = queue_show_map.get()
+        show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point, path=path)
         time.sleep(show_map_sleep_time)
 
 def is_goal_reached(goal_point, robot_map, robot_pos, distance_to_trigger_goal_m, size_of_cell_in_meter):
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     cartographer = Cartographer(robot_map)
 
     queue_show_map = Queue()
-    show_map_process = Process(target=run_show_map, args=(queue_show_map, robot_map, show_map_sleep_time))
+    show_map_process = Process(target=run_show_map, args=(queue_show_map, robot_map.grid, show_map_sleep_time))
     show_map_process.daemon = True
     show_map_process.start()
 
@@ -62,4 +62,4 @@ if __name__ == '__main__':
             path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
             delay = 10
-        queue_show_map.put([robot_pos, frontiers, goal_point, path])
+        queue_show_map.put([robot_map, robot_pos, frontiers, goal_point, path])

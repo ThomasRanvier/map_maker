@@ -9,7 +9,7 @@ lower_left_pos = Position(-5.0, -5.0)
 upper_right_pos = Position(5.0, 5.0)
 test_map = Map(lower_left_pos, upper_right_pos, 1.0)
 goal_planner = GoalPlanner(test_map, 0)
-show_map = ShowMap(test_map, True)
+show_map = ShowMap(test_map.grid, True)
 
 for x in range(test_map.grid_width):
     for y in range(test_map.grid_height):
@@ -32,13 +32,13 @@ for y in range(4, 6):
 for x in range(6, 9):
     test_map.grid[x][2] = 1
 
-divided_frontiers = goal_planner.get_frontiers(test_map.to_real_pos(robot_pos))
-if divided_frontiers:
-    for frontier in divided_frontiers:
+goal_point, frontiers = goal_planner.get_goal_point(test_map.to_real_pos(robot_pos))
+if frontiers:
+    for frontier in frontiers:
         print('-----New frontier-----')
         for cell in frontier:
             print(cell)
 
 while True:
-    show_map.update(robot_pos, frontiers=divided_frontiers)
+    show_map.update(test_map, robot_pos, frontiers=frontiers, goal_point=goal_point)
     time.sleep(0.1)

@@ -7,7 +7,7 @@ robot_pos = Position(9, 9)
 lower_left_pos = Position(-5.0, -5.0)
 upper_right_pos = Position(5.0, 5.0)
 test_map = Map(lower_left_pos, upper_right_pos, 1.0)
-show_map = ShowMap(test_map, True)
+show_map = ShowMap(test_map.grid, True)
 
 for x in range(test_map.grid_width):
     for y in range(test_map.grid_height):
@@ -38,5 +38,5 @@ if divided_frontiers:
             print(cell)
 
 while True:
-    show_map.update(robot_pos, frontiers=divided_frontiers)
+    show_map.update(test_map, robot_pos, frontiers=divided_frontiers)
     time.sleep(0.1)
