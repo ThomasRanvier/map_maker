@@ -32,7 +32,7 @@ if __name__ == '__main__':
     path_planner = PathPlanner(robot_map)
     cartographer = Cartographer(robot_map)
 
-    show_map = ShowMap(grid)
+    show_map = ShowMap(robot_map.grid)
 
     frontiers = None
     goal_point = None
