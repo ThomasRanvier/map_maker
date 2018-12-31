@@ -12,6 +12,7 @@ import time
 def run_show_map(queue_show_map, grid, show_map_sleep_time):
     show_map = ShowMap(grid)
     while True:
+        robot_map, robot_pos, frontiers, goal_point, path = queue_show_map.get()
         while not queue_show_map.empty():
             robot_map, robot_pos, frontiers, goal_point, path = queue_show_map.get()
         show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point, path=path)
