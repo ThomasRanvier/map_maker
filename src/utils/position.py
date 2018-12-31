@@ -22,3 +22,6 @@ class Position:
         if isinstance(other, Position):
             is_equal = (other.x == self.x and other.y == self.y and other.z == self.z and other.angle == self.angle)
         return is_equal
+
+    def __hash__(self):
+        return hash(str(self))

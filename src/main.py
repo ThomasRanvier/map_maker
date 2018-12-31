@@ -2,6 +2,7 @@ from robot import Robot
 from mapping.cartographer import Cartographer
 from mapping.map import Map
 from mapping.show_map import ShowMap
+from planning.goal_planner import GoalPlanner
 from utils.position import Position
 import time
 
@@ -14,6 +15,7 @@ if __name__ == '__main__':
     lower_left_pos = Position(-50.0, -50.0)
     upper_right_pos = Position(50.0, 50.0)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
+    goal_planner = GoalPlanner(robot_map)
     cartographer = Cartographer(robot_map)
     show_map = ShowMap(robot_map)
 
@@ -24,7 +26,7 @@ if __name__ == '__main__':
         cartographer.update(robot_pos, robot_lasers)
         show_map.update(robot_map.to_grid_pos(robot_pos))
 
-    frontiers = robot_map.get_divided_frontiers()
+    frontiers = goal_planner.get_frontiers(robot_pos)
 
     while True:
         show_map.update(robot_map.to_grid_pos(robot.position), frontiers=frontiers)
