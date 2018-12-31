@@ -61,7 +61,10 @@ class ShowMap:
             self.__start_time = time.time()
 
     def __save(self):
+        pass
+        """
         data = np.fromstring(self.__fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
         data = data.reshape(self.__fig.canvas.get_width_height()[::-1] + (3,))
         img = Image.fromarray(data)
         img.convert('RGB').save(self.__name, "PNG")
+        """
