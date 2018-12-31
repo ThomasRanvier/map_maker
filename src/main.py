@@ -22,15 +22,17 @@ if __name__ == '__main__':
     frontiers = None
     goal_point = None
     path = None
-    start = time.time() + 8.0
+    start = time.time()
+    delay = 2
 
     while True:
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
         show_map.update(robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
-        if time.time() - start >= 10 or (goal_point != None and distance_2(robot_map.to_grid_pos(robot_pos), goal_point) <= 4):
+        if time.time() - start >= delay or (goal_point != None and distance_2(robot_map.to_grid_pos(robot_pos), goal_point) <= 4):
             goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
             #path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
+            delay = 20
 
