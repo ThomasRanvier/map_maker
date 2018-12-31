@@ -2,7 +2,7 @@ from utils.position import Position
 from utils.utils import von_neumann_neighbourhood, moore_neighbourhood
 
 class GoalPlanner:
-    def __init__(self, robot_map, min_frontier_points = 25):
+    def __init__(self, robot_map, min_frontier_points = 20):
         self.__map = robot_map
         self.__min_frontier_points = min_frontier_points
 
