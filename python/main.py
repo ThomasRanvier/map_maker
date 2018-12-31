@@ -18,14 +18,17 @@ if __name__ == '__main__':
     show_map = ShowMap(robot_map)
 
     #while True:
-    for _ in range(25):
+    for i in range(25):
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
         show_map.update(robot_map.to_grid_pos(robot_pos))
+        print(str(i))
 
-    print('Stop the robot')
     time.sleep(2)
 
     frontiers = robot_map.get_divided_frontiers()
     show_map.update(robot_map.to_grid_pos(robot.position), frontiers=frontiers)
+
+    while True:
+        pass
