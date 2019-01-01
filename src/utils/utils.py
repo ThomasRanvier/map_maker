@@ -1,6 +1,64 @@
 from math import atan2, pi
 from utils.position import Position
 
+def filled_midpoint_circle(x0, y0, radius):
+    """
+    https://stackoverflow.com/questions/10878209/midpoint-circle-algorithm-for-filled-circles
+    """
+    x = radius
+    y = 0
+    radius_err = 1 - x
+    circle = []
+    while x >= y:
+        start_x = -x + x0
+        end_x = x + x0
+        for ix in range(start_x, end_x + 1):
+            circle.append(Position(ix, y + y0))
+        if y != 0:
+            for ix in range(start_x, end_x + 1):
+                circle.append(Position(ix, -y + y0))
+        y += 1
+        if radius_err < 0:
+            radius_err += 2 * y + 1
+        else:
+            if x >= y:
+                start_x = -y + 1 + x0
+                end_x = y - 1 + x0
+                for ix in range(start_x, end_x + 1):
+                    circle.append(Position(ix, x + y0))
+                    circle.append(Position(ix, -x + y0))
+            x -= 1
+            radius_err += 2 * (y - x + 1)
+    return circle
+    """
+    f = 1 - radius
+    ddf_x = 1
+    ddf_y = -2 * radius
+    x = 0
+    y = radius
+    circle = set([])
+    circle.add(Position(x0, y0 + radius))
+    circle.add(Position(x0, y0 - radius))
+    circle.add(Position(x0 + radius, y0))
+    circle.add(Position(x0 - radius, y0))
+    while x < y:
+        if f >= 0: 
+            y -= 1
+            ddf_y += 2
+            f += ddf_y
+        x += 1
+        ddf_x += 2
+        f += ddf_x    
+        circle.add(Position(x0 + x, y0 + y))
+        circle.add(Position(x0 - x, y0 + y))
+        circle.add(Position(x0 + x, y0 - y))
+        circle.add(Position(x0 - x, y0 - y))
+        circle.add(Position(x0 + y, y0 + x))
+        circle.add(Position(x0 - y, y0 + x))
+        circle.add(Position(x0 + y, y0 - x))
+        circle.add(Position(x0 - y, y0 - x))
+    """
+
 """
 http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
 """

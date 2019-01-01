@@ -27,7 +27,7 @@ class ShowMap:
         self.__save()
         self.__start_time = time.time()
 
-    def update(self, map_to_display, robot_cell, goal_point = None, path = None, frontiers = None, attr_force = None):
+    def update(self, map_to_display, robot_cell, goal_point = None, path = None, frontiers = None, attr_force = None, rep_force = None):
         import matplotlib.pyplot as plt
         plt.pause(0.02)
         grid = np.matrix(map_to_display.grid)
@@ -40,6 +40,9 @@ class ShowMap:
         self.__ax.set_xticks([])
         self.__ax.set_yticks([])
         self.__ax.plot(robot_cell.x, map_to_display.grid_height - 1 - robot_cell.y, 'rs', markersize=self.__robot_size)
+        if rep_force != None:
+            y = map_to_display.grid_height - 1 - robot_cell.y
+            self.__ax.arrow(robot_cell.x, y, rep_force['dx'], -rep_force['dy'], head_width=1, head_length=2, fc='g', ec='g')
         if attr_force != None:
             y = map_to_display.grid_height - 1 - robot_cell.y
             self.__ax.arrow(robot_cell.x, y, attr_force['dx'], -attr_force['dy'], head_width=1, head_length=2, fc='g', ec='g')

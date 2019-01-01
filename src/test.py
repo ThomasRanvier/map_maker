@@ -1,6 +1,7 @@
 from mapping.map import Map
 from utils.position import Position
-from utils.utils import bresenham_line
+from utils.utils import bresenham_line, filled_midpoint_circle
+import matplotlib.pyplot as plt
 
 def map_to_grid_pos():
     print('Test: map_to_grid_pos')
@@ -64,6 +65,110 @@ def utils_bresenham_line():
     assert(line[6].x == 8 and line[6].y == 9)
     print('OK')
 
+def utils_filled_midpoint_circle():
+    print('Test: utils_filled_midpoint_circle')
+    circle = filled_midpoint_circle(5, 5, 5)
+    result = [' x: 0 y: 5',
+                ' x: 1 y: 5',
+                ' x: 2 y: 5',
+                ' x: 3 y: 5',
+                ' x: 4 y: 5',
+                ' x: 5 y: 5',
+                ' x: 6 y: 5',
+                ' x: 7 y: 5',
+                ' x: 8 y: 5',
+                ' x: 9 y: 5',
+                ' x: 10 y: 5',
+                ' x: 0 y: 6',
+                ' x: 1 y: 6',
+                ' x: 2 y: 6',
+                ' x: 3 y: 6',
+                ' x: 4 y: 6',
+                ' x: 5 y: 6',
+                ' x: 6 y: 6',
+                ' x: 7 y: 6',
+                ' x: 8 y: 6',
+                ' x: 9 y: 6',
+                ' x: 10 y: 6',
+                ' x: 0 y: 4',
+                ' x: 1 y: 4',
+                ' x: 2 y: 4',
+                ' x: 3 y: 4',
+                ' x: 4 y: 4',
+                ' x: 5 y: 4',
+                ' x: 6 y: 4',
+                ' x: 7 y: 4',
+                ' x: 8 y: 4',
+                ' x: 9 y: 4',
+                ' x: 10 y: 4',
+                ' x: 0 y: 7',
+                ' x: 1 y: 7',
+                ' x: 2 y: 7',
+                ' x: 3 y: 7',
+                ' x: 4 y: 7',
+                ' x: 5 y: 7',
+                ' x: 6 y: 7',
+                ' x: 7 y: 7',
+                ' x: 8 y: 7',
+                ' x: 9 y: 7',
+                ' x: 10 y: 7',
+                ' x: 0 y: 3',
+                ' x: 1 y: 3',
+                ' x: 2 y: 3',
+                ' x: 3 y: 3',
+                ' x: 4 y: 3',
+                ' x: 5 y: 3',
+                ' x: 6 y: 3',
+                ' x: 7 y: 3',
+                ' x: 8 y: 3',
+                ' x: 9 y: 3',
+                ' x: 10 y: 3',
+                ' x: 3 y: 10',
+                ' x: 3 y: 0',
+                ' x: 4 y: 10',
+                ' x: 4 y: 0',
+                ' x: 5 y: 10',
+                ' x: 5 y: 0',
+                ' x: 6 y: 10',
+                ' x: 6 y: 0',
+                ' x: 7 y: 10',
+                ' x: 7 y: 0',
+                ' x: 1 y: 8',
+                ' x: 2 y: 8',
+                ' x: 3 y: 8',
+                ' x: 4 y: 8',
+                ' x: 5 y: 8',
+                ' x: 6 y: 8',
+                ' x: 7 y: 8',
+                ' x: 8 y: 8',
+                ' x: 9 y: 8',
+                ' x: 1 y: 2',
+                ' x: 2 y: 2',
+                ' x: 3 y: 2',
+                ' x: 4 y: 2',
+                ' x: 5 y: 2',
+                ' x: 6 y: 2',
+                ' x: 7 y: 2',
+                ' x: 8 y: 2',
+                ' x: 9 y: 2',
+                ' x: 2 y: 9',
+                ' x: 2 y: 1',
+                ' x: 3 y: 9',
+                ' x: 3 y: 1',
+                ' x: 4 y: 9',
+                ' x: 4 y: 1',
+                ' x: 5 y: 9',
+                ' x: 5 y: 1',
+                ' x: 6 y: 9',
+                ' x: 6 y: 1',
+                ' x: 7 y: 9',
+                ' x: 7 y: 1',
+                ' x: 8 y: 9',
+                ' x: 8 y: 1']
+    for i in range(len(circle)):
+        assert(str(circle[i] == result[i]))
+    print('OK')
+
 def position_properties():
     print('Test: position_properties')
     pos_1 = Position(x=1, y=2, angle=4)
@@ -89,6 +194,7 @@ if __name__ == '__main__':
     map_to_grid_pos()
     map_to_real_pos()
     utils_bresenham_line()
+    utils_filled_midpoint_circle()
     position_properties()
     print('End of tests')
     print('OK')
