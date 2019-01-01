@@ -40,7 +40,7 @@ if __name__ == '__main__':
     path_planner = PathPlanner(robot_map)
     cartographer = Cartographer(robot_map)
 
-    #show_map = ShowMap(robot_map.grid)
+    show_map = ShowMap(robot_map.grid)
 
     frontiers = None
     goal_point = None
@@ -53,12 +53,10 @@ if __name__ == '__main__':
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
-        """
         goal_reached = is_goal_reached(goal_point, robot_map.to_grid_pos(robot_pos), distance_to_trigger_goal_m, size_of_cell_in_meter)
         if time.time() - start >= delay or goal_reached:
             goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
             path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
             delay = 15
-        """
-        #show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
+        show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
