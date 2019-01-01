@@ -10,7 +10,7 @@ from multiprocessing import Queue, Process
 import time
 import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format='%(filename)s:%(funcName)s:%(lineno)s> %(message)s' ,level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter):
@@ -18,6 +18,8 @@ def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_
         dist_2 = distance_2(robot_cell, goal_point)
         trigger_2 = (distance_to_trigger_goal_m * (1.0 / size_of_cell_in_meter))**2
         goal_reached = (dist_2 <= trigger_2)
+        if goal_reached:
+            logger.info('Goal reached')
         return goal_reached
     return False
 
@@ -55,4 +57,3 @@ if __name__ == '__main__':
             start = time.time()
             delay = 15
         show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
-        logger.info('Test')

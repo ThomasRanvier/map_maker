@@ -11,15 +11,18 @@ class GoalPlanner:
         self.__min_frontier_points = min_frontier_points
 
     def get_goal_point(self, robot_pos):
-        logger.info('Test goal')
+        logger.info('Search new goal')
         frontiers = self.__get_frontiers(robot_pos)
         if frontiers:
             closest_frontier = self.__find_closest_frontier(frontiers, robot_pos)
             goal_point = centroid(closest_frontier)
+            logger.info('New goal defined')
             return (goal_point, frontiers)
+        logger.info('No frontiers found')
         return (None, None)
 
     def __find_closest_frontier(self, frontiers, robot_pos):
+        logger.info('Search closest frontier')
         closest_frontier = frontiers[0]
         if len(frontiers) == 1:
             return closest_frontier
@@ -37,6 +40,7 @@ class GoalPlanner:
         """
         https://arxiv.org/pdf/1806.03581.pdf
         """
+        logger.info('Search frontiers')
         robot_cell = self.__map.to_grid_pos(Position(robot_pos.x, robot_pos.y))
         frontiers = []
         queue_m = []
