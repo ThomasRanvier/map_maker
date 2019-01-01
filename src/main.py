@@ -48,8 +48,8 @@ if __name__ == '__main__':
     start = time.time()
     delay = 4
 
+    controller.turn_around()
     while True:
-        controller.turn_around()
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)

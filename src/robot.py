@@ -15,7 +15,7 @@ class Robot:
         mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
         response = mrds.getresponse()
         status = response.status
-        response.close()
+        #response.close()
         if status == 204:
             return response
         else:
