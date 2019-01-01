@@ -7,7 +7,7 @@ class Controller:
         self.__map = robot_map
         self.__robot = robot
     
-    def go_to_goal_point(self, goal_point):
+    def go_to_goal_point(self, robot_cell, goal_point):
         if goal_point == None:
             return
         pass
