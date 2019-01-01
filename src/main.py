@@ -55,6 +55,7 @@ if __name__ == '__main__':
         cartographer.update(robot_pos, robot_lasers)
         goal_reached = is_goal_reached(goal_point, robot_map.to_grid_pos(robot_pos), distance_to_trigger_goal_m, size_of_cell_in_meter)
         if time.time() - start >= delay or goal_reached:
+            controller.stop()
             goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
             path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()

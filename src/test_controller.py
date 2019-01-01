@@ -17,18 +17,5 @@ robot_map = Map(lower_left_pos, upper_right_pos, scale)
 controller = Controller(robot, robot_map)
 controller.turn_around()
 
-"""
-HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
-params = json.dumps({'TargetAngularSpeed': 2, 'TargetLinearSpeed': 2})
-mrds = http.client.HTTPConnection('localhost:50000')
-mrds.request('POST', '/lokarria/differentialdrive', params, HEADERS)
-response = mrds.getresponse()
-status = response.status
-if status == 204:
-    logger.info('Ok')
-else:
-    logger.info('Impossible to post robot speed')
-"""
-
 while True:
     pass

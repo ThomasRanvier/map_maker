@@ -8,3 +8,6 @@ class Controller:
 
     def turn_around(self):
         self.__robot.post_speed(2, 2)
+
+    def stop(self):
+        self.__robot.post_speed(0, 0)
