@@ -5,12 +5,13 @@ from logging import getLogger
 logger = getLogger('potential_field')
 
 class PotentialField:
-    def __init__(self, robot, robot_map, weight_attr = 0.4, weight_rep = 0.6, radius_obs = 6, max_obs = 5):
+    def __init__(self, robot, robot_map, weight_attr = 0.4, weight_rep = 0.6, radius_obs = 6, max_obs = 5, trigger_obs = 0.75):
         self.__map = robot_map
         self.__robot = robot
         self.__weight_attr = weight_attr
         self.__weight_rep = weight_rep
         self.__radius_obs = radius_obs
+        self.__trigger_obs = trigger_obs
         self.__max_obs = max_obs
 
     def get_forces(self, robot_cell, goal_point):
@@ -32,17 +33,11 @@ class PotentialField:
         return {'dx': length * cos(angle), 'dy': length * sin(angle)}
 
     def __get_repulsive_force(self, robot_cell):
-        obstacles = []
         circle = filled_midpoint_circle(robot_cell.x, robot_cell.y, self.__radius_obs)
+        closest_obstacles = [None, None, None, None, None]
+        min_dists = [inf, inf, inf, inf, inf]
         for point in circle:
             if self.__map.is_in_bound(point) and self.__map.grid[point.x][point.y] >= 0.75:
-                obstacles.append(point)
-        closest_obstacles = [None, None, None, None, None]
-        if len(obstacles) <= self.__max_obs:
-            closest_obstacles = obstacles
-        else:
-            min_dists = [inf, inf, inf, inf, inf]
-            for obstacle in obstacles:
                 dist = hypot(robot_cell.x - obstacle.x, robot_cell.y - obstacle.y)
                 for i in range(self.__max_obs):
                     if dist < min_dists[i]:
