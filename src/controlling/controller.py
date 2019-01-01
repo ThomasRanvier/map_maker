@@ -20,6 +20,9 @@ class Controller:
         dx = goal_point.x - robot_cell.x
         dy = goal_point.y - robot_cell.y
         angle = atan(dy / dx)
+        logger.info('dx: ' + str(dx))
+        logger.info('dy: ' + str(dy))
+        logger.info('Angle: ' + str(angle))
         return {'x': robot_cell.x, 'y': robot_cell.y, 'dx': length * cos(angle), 'dy': length * sin(angle)}
 
     def turn_around(self):
