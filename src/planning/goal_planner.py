@@ -1,5 +1,5 @@
 from utils.position import Position
-from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2
+from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2, centroid
 from math import inf
 
 class GoalPlanner:
@@ -11,19 +11,9 @@ class GoalPlanner:
         frontiers = self.__get_frontiers(robot_pos)
         if frontiers:
             closest_frontier = self.__find_closest_frontier(frontiers, robot_pos)
-            goal_point = self.__find_centroid(closest_frontier)
+            goal_point = centroid(closest_frontier)
             return (goal_point, frontiers)
         return (None, None)
-
-    def __find_centroid(self, frontier):
-        count = 0.0
-        x_sum = 0.0
-        y_sum = 0.0
-        for point in frontier:
-            x_sum += point.x
-            y_sum += point.y
-            count += 1.0
-        return Position(x_sum / count, y_sum / count)
 
     def __find_closest_frontier(self, frontiers, robot_pos):
         closest_frontier = frontiers[0]

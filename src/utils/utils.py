@@ -36,6 +36,16 @@ def bresenham_line(x1, y1, x2, y2):
 def distance_2(pos_1, pos_2):
     return (pos_2.x - pos_1.x)**2 + (pos_2.y - pos_1.y)**2
 
+def centroid(points):
+    count = 0.0
+    x_sum = 0.0
+    y_sum = 0.0
+    for point in points:
+        x_sum += point.x
+        y_sum += point.y
+        count += 1.0
+    return Position(x_sum / count, y_sum / count)
+
 def von_neumann_neighbourhood(cell, grid_width, grid_height):
     neighbours = []
     if cell.x > 0:

@@ -182,6 +182,12 @@ To do so we determined that we should always try to explore the closest frontier
 
 To determine the goal point to go to we decided to choose a point that would be around the middle of the frontier, to do so we have to find the centroid of the selected frontier.
 
+The coordinates of the centroid of a frontier is calculated in that way, with $x_i$ and $y_i$ the points of the frontier:
+
+\begin{align*}
+    &x = \dfrac{\sum_{i=0}^{n}x_i}{n}   &y = \dfrac{\sum_{i=0}^{n}y_i}{n}
+\end{align*}
+
 The process of finding the frontiers and a goal point is done every 10 seconds or every time the robot reaches the goal point, that way when the frontier moves the robot will follow it.
 
 \section{Build the path}
