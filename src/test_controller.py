@@ -1,6 +1,7 @@
 from controlling.controller import Controller
 from robot import Robot
 from mapping.map import Map
+from utils.position import Position
 
 robot = Robot('localhost:50000')
 size_of_cell_in_meter = 0.5
