@@ -46,13 +46,14 @@ class Controller:
                         break
         result = {'dx': 0, 'dy': 0}
         for obstacle in closest_obstacles:
-            dist = hypot(robot_cell.x - obstacle.x, robot_cell.y - obstacle.y)
-            length = (radius * 2) - dist
-            dx = obstacle.x - robot_cell.x
-            dy = obstacle.y - robot_cell.y
-            angle = atan2(dy, dx)
-            result['dx'] += -length * cos(angle)
-            result['dy'] += -length * sin(angle)
+            if obstacle != None:
+                dist = hypot(robot_cell.x - obstacle.x, robot_cell.y - obstacle.y)
+                length = (radius * 2) - dist
+                dx = obstacle.x - robot_cell.x
+                dy = obstacle.y - robot_cell.y
+                angle = atan2(dy, dx)
+                result['dx'] += -length * cos(angle)
+                result['dy'] += -length * sin(angle)
         if result['dx'] == 0 and result['dy'] == 0:
             result = None
         return result
