@@ -10,7 +10,7 @@ lower_left_pos = Position(-100.0, -100.0)
 upper_right_pos = Position(100.0, 100.0)
 robot_map = Map(lower_left_pos, upper_right_pos, scale)
 controller = Controller(robot, robot_map)
-controller.post_speed(2, 2)
+controller.turn_around()
 
 while True:
     pass
