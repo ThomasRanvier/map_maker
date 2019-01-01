@@ -42,12 +42,12 @@ class ShowMap:
         self.__ax.plot(robot_cell.x, map_to_display.grid_height - 1 - robot_cell.y, 'rs', markersize=self.__robot_size)
         if forces != None:
             y = map_to_display.grid_height - 1 - robot_cell.y
-            if forces['gen_force'] != None:
-                self.__ax.arrow(robot_cell.x, y, forces['gen_force']['dx'], -forces['gen_force']['dy'], head_width=1, head_length=2, fc='m', ec='m')
             if forces['rep_force'] != None:
                 self.__ax.arrow(robot_cell.x, y, forces['rep_force']['dx'], -forces['rep_force']['dy'], head_width=1, head_length=2, fc='r', ec='r')
             if forces['attr_force'] != None:
                 self.__ax.arrow(robot_cell.x, y, forces['attr_force']['dx'], -forces['attr_force']['dy'], head_width=1, head_length=2, fc='g', ec='g')
+            if forces['gen_force'] != None:
+                self.__ax.arrow(robot_cell.x, y, forces['gen_force']['dx'], -forces['gen_force']['dy'], head_width=1, head_length=2, fc='m', ec='m')
         if goal_point != None:
             self.__ax.plot(goal_point.x, map_to_display.grid_height - 1 - goal_point.y, 'bh', markersize=8)
         if path != None:
