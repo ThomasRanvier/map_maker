@@ -8,12 +8,12 @@ class Robot:
     def __init__(self, url):
         self.__url = url
         self.HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
+        self.__mrds = http.client.HTTPConnection(self.__url)
 
     def post_speed(self, angular_speed, linear_speed):
         params = json.dumps({'TargetAngularSpeed': angular_speed, 'TargetLinearSpeed': linear_speed})
-        mrds = http.client.HTTPConnection(self.__url)
-        mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
-        response = mrds.getresponse()
+        self.__mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
+        response = self.__mrds.getresponse()
         status = response.status
         response.close()
         if status == 204:
@@ -24,9 +24,8 @@ class Robot:
 
     @property
     def position(self):
-        mrds = http.client.HTTPConnection(self.__url)
-        mrds.request('GET', '/lokarria/localization')
-        response = mrds.getresponse()
+        self.__mrds.request('GET', '/lokarria/localization')
+        response = self.__mrds.getresponse()
         if (response.status == 200):
             pose_data = response.read()
             response.close()
@@ -50,9 +49,8 @@ class Robot:
             return None
 
     def __get_laser_echoes(self):
-        mrds = http.client.HTTPConnection(self.__url)
-        mrds.request('GET', '/lokarria/laser/echoes')
-        response = mrds.getresponse()
+        self.__mrds.request('GET', '/lokarria/laser/echoes')
+        response = self.__mrds.getresponse()
         if response.status == 200:
             laser_data = response.read().decode('utf-8')
             response.close()
@@ -63,9 +61,8 @@ class Robot:
             return None
 
     def __get_laser_angles(self):
-        mrds = http.client.HTTPConnection(self.__url)
-        mrds.request('GET', '/lokarria/laser/properties')
-        response = mrds.getresponse()
+        self.__mrds.request('GET', '/lokarria/laser/properties')
+        response = self.__mrds.getresponse()
         if response.status == 200:
             laser_data = response.read().decode('utf-8')
             response.close()
