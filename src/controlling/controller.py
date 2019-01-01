@@ -1,5 +1,5 @@
 from logging import getLogger
-from math import hypot, atan, cos, sin, inf
+from math import hypot, atan2, cos, sin, inf
 from utils.utils import filled_midpoint_circle
 
 logger = getLogger('controller')
@@ -20,7 +20,7 @@ class Controller:
         length = 0.2 * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.y)
         dx = goal_point.x - robot_cell.x
         dy = goal_point.y - robot_cell.y
-        angle = atan(dy / dx)
+        angle = atan2(dy, dx)
         return {'dx': -length * cos(angle), 'dy': -length * sin(angle)}
 
     def repulsive_force(self, robot_cell, radius = 6, max_obstacles = 5):
@@ -50,7 +50,7 @@ class Controller:
             length = (radius * 2) - dist
             dx = obstacle.x - robot_cell.x
             dy = obstacle.y - robot_cell.y
-            angle = atan(dy / dx)
+            angle = atan2(dy, dx)
             result['dx'] += -length * cos(angle)
             result['dy'] += -length * sin(angle)
         if result['dx'] == 0 and result['dy'] == 0:
