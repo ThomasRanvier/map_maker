@@ -19,7 +19,7 @@ class Controller:
         length = 0.2 * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.x)
         dx = goal_point.x - robot_cell.x
         dy = goal_point.y - robot_cell.y
-        angle = atan(dx / dy)
+        angle = atan(dy / dx)
         return {'x': robot_cell.x, 'y': robot_cell.y, 'dx': length * cos(angle), 'dy': length * sin(angle)}
 
     def turn_around(self):

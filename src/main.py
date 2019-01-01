@@ -57,7 +57,7 @@ if __name__ == '__main__':
         attr_force = controller.attractive_force(robot_cell, goal_point)
         goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
         if time.time() - start >= delay or goal_reached:
-            controller.stop()
+            #controller.stop()
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell)
             path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
