@@ -10,7 +10,7 @@ from multiprocessing import Queue, Process
 import time
 import logging
 
-logging.basicConfig(format='%(filename)s:%(funcName)s:%(lineno)s> %(message)s' ,level=logging.INFO)
+logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter):
