@@ -3,7 +3,7 @@ from robot import Robot
 from mapping.map import Map
 from utils.position import Position
 import json, http.client
-from logging
+import logging
 
 """
 robot = Robot('localhost:50000')
