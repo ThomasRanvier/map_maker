@@ -61,4 +61,4 @@ if __name__ == '__main__':
             start = time.time()
             delay = 15
         """
-        show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
+        #show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
