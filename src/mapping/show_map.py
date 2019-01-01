@@ -42,7 +42,7 @@ class ShowMap:
         self.__ax.plot(robot_cell.x, map_to_display.grid_height - 1 - robot_cell.y, 'rs', markersize=self.__robot_size)
         if rep_force != None:
             y = map_to_display.grid_height - 1 - robot_cell.y
-            self.__ax.arrow(robot_cell.x, y, rep_force['dx'], -rep_force['dy'], head_width=1, head_length=2, fc='g', ec='g')
+            self.__ax.arrow(robot_cell.x, y, rep_force['dx'], -rep_force['dy'], head_width=1, head_length=2, fc='r', ec='r')
         if attr_force != None:
             y = map_to_display.grid_height - 1 - robot_cell.y
             self.__ax.arrow(robot_cell.x, y, attr_force['dx'], -attr_force['dy'], head_width=1, head_length=2, fc='g', ec='g')

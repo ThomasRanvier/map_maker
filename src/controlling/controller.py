@@ -53,6 +53,8 @@ class Controller:
             angle = atan(dy / dx)
             result['dx'] += -length * cos(angle)
             result['dy'] += -length * sin(angle)
+        if result['dx'] == 0 and result['dy'] == 0:
+            result = None
         return result
 
     def turn_around(self):
