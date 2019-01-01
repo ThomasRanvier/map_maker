@@ -37,7 +37,7 @@ if __name__ == '__main__':
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
     controller = Controller(robot, robot_map)
     goal_planner = GoalPlanner(robot_map)
-    path_planner = PathPlanner(robot_map)
+    #path_planner = PathPlanner(robot_map)
     cartographer = Cartographer(robot_map)
 
     show_map = ShowMap(robot_map.grid)
@@ -46,18 +46,20 @@ if __name__ == '__main__':
     goal_point = None
     path = None
     start = time.time()
-    delay = 4
+    delay = 10
 
     controller.turn_around()
     while True:
         robot_pos = robot.position
+        robot_cell = robot_map.to_grid_pos(robot_pos)
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
-        goal_reached = is_goal_reached(goal_point, robot_map.to_grid_pos(robot_pos), distance_to_trigger_goal_m, size_of_cell_in_meter)
+        controller.go_to_goal_point(robot_cell, goal_point)
+        goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
         if time.time() - start >= delay or goal_reached:
             controller.stop()
-            goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
-            path = path_planner.get_path(robot_pos, goal_point)
+            goal_point, frontiers = goal_planner.get_goal_point(robot_cell)
+            #path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
-            delay = 15
+            delay = 20
         show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)

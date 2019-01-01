@@ -5,7 +5,7 @@ from utils.utils import orientation_to_angle
 from math import pi
 from logging import getLogger
 
-logger = getLogger('controller')
+logger = getLogger('robot')
 
 class Robot:
     def __init__(self, url):
@@ -19,6 +19,7 @@ class Robot:
         response = mrds.getresponse()
         status = response.status
         if status == 204:
+            logger.info('Update robot speed')
             return response
         else:
             logger.info('Impossible to post robot speed')
