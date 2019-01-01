@@ -43,10 +43,10 @@ class ShowMap:
         if attr_force != None:
             y = map_to_display.grid_height - 1 - robot_cell.y
             dy = map_to_display.grid_height - 1 - (robot_cell.y + attr_force['dy'])
-            logger.info('x: ' + robot_cell.x)
-            logger.info('y: ' + y)
-            logger.info('dx: ' + robot_cell.x + attr_force['dx'])
-            logger.info('dy: ' + dy)
+            logger.info('x: ' + str(robot_cell.x))
+            logger.info('y: ' + str(y))
+            logger.info('dx: ' + str(robot_cell.x + attr_force['dx']))
+            logger.info('dy: ' + str(dy))
             self.__ax.arrow(robot_cell.x, y, robot_cell.x + attr_force['dx'], dy, head_width=1, head_length=2, fc='g', ec='g')
         if goal_point != None:
             self.__ax.plot(goal_point.x, map_to_display.grid_height - 1 - goal_point.y, 'bh', markersize=8)
