@@ -33,7 +33,7 @@ class PotentialField:
 
     def __get_repulsive_force(self, robot_cell):
         obstacles = []
-        circle = filled_midpoint_circle(0, 0, self.__radius_obs)
+        circle = filled_midpoint_circle(robot_cell.x, robot_cell.y, self.__radius_obs)
         for point in circle:
             if self.__map.is_in_bound(point) and self.__map.grid[point.x][point.y] >= 0.75:
                 obstacles.append(point)
