@@ -11,9 +11,9 @@ class Robot:
 
     def post_speed(self, angular_speed, linear_speed):
         params = json.dumps({'TargetAngularSpeed': angular_speed, 'TargetLinearSpeed': linear_speed})
-        self.__mrds = http.client.HTTPConnection(self.__url)
-        self.__mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
-        response = self.__mrds.getresponse()
+        mrds = http.client.HTTPConnection(self.__url)
+        mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
+        response = mrds.getresponse()
         status = response.status
         response.close()
         if status == 204:
@@ -24,9 +24,9 @@ class Robot:
 
     @property
     def position(self):
-        self.__mrds = http.client.HTTPConnection(self.__url)
-        self.__mrds.request('GET', '/lokarria/localization')
-        response = self.__mrds.getresponse()
+        mrds = http.client.HTTPConnection(self.__url)
+        mrds.request('GET', '/lokarria/localization')
+        response = mrds.getresponse()
         if (response.status == 200):
             pose_data = response.read()
             response.close()
@@ -50,9 +50,9 @@ class Robot:
             return None
 
     def __get_laser_echoes(self):
-        self.__mrds = http.client.HTTPConnection(self.__url)
-        self.__mrds.request('GET', '/lokarria/laser/echoes')
-        response = self.__mrds.getresponse()
+        mrds = http.client.HTTPConnection(self.__url)
+        mrds.request('GET', '/lokarria/laser/echoes')
+        response = mrds.getresponse()
         if response.status == 200:
             laser_data = response.read().decode('utf-8')
             response.close()
@@ -63,8 +63,8 @@ class Robot:
             return None
 
     def __get_laser_angles(self):
-        self.__mrds.request('GET', '/lokarria/laser/properties')
-        response = self.__mrds.getresponse()
+        mrds.request('GET', '/lokarria/laser/properties')
+        response = mrds.getresponse()
         if response.status == 200:
             laser_data = response.read().decode('utf-8')
             response.close()
