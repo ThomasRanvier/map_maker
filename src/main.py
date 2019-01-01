@@ -8,10 +8,13 @@ from utils.position import Position
 from utils.utils import distance_2
 from multiprocessing import Queue, Process
 import time
+import logging
 
-def is_goal_reached(goal_point, robot_map, robot_pos, distance_to_trigger_goal_m, size_of_cell_in_meter):
+logging.basicConfig(level=logging.DEBUG)
+
+def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter):
     if goal_point != None:
-        dist_2 = distance_2(robot_map.to_grid_pos(robot_pos), goal_point)
+        dist_2 = distance_2(robot_cell, goal_point)
         trigger_2 = (distance_to_trigger_goal_m * (1.0 / size_of_cell_in_meter))**2
         goal_reached = (dist_2 <= trigger_2)
         return goal_reached
@@ -44,10 +47,11 @@ if __name__ == '__main__':
         robot_pos = robot.position
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
-        goal_reached = is_goal_reached(goal_point, robot_map, robot_pos, distance_to_trigger_goal_m, size_of_cell_in_meter)
+        goal_reached = is_goal_reached(goal_point, robot_map.to_grid_pos(robot_pos), distance_to_trigger_goal_m, size_of_cell_in_meter)
         if time.time() - start >= delay or goal_reached:
             goal_point, frontiers = goal_planner.get_goal_point(robot_pos)
             path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
             delay = 15
         show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
+        logging.debug('Test')
