@@ -63,6 +63,7 @@ class Robot:
             return None
 
     def __get_laser_angles(self):
+        mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/laser/properties')
         response = mrds.getresponse()
         if response.status == 200:
