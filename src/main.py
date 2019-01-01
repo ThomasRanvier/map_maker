@@ -11,6 +11,7 @@ import time
 import logging
 
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter):
     if goal_point != None:
@@ -54,4 +55,4 @@ if __name__ == '__main__':
             start = time.time()
             delay = 15
         show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point)
-        logging.info('Test')
+        logger.info('Test')

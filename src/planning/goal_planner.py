@@ -2,13 +2,15 @@ from utils.position import Position
 from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2, centroid
 from math import inf
 
+logger = logging.getLogger('goal_planner')
+
 class GoalPlanner:
     def __init__(self, robot_map, min_frontier_points = 20):
         self.__map = robot_map
         self.__min_frontier_points = min_frontier_points
 
     def get_goal_point(self, robot_pos):
-        logging.info('Test goal')
+        logger.info('Test goal')
         frontiers = self.__get_frontiers(robot_pos)
         if frontiers:
             closest_frontier = self.__find_closest_frontier(frontiers, robot_pos)
