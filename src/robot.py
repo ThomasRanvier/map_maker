@@ -3,6 +3,9 @@ from utils.position import Position
 from utils.laser import Laser
 from utils.utils import orientation_to_angle
 from math import pi
+from logging import getLogger
+
+logger = getLogger('controller')
 
 class Robot:
     def __init__(self, url):
@@ -18,7 +21,7 @@ class Robot:
         if status == 204:
             return response
         else:
-            print('Impossible to post robot speed')
+            logger.info('Impossible to post robot speed')
             return None
 
     @property
@@ -32,7 +35,7 @@ class Robot:
             pos = json.loads(pose_data.decode())['Pose']
             return Position(pos['Position']['X'], pos['Position']['Y'], pos['Position']['Z'], orientation_to_angle(pos['Orientation']))
         else:
-            print('Impossible to get the robot pose')
+            logger.info('Impossible to get the robot pose')
             return None
 
     @property
@@ -45,7 +48,7 @@ class Robot:
                 lasers.append(Laser(laser_echoes[i], laser_angles[i]))
             return lasers
         else:
-            print('Impossible to get the robot lasers')
+            logger.info('Impossible to get the robot lasers')
             return None
 
     def __get_laser_echoes(self):
@@ -58,7 +61,7 @@ class Robot:
             laser_scan = json.loads(laser_data)
             return laser_scan['Echoes']
         else:
-            print('Impossible to get the robot laser echoes')
+            logger.info('Impossible to get the robot laser echoes')
             return None
 
     def __get_laser_angles(self):
@@ -76,6 +79,6 @@ class Robot:
                 a += pi / 180
             return angles
         else:
-            print('Impossible to get the robot laser angles')
+            logger.info('Impossible to get the robot laser angles')
             return None
 
