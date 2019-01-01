@@ -1,4 +1,4 @@
-import httplib, json
+import http.client, json
 from utils.position import Position
 from utils.laser import Laser
 from utils.utils import orientation_to_angle
@@ -11,7 +11,7 @@ class Robot:
 
     def post_speed(self, angular_speed, linear_speed):
         params = json.dumps({'TargetAngularSpeed': angular_speed, 'TargetLinearSpeed': linear_speed})
-        mrds = httplib.HTTPConnection(self.__url)
+        mrds = http.client.HTTPConnection(self.__url)
         mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
         response = mrds.getresponse()
         status = response.status
@@ -23,7 +23,7 @@ class Robot:
 
     @property
     def position(self):
-        mrds = httplib.HTTPConnection(self.__url)
+        mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/localization')
         response = mrds.getresponse()
         if (response.status == 200):
@@ -49,7 +49,7 @@ class Robot:
             return None
 
     def __get_laser_echoes(self):
-        mrds = httplib.HTTPConnection(self.__url)
+        mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/laser/echoes')
         response = mrds.getresponse()
         if response.status == 200:
@@ -62,7 +62,7 @@ class Robot:
             return None
 
     def __get_laser_angles(self):
-        mrds = httplib.HTTPConnection(self.__url)
+        mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/laser/properties')
         response = mrds.getresponse()
         if response.status == 200:
