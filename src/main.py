@@ -6,6 +6,7 @@ from planning.goal_planner import GoalPlanner
 from planning.path_planner import PathPlanner
 from utils.position import Position
 from utils.utils import distance_2
+from controlling.controller import Controller
 from multiprocessing import Queue, Process
 import time
 import logging
@@ -29,11 +30,12 @@ if __name__ == '__main__':
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 6
     show_map_sleep_time = 0.5
-
-    robot = Robot(url)
     lower_left_pos = Position(-100.0, -100.0)
     upper_right_pos = Position(100.0, 100.0)
+
+    robot = Robot(url)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
+    controller = Controller(robot, robot_map)
     goal_planner = GoalPlanner(robot_map)
     path_planner = PathPlanner(robot_map)
     cartographer = Cartographer(robot_map)
@@ -45,6 +47,8 @@ if __name__ == '__main__':
     path = None
     start = time.time()
     delay = 4
+
+    controller.turn_around()
 
     while True:
         robot_pos = robot.position
