@@ -1,8 +1,9 @@
 from utils.position import Position
 from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2, centroid
 from math import inf
+from logging import getLogger
 
-logger = logging.getLogger('goal_planner')
+logger = getLogger('goal_planner')
 
 class GoalPlanner:
     def __init__(self, robot_map, min_frontier_points = 20):
