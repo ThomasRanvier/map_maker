@@ -1,4 +1,5 @@
 from logging import getLogger
+from math import hypot, atan, cos, sin
 
 logger = getLogger('controller')
 
@@ -12,8 +13,14 @@ class Controller:
             return
         pass
 
-    def __applied_force(self, robot_cell, goal_point):
-        pass
+    def attractive_force(self, robot_cell, goal_point):
+        if goal_point == None:
+            return None
+        length = 0.2 * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.x)
+        dx = goal_point.x - robot_cell.x
+        dy = goal_point.y - robot_cell.y
+        angle = atan(dx / dy)
+        return {'x': robot_cel.x, 'y': robot_cel.y, 'dx': length * cos(angle), 'dy': length * sin(angle)}
 
     def turn_around(self):
         logger.info('Make the robot turn around')
