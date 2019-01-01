@@ -12,6 +12,9 @@ class Controller:
             return
         pass
 
+    def __applied_force(self, robot_cell, goal_point):
+        pass
+
     def turn_around(self):
         logger.info('Make the robot turn around')
         self.__robot.post_speed(1, 1)

@@ -37,6 +37,7 @@ class ShowMap:
         self.__ax.set_xticks([])
         self.__ax.set_yticks([])
         self.__ax.plot(robot_pos.x, map_to_display.grid_height - 1 - robot_pos.y, 'rs', markersize=self.__robot_size)
+        self.__ax.arrow(40, 40, 80, 80, fc='r', ec='k')
         if goal_point != None:
             self.__ax.plot(goal_point.x, map_to_display.grid_height - 1 - goal_point.y, 'bh', markersize=8)
         if path != None:
