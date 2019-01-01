@@ -18,7 +18,11 @@ class Cartographer:
         lasers_pos_y = robot_pos.y + self.__lasers_distance * sin(robot_pos.angle)
         lasers_cell = self.__map.to_grid_pos(Position(lasers_pos_x, lasers_pos_y))
         real_lasers_cell = self.__map.to_real_pos(lasers_cell)
+        count = 0
         for laser in lasers:
+            if count % 2 == 0:
+                continue
+            count += 1
             angle = robot_pos.angle + laser.angle
             laser_hit = Position(lasers_pos_x + laser.echoe * cos(angle), lasers_pos_y + laser.echoe * sin(angle))
             hit_cell = self.__map.to_grid_pos(laser_hit)
