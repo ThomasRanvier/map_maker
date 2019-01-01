@@ -22,10 +22,9 @@ mrds.request('POST', '/lokarria/differentialdrive', params, HEADERS)
 response = mrds.getresponse()
 status = response.status
 if status == 204:
-    return response
+    print('Ok')
 else:
     print('Impossible to post robot speed')
-    return None
 
 while True:
     pass
