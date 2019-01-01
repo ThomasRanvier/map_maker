@@ -62,4 +62,4 @@ if __name__ == '__main__':
             path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
             delay = 20
-        show_map.update(robot_map, robot_map.to_grid_pos(robot_pos), frontiers=frontiers, goal_point=goal_point, attr_force=attr_force)
+        show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, attr_force=attr_force)

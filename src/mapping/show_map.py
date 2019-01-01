@@ -3,6 +3,9 @@ import threading
 import matplotlib
 import time
 import numpy as np
+from logging import getLogger
+
+logger = getLogger('show_map')
 
 class ShowMap:
     def __init__(self, grid, show_gui = True, save_map_time = 5, name = 'map.png', robot_size = 3):
@@ -24,7 +27,7 @@ class ShowMap:
         self.__save()
         self.__start_time = time.time()
 
-    def update(self, map_to_display, robot_pos, goal_point = None, path = None, frontiers = None, attr_force = None):
+    def update(self, map_to_display, robot_cell, goal_point = None, path = None, frontiers = None, attr_force = None):
         import matplotlib.pyplot as plt
         plt.pause(0.02)
         grid = np.matrix(map_to_display.grid)
@@ -36,10 +39,15 @@ class ShowMap:
         self.__implot = self.__ax.imshow(self.__image)
         self.__ax.set_xticks([])
         self.__ax.set_yticks([])
-        self.__ax.plot(robot_pos.x, map_to_display.grid_height - 1 - robot_pos.y, 'rs', markersize=self.__robot_size)
+        self.__ax.plot(robot_cell.x, map_to_display.grid_height - 1 - robot_cell.y, 'rs', markersize=self.__robot_size)
         if attr_force != None:
-            y = map_to_display.grid_height - 1 - robot_pos.y
-            self.__ax.arrow(robot_pos.x, y, robot_pos.x + attr_force['dx'], y - attr_force['dy'], head_width=1, head_length=2, fc='g', ec='g')
+            y = map_to_display.grid_height - 1 - robot_cell.y
+            dy = map_to_display.grid_height - 1 - (robot_cell.y + attr_force['dy'])
+            logger.info('x: ' + robot_cell.x)
+            logger.info('y: ' + y)
+            logger.info('dx: ' + robot_cell.x + attr_force['dx'])
+            logger.info('dy: ' + dy)
+            self.__ax.arrow(robot_cell.x, y, robot_cell.x + attr_force['dx'], dy, head_width=1, head_length=2, fc='g', ec='g')
         if goal_point != None:
             self.__ax.plot(goal_point.x, map_to_display.grid_height - 1 - goal_point.y, 'bh', markersize=8)
         if path != None:
