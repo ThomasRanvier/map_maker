@@ -1,5 +1,5 @@
 class Controller:
-    def __init__(self, robot_map, robot):
+    def __init__(self, robot, robot_map):
         self.__map = robot_map
         self.__robot = robot
     
