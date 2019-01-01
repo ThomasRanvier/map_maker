@@ -17,11 +17,11 @@ class Controller:
     def attractive_force(self, robot_cell, goal_point):
         if goal_point == None:
             return None
-        length = 0.2 * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.y)
+        length = 0.4 * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.y)
         dx = goal_point.x - robot_cell.x
         dy = goal_point.y - robot_cell.y
         angle = atan2(dy, dx)
-        return {'dx': -length * cos(angle), 'dy': -length * sin(angle)}
+        return {'dx': length * cos(angle), 'dy': length * sin(angle)}
 
     def repulsive_force(self, robot_cell, radius = 6, max_obstacles = 5):
         circle = filled_midpoint_circle(robot_cell.x, robot_cell.y, radius)
