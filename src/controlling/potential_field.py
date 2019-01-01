@@ -1,6 +1,6 @@
 from math import hypot, atan2, cos, sin, inf
 from utils.utils import filled_midpoint_circle
-from logging import logger
+from logging import getLogger
 
 logger = getLogger('potential_field')
 
