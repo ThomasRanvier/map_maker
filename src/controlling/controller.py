@@ -52,7 +52,7 @@ class Controller:
             dy = obstacle.y - robot_cell.y
             angle = atan(dy / dx)
             result['dx'] += -length * cos(angle)
-            result['dy'] += -length * sin(angle)])
+            result['dy'] += -length * sin(angle)
         return result
 
     def turn_around(self):
