@@ -38,15 +38,15 @@ class PotentialField:
             if self.__map.is_in_bound(point) and self.__map.grid[point.x][point.y] >= 0.75:
                 obstacles.append(point)
         closest_obstacles = [None, None, None, None, None]
-        if len(obstacles) <= max_obs:
+        if len(obstacles) <= self.__max_obs:
             closest_obstacles = obstacles
         else:
             min_dists = [inf, inf, inf, inf, inf]
             for obstacle in obstacles:
                 dist = hypot(robot_cell.x - obstacle.x, robot_cell.y - obstacle.y)
-                for i in range(max_obs):
+                for i in range(self.__max_obs):
                     if dist < min_dists[i]:
-                        for ii in range(max_obs - 1, i + 2, -1):
+                        for ii in range(self.__max_obs - 1, i + 2, -1):
                             min_dists[ii] = min_dists[ii - 1]
                             closest_obstacles[ii] = closest_obstacles[ii - 1]
                         min_dists[i] = dist
