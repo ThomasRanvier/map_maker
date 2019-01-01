@@ -8,6 +8,7 @@ class GoalPlanner:
         self.__min_frontier_points = min_frontier_points
 
     def get_goal_point(self, robot_pos):
+        logging.info('Test goal')
         frontiers = self.__get_frontiers(robot_pos)
         if frontiers:
             closest_frontier = self.__find_closest_frontier(frontiers, robot_pos)
