@@ -24,7 +24,7 @@ class Controller:
 
     def __get_attractive_force(self, robot_cell, goal_point):
         if goal_point == None:
-            return None
+            return {'dx': 0, 'dy': 0}
         length = 0.4 * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.y)
         dx = goal_point.x - robot_cell.x
         dy = goal_point.y - robot_cell.y
@@ -62,8 +62,6 @@ class Controller:
                 angle = atan2(dy, dx)
                 result['dx'] += -length * cos(angle)
                 result['dy'] += -length * sin(angle)
-        if result['dx'] == 0 and result['dy'] == 0:
-            result = None
         return result
 
     def turn_around(self):
