@@ -39,8 +39,8 @@ class ShowMap:
         self.__ax.plot(robot_pos.x, map_to_display.grid_height - 1 - robot_pos.y, 'rs', markersize=self.__robot_size)
         if attr_force != None:
             y = map_to_display.grid_height - 1 - attr_force['y']
-            dy = map_to_display.grid_height - 1 - attr_force['dy']
-            self.__ax.arrow(attr_force['x'], y, attr_force['dx'], dy, head_width=1, head_length=2, fc='g', ec='g')
+            targety = map_to_display.grid_height - 1 - attr_force['targety']
+            self.__ax.arrow(attr_force['x'], y, attr_force['targetx'], targety, head_width=1, head_length=2, fc='g', ec='g')
         if goal_point != None:
             self.__ax.plot(goal_point.x, map_to_display.grid_height - 1 - goal_point.y, 'bh', markersize=8)
         if path != None:
