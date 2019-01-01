@@ -23,7 +23,11 @@ class Controller:
         logger.info('dx: ' + str(dx))
         logger.info('dy: ' + str(dy))
         logger.info('Angle: ' + str(angle))
-        return {'x': robot_cell.x, 'y': robot_cell.y, 'dx': length * cos(angle), 'dy': length * sin(angle)}
+        targetx = length * cos(angle)
+        targety = length * sin(angle)
+        logger.info('tx: ' + str(targetx))
+        logger.info('ty: ' + str(targety))
+        return {'x': robot_cell.x, 'y': robot_cell.y, 'targetx': length * cos(angle), 'targety': length * sin(angle)}
 
     def turn_around(self):
         logger.info('Make the robot turn around')
