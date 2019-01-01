@@ -22,16 +22,16 @@ class Controller:
                                 'dy': forces['attr_force']['dy'] + forces['rep_force']['dy']}
         return forces
 
-    def __get_attractive_force(self, robot_cell, goal_point):
+    def __get_attractive_force(self, robot_cell, goal_point, weight = 0.4):
         if goal_point == None:
             return {'dx': 0, 'dy': 0}
-        length = 0.4 * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.y)
+        length = weight * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.y)
         dx = goal_point.x - robot_cell.x
         dy = goal_point.y - robot_cell.y
         angle = atan2(dy, dx)
         return {'dx': length * cos(angle), 'dy': length * sin(angle)}
 
-    def __get_repulsive_force(self, robot_cell, radius = 6, max_obstacles = 5):
+    def __get_repulsive_force(self, robot_cell, radius = 6, max_obstacles = 5, weight = 0.6):
         circle = filled_midpoint_circle(robot_cell.x, robot_cell.y, radius)
         obstacles = []
         for point in circle:
@@ -56,7 +56,7 @@ class Controller:
         for obstacle in closest_obstacles:
             if obstacle != None:
                 dist = hypot(robot_cell.x - obstacle.x, robot_cell.y - obstacle.y)
-                length = (radius * 2) - dist
+                length = ((radius * 2) - dist) * weight
                 dx = obstacle.x - robot_cell.x
                 dy = obstacle.y - robot_cell.y
                 angle = atan2(dy, dx)
