@@ -3,6 +3,7 @@ from robot import Robot
 from mapping.map import Map
 from utils.position import Position
 import json, http.client
+from logging
 
 """
 robot = Robot('localhost:50000')
@@ -14,6 +15,8 @@ robot_map = Map(lower_left_pos, upper_right_pos, scale)
 controller = Controller(robot, robot_map)
 controller.turn_around()
 """
+logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)
+logger = logging.getLogger('test controller')
 
 HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
 params = json.dumps({'TargetAngularSpeed': 2, 'TargetLinearSpeed': 2})
@@ -22,9 +25,9 @@ mrds.request('POST', '/lokarria/differentialdrive', params, HEADERS)
 response = mrds.getresponse()
 status = response.status
 if status == 204:
-    print('Ok')
+    logger.info('Ok')
 else:
-    print('Impossible to post robot speed')
+    logger.info('Impossible to post robot speed')
 
 while True:
     pass
