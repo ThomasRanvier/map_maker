@@ -54,8 +54,7 @@ if __name__ == '__main__':
         robot_cell = robot_map.to_grid_pos(robot_pos)
         robot_lasers = robot.lasers
         cartographer.update(robot_pos, robot_lasers)
-        attr_force = controller.attractive_force(robot_cell, goal_point)
-        rep_force = controller.repulsive_force(robot_cell)
+        forces = controller.get_forces(robot_cell, goal_point)
         goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
         if time.time() - start >= delay or goal_reached:
             controller.stop()
@@ -63,4 +62,4 @@ if __name__ == '__main__':
             path = path_planner.get_path(robot_pos, goal_point)
             start = time.time()
             delay = 20
-        show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, attr_force=attr_force, rep_force=rep_force)
+        show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)

@@ -14,7 +14,15 @@ class Controller:
             return
         pass
 
-    def attractive_force(self, robot_cell, goal_point):
+    def get_forces(self, robot_cell, goal_point):
+        forces = {'gen_force': None, 'attr_force': None, 'rep_force': None}
+        forces['attr_force'] = self.__get_attractive_force(robot_cell, goal_point)
+        forces['rep_force'] = self.__get_repulsive_force(robot_cell)
+        forces['gen_force'] = {'dx': forces['attr_force']['dx'] + forces['rep_force']['dx'], 
+                                'dy': forces['attr_force']['dy'] + forces['rep_force']['dy']}
+        return forces
+
+    def __get_attractive_force(self, robot_cell, goal_point):
         if goal_point == None:
             return None
         length = 0.4 * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.y)
@@ -23,7 +31,7 @@ class Controller:
         angle = atan2(dy, dx)
         return {'dx': length * cos(angle), 'dy': length * sin(angle)}
 
-    def repulsive_force(self, robot_cell, radius = 6, max_obstacles = 5):
+    def __get_repulsive_force(self, robot_cell, radius = 6, max_obstacles = 5):
         circle = filled_midpoint_circle(robot_cell.x, robot_cell.y, radius)
         obstacles = []
         for point in circle:

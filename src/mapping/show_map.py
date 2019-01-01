@@ -27,7 +27,7 @@ class ShowMap:
         self.__save()
         self.__start_time = time.time()
 
-    def update(self, map_to_display, robot_cell, goal_point = None, path = None, frontiers = None, attr_force = None, rep_force = None):
+    def update(self, map_to_display, robot_cell, goal_point = None, path = None, frontiers = None, forces = None):
         import matplotlib.pyplot as plt
         plt.pause(0.02)
         grid = np.matrix(map_to_display.grid)
@@ -40,12 +40,14 @@ class ShowMap:
         self.__ax.set_xticks([])
         self.__ax.set_yticks([])
         self.__ax.plot(robot_cell.x, map_to_display.grid_height - 1 - robot_cell.y, 'rs', markersize=self.__robot_size)
-        if rep_force != None:
+        if forces != None:
             y = map_to_display.grid_height - 1 - robot_cell.y
-            self.__ax.arrow(robot_cell.x, y, rep_force['dx'], -rep_force['dy'], head_width=1, head_length=2, fc='r', ec='r')
-        if attr_force != None:
-            y = map_to_display.grid_height - 1 - robot_cell.y
-            self.__ax.arrow(robot_cell.x, y, attr_force['dx'], -attr_force['dy'], head_width=1, head_length=2, fc='g', ec='g')
+            if forces['gen_force'] != None:
+                self.__ax.arrow(robot_cell.x, y, forces['gen_force']['dx'], -forces['gen_force']['dy'], head_width=1, head_length=2, fc='m', ec='m')
+            if forces['rep_force'] != None:
+                self.__ax.arrow(robot_cell.x, y, forces['rep_force']['dx'], -forces['rep_force']['dy'], head_width=1, head_length=2, fc='r', ec='r')
+            if forces['attr_force'] != None:
+                self.__ax.arrow(robot_cell.x, y, forces['attr_force']['dx'], -forces['attr_force']['dy'], head_width=1, head_length=2, fc='g', ec='g')
         if goal_point != None:
             self.__ax.plot(goal_point.x, map_to_display.grid_height - 1 - goal_point.y, 'bh', markersize=8)
         if path != None:
