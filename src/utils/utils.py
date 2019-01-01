@@ -30,39 +30,11 @@ def filled_midpoint_circle(x0, y0, radius):
             x -= 1
             radius_err += 2 * (y - x + 1)
     return circle
-    """
-    f = 1 - radius
-    ddf_x = 1
-    ddf_y = -2 * radius
-    x = 0
-    y = radius
-    circle = set([])
-    circle.add(Position(x0, y0 + radius))
-    circle.add(Position(x0, y0 - radius))
-    circle.add(Position(x0 + radius, y0))
-    circle.add(Position(x0 - radius, y0))
-    while x < y:
-        if f >= 0: 
-            y -= 1
-            ddf_y += 2
-            f += ddf_y
-        x += 1
-        ddf_x += 2
-        f += ddf_x    
-        circle.add(Position(x0 + x, y0 + y))
-        circle.add(Position(x0 - x, y0 + y))
-        circle.add(Position(x0 + x, y0 - y))
-        circle.add(Position(x0 - x, y0 - y))
-        circle.add(Position(x0 + y, y0 + x))
-        circle.add(Position(x0 - y, y0 + x))
-        circle.add(Position(x0 + y, y0 - x))
-        circle.add(Position(x0 - y, y0 - x))
-    """
 
-"""
-http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
-"""
 def bresenham_line(x1, y1, x2, y2):
+    """
+    http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
+    """
     dx = x2 - x1
     dy = y2 - y1
     is_steep = abs(dy) > abs(dx)
