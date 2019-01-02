@@ -79,11 +79,6 @@ if __name__ == '__main__':
     potential_field = PotentialField(robot)
     goal_planner = GoalPlanner()
 
-    frontiers = None
-    goal_point = None
-    start = time.time()
-    delay = 10
-
     queue_cartographer = Queue()
     queue_sm = Queue()
     queue_sm_optionals = Queue()
@@ -97,6 +92,11 @@ if __name__ == '__main__':
     show_map_process.start()
 
     #show_map = ShowMap(robot_map.grid)
+
+    frontiers = None
+    goal_point = None
+    start = time.time()
+    delay = 10
 
     controller.turn_around()
     while True:
