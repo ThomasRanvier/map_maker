@@ -54,13 +54,13 @@ if __name__ == '__main__':
     queue_sm_map = Queue()
     queue_sm_optionals = Queue()
 
-    cartographer_process = Process(target=cartographer_job, args=(queue_cartographer, queue_sm_map, robot_map, robot))
-    cartographer_process.daemon = True
-    cartographer_process.start()
+    cartographer_d = Process(target=cartographer_job, args=(queue_cartographer, queue_sm_map, robot_map, robot))
+    cartographer_d.daemon = False
+    cartographer_d.start()
 
-    show_map_process = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
-    show_map_process.daemon = True
-    show_map_process.start()
+    show_map_d = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
+    show_map_d.daemon = False
+    show_map_d.start()
 
     frontiers = None
     goal_point = None
@@ -88,5 +88,5 @@ if __name__ == '__main__':
         sleep = 0.1 - (time.time() - start_loop)
         if sleep > 0:
             time.sleep(sleep)
-    cartographer_process.terminate()
-    show_map_process.terminate()
+    cartographer_d.terminate()
+    show_map_d.terminate()

@@ -18,6 +18,8 @@ class Robot:
         Instantiates a Robot.
         :param url: The url of the MRDS server.
         :type url: string
+        :param min_delay: Minimum delay before executing another request to the server.
+        :type min_delay: float
         """
         self.__url = url
         self.HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
