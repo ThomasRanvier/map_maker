@@ -40,7 +40,7 @@ if __name__ == '__main__':
     url = 'localhost:50000'
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
-    distance_to_trigger_goal_m = 6
+    distance_to_trigger_goal_m = 4
     lower_left_pos = Position(-100.0, -100.0)
     upper_right_pos = Position(100.0, 100.0)
 
