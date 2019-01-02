@@ -37,7 +37,7 @@ def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_
         return goal_reached
     return False
 
-def cartographer_job(queue_cartographer, queue_show_map, robot_map, robot):
+def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
     cartographer = Cartographer()
     while True:
         robot_pos = robot.position
@@ -54,7 +54,7 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
     goal_point = None
     while True:
         while not queue_sm_map.empty():
-            robot_map = queue_show_map.get()
+            robot_map = queue_sm_map.get()
         while not queue_sm_optionals.empty():
             frontiers, forces, goal_point = queue_sm_optionals.get()
         robot_pos = robot.position
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     queue_sm_map = Queue()
     queue_sm_optionals = Queue()
 
-    cartographer_process = Process(target=cartographer_job, args=(queue_cartographer, queue_show_map, robot_map, robot))
+    cartographer_process = Process(target=cartographer_job, args=(queue_cartographer, queue_sm_map, robot_map, robot))
     cartographer_process.daemon = True
     cartographer_process.start()
 
