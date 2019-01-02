@@ -1,0 +1,28 @@
+To optimise the performances we choose to use multiprocessing.
+
+\section{Cartographer}
+
+We've put the cartographer in its own subprocess, it updates the map every 0.1 seconds.
+In that way the map is always efficiently updated.
+
+The map is then 'sent' to the main program through a Queue (object of the multiprocessing python library).
+In that way the main program can recuperate the last version of the map at any time needed.
+
+\section{Show map}
+
+Since we usually print out many informations on our map: the frontiers, goal point and forces applied to the robot, the update of the graphical window takes some time.
+It came to a point where the update of the graphical window was the longest part in our program.
+We could not afford to lose that much time so we created a subprocess for the ShowMap.
+
+The graphical window is updated every half a second.
+
+\section{Communication with MRDS}
+
+To communicate with MRDS we were using the Robot class as an interface, the only thing that it did was send the request.
+Eventually we ran into a case where more than one process tried to access to the robot position through the Robot object simultaneously.
+In that case we had an error message from the MRDS server and our program crashed.
+
+To fix this situation we implemented a delay system in the Robot class.
+When we access to the Robot interface to request the position or the lasers if a request has already been made in the last 0.1 seconds it will return the result of that last request.
+By doing that we are able to use the Robot interface with as many processes as we want.
+

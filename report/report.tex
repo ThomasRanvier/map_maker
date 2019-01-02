@@ -11,21 +11,17 @@
 
 \tableofcontents
 
-\chapter{How to use our program}
+\chapter{Context}
 \input{sections/chapter_1}
-
-Our program is divided in two main modules, the mapping module and the planning module.
-The role of the first one is to build the map of the environment of the robot using the echoes of the lasers.
-The role of the second one is to plan the path that the robot must follow in order to explore the world.
-
-To communicate with the MRDS server we created a class named 'Robot', it is used as an interface to send and receive informations to and from the MRDS server easily.
-The received informations are directly adapted to our needs and stored using our 'Position' and 'Laser' datastructures in this class.
 
 \chapter{Mapping}
 \input{sections/chapter_2}
 
 \chapter{Planning}
 \input{sections/chapter_3}
+
+\chapter{Optimisation}
+\input{sections/chapter_4}
 
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
