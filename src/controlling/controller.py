@@ -31,7 +31,7 @@ class Controller:
         Makes the robot turn in circles, slow enough to have a precise lasers reading.
         """
         logger.info('Make the robot turn around')
-        self.__robot.post_speed(3, 3)
+        self.__robot.post_speed(0.75, 0.5)
 
     def stop(self):
         """
