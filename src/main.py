@@ -69,7 +69,7 @@ if __name__ == '__main__':
     queue_cartographer = Queue()
     queue_main = Queue()
 
-    cartographer_process = Process(target=cartographer_job, arg=(queue_cartographer, queue_main))
+    cartographer_process = Process(target=cartographer_job, args=(queue_cartographer, queue_main))
     cartographer_process.daemon = True
     cartographer_process.start()
 
