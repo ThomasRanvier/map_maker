@@ -72,17 +72,17 @@ if __name__ == '__main__':
     lower_left_pos = Position(-100.0, -100.0)
     upper_right_pos = Position(100.0, 100.0)
 
-    frontiers = None
-    goal_point = None
-    robot_pos = robot.position
-    start = time.time()
-    delay = 10
-
     robot = Robot(url)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
     controller = Controller(robot)
     potential_field = PotentialField(robot)
     goal_planner = GoalPlanner()
+
+    frontiers = None
+    goal_point = None
+    robot_pos = robot.position
+    start = time.time()
+    delay = 10
 
     queue_cartographer = Queue()
     queue_sm = Queue()
