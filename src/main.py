@@ -43,7 +43,11 @@ def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
         robot_pos = robot.position
         robot_lasers = robot.lasers
         robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
+        while not queue_cartographer.empty():
+            queue_cartographer.get()
         queue_cartographer.put(robot_map)
+        while not queue_sm_map.empty():
+            queue_sm_map.get()
         queue_sm_map.put(robot_map)
         time.sleep(0.1)
 
@@ -84,11 +88,11 @@ if __name__ == '__main__':
     cartographer_process.daemon = True
     cartographer_process.start()
 
-    #show_map_process = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
-    #show_map_process.daemon = True
-    #show_map_process.start()
+    show_map_process = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
+    show_map_process.daemon = True
+    show_map_process.start()
 
-    show_map = ShowMap(robot_map.grid)
+    #show_map = ShowMap(robot_map.grid)
 
     frontiers = None
     goal_point = None
@@ -112,6 +116,8 @@ if __name__ == '__main__':
             start = time.time()
             delay = 20
         #Communicate with show_map
-        #queue_sm_optionals.put([frontiers, forces, goal_point])
-        show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
+        while not queue_sm_optionals.empty():
+            queue_sm_optionals.get()
+        queue_sm_optionals.put([frontiers, forces, goal_point])
+        #show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
     cartographer_process.terminate()
