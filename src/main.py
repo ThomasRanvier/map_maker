@@ -91,7 +91,7 @@ if __name__ == '__main__':
     show_map_process.daemon = True
     show_map_process.start()
 
-    show_map = ShowMap(robot_map.grid)
+    #show_map = ShowMap(robot_map.grid)
 
     frontiers = None
     goal_point = None
