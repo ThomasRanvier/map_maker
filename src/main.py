@@ -97,11 +97,11 @@ if __name__ == '__main__':
     frontiers = None
     goal_point = None
     start = time.time()
-    delay = 10
+    delay = 8
 
     controller.turn_around()
     while True:
-        start = time.time()
+        start_loop = time.time()
         while not queue_cartographer.empty():
             robot_map = queue_cartographer.get()
         robot_pos = robot.position
@@ -117,7 +117,7 @@ if __name__ == '__main__':
         while not queue_sm_optionals.empty():
             queue_sm_optionals.get()
         queue_sm_optionals.put([frontiers, forces, goal_point])
-        sleep = 0.1 - (time.time() - start)
+        sleep = 0.1 - (time.time() - start_loop)
         if sleep > 0:
             time.sleep(sleep)
     cartographer_process.terminate()
