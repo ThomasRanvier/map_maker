@@ -46,7 +46,7 @@ class Controller:
             theta = sin(force_angle - robot_pos.angle)
             ang_speed = self.__max_ang_speed * theta * self.__ang_speed_weight
             ang_speed = min(max(ang_speed, -self.__max_ang_speed), self.__max_ang_speed)
-            self.__robot.post_speed(ang_speed, 1)
+            self.__robot.post_speed(ang_speed, min(self.__max_linear_speed, -0.2 * min(3, abs(ang_speed)) + 1.3))
 
     def turn_around(self):
         """
