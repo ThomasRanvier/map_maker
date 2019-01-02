@@ -86,6 +86,7 @@ if __name__ == '__main__':
             queue_sm_optionals.get()
         queue_sm_optionals.put([frontiers, forces, goal_point])
         sleep = 0.1 - (time.time() - start_loop)
+        logger.info('sleep: ' + str(sleep))
         if sleep > 0:
             time.sleep(sleep)
     cartographer_process.terminate()
