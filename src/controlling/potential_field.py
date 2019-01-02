@@ -44,7 +44,6 @@ class PotentialField:
         :return: The 3 forces.
         :rtype: A dictionary containing the 3 forces, which also are dictionaries.
         """
-        logger.info('Calculate forces')
         forces = {'gen_force': None, 'attr_force': None, 'rep_force': None}
         forces['attr_force'] = self.__get_attractive_force(robot_cell, goal_point)
         forces['rep_force'] = self.__get_repulsive_force(robot_cell, robot_map)
