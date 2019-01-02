@@ -37,6 +37,19 @@ def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_
         return goal_reached
     return False
 
+def cartographer_job(queue_cartographer, queue_main):
+    cartographer = Cartographer()
+    while True:
+        robot = None
+        robot_map = None
+        while not queue_cartographer.empty():
+            robot_map, robot = queue_cartographer.get()
+        if robot_map != None and robot != None:
+            robot_pos = robot.position
+            robot_lasers = robot.lasers
+            robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
+            queue_main.put(robot_map)
+
 if __name__ == '__main__':
     url = 'localhost:50000'
     size_of_cell_in_meter = 0.5
@@ -51,7 +64,14 @@ if __name__ == '__main__':
     controller = Controller(robot)
     potential_field = PotentialField(robot)
     goal_planner = GoalPlanner()
-    cartographer = Cartographer()
+    #cartographer = Cartographer()
+
+    queue_cartographer = Queue()
+    queue_main = Queue()
+
+    cartographer_process = Process(target=cartographer_job, arg=(queue_cartographer, queue_main))
+    cartographer_process.daemon = True
+    cartographer_process.start()
 
     show_map = ShowMap(robot_map.grid)
 
@@ -63,10 +83,15 @@ if __name__ == '__main__':
 
     controller.turn_around()
     while True:
+        new_robot_map = None
+        while not queue_main.empty():
+            new_robot_map = queue_main.get()
+        if new_robot_map != None:
+            robot_map = new_robot_map
         robot_pos = robot.position
-        robot_lasers = robot.lasers
+        #robot_lasers = robot.lasers
         robot_cell = robot_map.to_grid_pos(robot_pos)
-        robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
+        #robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
         forces = potential_field.get_forces(robot_cell, goal_point, robot_map)
         controller.apply_force(forces['gen_force'], robot_pos)
         goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
