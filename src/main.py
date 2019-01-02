@@ -66,7 +66,6 @@ if __name__ == '__main__':
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 6
-    show_map_sleep_time = 0.5
     lower_left_pos = Position(-100.0, -100.0)
     upper_right_pos = Position(100.0, 100.0)
 
@@ -84,9 +83,9 @@ if __name__ == '__main__':
     cartographer_process.daemon = True
     cartographer_process.start()
 
-    show_map_process = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
-    show_map_process.daemon = True
-    show_map_process.start()
+    #show_map_process = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
+    #show_map_process.daemon = True
+    #show_map_process.start()
 
     show_map = ShowMap(robot_map.grid)
 
