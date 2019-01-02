@@ -37,18 +37,18 @@ def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_
         return goal_reached
     return False
 
-def cartographer_job(queue_cartographer, queue_main):
+def cartographer_job(queue_cartographer, queue_main, robot):
     cartographer = Cartographer()
+    robot_map = None
     while True:
-        robot = None
-        robot_map = None
         while not queue_cartographer.empty():
-            robot_map, robot = queue_cartographer.get()
-        if robot_map != None and robot != None:
+            robot_map = queue_cartographer.get()
+        if robot_map != None:
             robot_pos = robot.position
             robot_lasers = robot.lasers
             robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
             queue_main.put(robot_map)
+        time.sleep(0.1)
 
 if __name__ == '__main__':
     url = 'localhost:50000'
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     queue_cartographer = Queue()
     queue_main = Queue()
 
-    cartographer_process = Process(target=cartographer_job, args=(queue_cartographer, queue_main))
+    cartographer_process = Process(target=cartographer_job, args=(queue_cartographer, queue_main, robot))
     cartographer_process.daemon = True
     cartographer_process.start()
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     controller.turn_around()
     while True:
         #Communicate with the cartographer
-        queue_cartographer.put([robot_map, robot])
+        queue_cartographer.put([robot_map])
         new_robot_map = None
         while not queue_main.empty():
             new_robot_map = queue_main.get()
