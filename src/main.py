@@ -1,13 +1,12 @@
 from robot import Robot
-from mapping.cartographer import Cartographer
 from mapping.map import Map
-from mapping.show_map import ShowMap
 from planning.goal_planner import GoalPlanner
 from utils.position import Position
 from utils.utils import distance_2
 from controlling.controller import Controller
 from controlling.potential_field import PotentialField
 from multiprocessing import Queue, Process
+from jobs import show_map_job, cartographer_job
 import time
 import logging
 
@@ -36,37 +35,6 @@ def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_
             logger.info('Goal reached')
         return goal_reached
     return False
-
-def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
-    cartographer = Cartographer()
-    while True:
-        start = time.time()
-        robot_pos = robot.position
-        robot_lasers = robot.lasers
-        robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
-        queue_cartographer.put(robot_map)
-        queue_sm_map.put(robot_map)
-        sleep = 0.1 - (time.time() - start)
-        if sleep > 0:
-            time.sleep(sleep)
-
-def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
-    show_map = ShowMap(robot_map.grid)
-    frontiers = None
-    forces = None
-    goal_point = None
-    while True:
-        start = time.time()
-        while not queue_sm_map.empty():
-            robot_map = queue_sm_map.get()
-        while not queue_sm_optionals.empty():
-            frontiers, forces, goal_point = queue_sm_optionals.get()
-        robot_pos = robot.position
-        robot_cell = robot_map.to_grid_pos(robot_pos)
-        show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
-        sleep = 0.2 - (time.time() - start)
-        if sleep > 0:
-            time.sleep(sleep)
 
 if __name__ == '__main__':
     url = 'localhost:50000'
