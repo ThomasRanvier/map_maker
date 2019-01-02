@@ -92,7 +92,7 @@ class PotentialField:
                             min_dists[ii] = min_dists[ii - 1]
                             closest_obstacles[ii] = closest_obstacles[ii - 1]
                         min_dists[i] = dist
-                        closest_obstacles[i] = obstacle
+                        closest_obstacles[i] = point
                         break
         result = {'x': 0, 'y': 0}
         for obstacle in closest_obstacles:
