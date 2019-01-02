@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     controller.turn_around()
     while True:
-        queue_cartographer.put(robot_map, robot)
+        queue_cartographer.put([robot_map, robot])
         new_robot_map = None
         while not queue_main.empty():
             new_robot_map = queue_main.get()
