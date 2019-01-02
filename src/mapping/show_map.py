@@ -83,7 +83,7 @@ class ShowMap:
                 count = 0
                 for point in frontier:
                     count += 1
-                    if count % 3 == 0:
+                    if count % 2 == 0:
                         color = ['gh', 'ch', 'mh', 'yh', 'kh']
                         self.__ax.plot(point.x, map_to_display.grid_height - 1 - point.y, color[index % 5], markersize=1)
                 index += 1
