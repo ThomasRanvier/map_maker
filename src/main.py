@@ -43,8 +43,8 @@ def cartographer_job(queue_cartographer, queue_sm, robot_map, robot):
         robot_pos = robot.position
         robot_lasers = robot.lasers
         robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
-        queue_cartographer.put(robot_map, robot_pos)
-        queue_sm.put(robot_map, robot_pos)
+        queue_cartographer.put([robot_map, robot_pos])
+        queue_sm.put([robot_map, robot_pos])
         time.sleep(0.1)
 
 def show_map_job(queue_sm, queue_sm_optionals, robot_map, robot_pos):
