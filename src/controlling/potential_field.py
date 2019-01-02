@@ -81,8 +81,8 @@ class PotentialField:
         :rtype: A dictionary containing the coordinates of the repulsive vector.
         """
         circle = filled_midpoint_circle(robot_cell.x, robot_cell.y, self.__radius_obs)
-        closest_obstacles = [None, None, None, None, None]
-        min_dists = [inf, inf, inf, inf, inf]
+        closest_obstacles = [None] * self.__max_obs
+        min_dists = [inf] * self.__max_obs
         for point in circle:
             if robot_map.is_in_bound(point) and robot_map.grid[point.x][point.y] >= 0.75:
                 dist = hypot(robot_cell.x - point.x, robot_cell.y - point.y)
