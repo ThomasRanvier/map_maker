@@ -40,12 +40,15 @@ def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_
 def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
     cartographer = Cartographer()
     while True:
+        start = time.time()
         robot_pos = robot.position
         robot_lasers = robot.lasers
         robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
         queue_cartographer.put(robot_map)
         queue_sm_map.put(robot_map)
-        time.sleep(0.1)
+        sleep = 0.1 - (time.time() - start)
+        if sleep > 0:
+            time.sleep(sleep)
 
 def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
     show_map = ShowMap(robot_map.grid)
@@ -98,6 +101,7 @@ if __name__ == '__main__':
 
     controller.turn_around()
     while True:
+        start = time.time()
         while not queue_cartographer.empty():
             robot_map = queue_cartographer.get()
         robot_pos = robot.position
@@ -113,5 +117,8 @@ if __name__ == '__main__':
         while not queue_sm_optionals.empty():
             queue_sm_optionals.get()
         queue_sm_optionals.put([frontiers, forces, goal_point])
+        sleep = 0.1 - (time.time() - start)
+        if sleep > 0:
+            time.sleep(sleep)
     cartographer_process.terminate()
     show_map_process.terminate()
