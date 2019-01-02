@@ -85,7 +85,7 @@ class PotentialField:
         min_dists = [inf, inf, inf, inf, inf]
         for point in circle:
             if self.__map.is_in_bound(point) and self.__map.grid[point.x][point.y] >= 0.75:
-                dist = hypot(robot_cell.x - obstacle.x, robot_cell.y - obstacle.y)
+                dist = hypot(robot_cell.x - point.x, robot_cell.y - point.y)
                 for i in range(self.__max_obs):
                     if dist < min_dists[i]:
                         for ii in range(self.__max_obs - 1, i + 2, -1):
