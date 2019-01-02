@@ -218,7 +218,17 @@ To compute the repulsive force we use the following method:
 
 To obtain the general force to apply to the robot we add the x and y of both attractive and repulsive forces together.
 
-In the following figure we can see the forces applied on the robot, in green is the attractive force, in red is the repulsive force and in magenta is the general force.
+In the following figure we can see the forces applied on the robot.
+The blue hexagon is the goal point, the green arrow is the attractive force, the red one is the repulsive force and the one in magenta is the general force.
+Only half of the points of the frontiers are displayed out to save some time, this is why they are not very clear.
+
+\FloatBarrier
+\begin{figure}
+    \centering\includegraphics[width=0.5\textwidth]{forces.png}
+    \label{fig:forces}
+    \caption{Forces applied to the robot}
+\end{figure}
+\FloatBarrier
 
 \subsection{Convert the force into commands for the robot}
 
