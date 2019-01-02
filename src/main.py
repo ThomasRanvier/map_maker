@@ -49,9 +49,9 @@ if __name__ == '__main__':
     robot = Robot(url)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
     controller = Controller(robot)
-    potential_field = PotentialField(robot, robot_map)
-    goal_planner = GoalPlanner(robot_map)
-    cartographer = Cartographer(robot_map)
+    potential_field = PotentialField(robot)
+    goal_planner = GoalPlanner()
+    cartographer = Cartographer()
 
     show_map = ShowMap(robot_map.grid)
 
@@ -64,15 +64,15 @@ if __name__ == '__main__':
     controller.turn_around()
     while True:
         robot_pos = robot.position
-        robot_cell = robot_map.to_grid_pos(robot_pos)
         robot_lasers = robot.lasers
-        cartographer.update(robot_pos, robot_lasers)
-        forces = potential_field.get_forces(robot_cell, goal_point)
+        robot_cell = robot_map.to_grid_pos(robot_pos)
+        robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
+        forces = potential_field.get_forces(robot_cell, goal_point, robot_map)
         controller.apply_force(forces['gen_force'], robot_pos)
         goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
         if time.time() - start >= delay or goal_reached:
             controller.stop()
-            goal_point, frontiers = goal_planner.get_goal_point(robot_cell)
+            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
             start = time.time()
             delay = 20
         show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
