@@ -10,7 +10,7 @@ class GoalPlanner:
     Class that implement a GoalPlanner, used to find a new goal from the frontiers between the explored and unknown world.
     """
 
-    def __init__(self, min_frontier_points = 20):
+    def __init__(self, min_frontier_points = 10):
         """
         Instantiates a GoalPlanner.
         :param min_frontier_points: Minimum points in a frontier to be relevant.

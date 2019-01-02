@@ -188,7 +188,7 @@ The coordinates of the centroid of a frontier is calculated in that way, with $x
     &x = \dfrac{\sum_{i=0}^{n}x_i}{n}   &y = \dfrac{\sum_{i=0}^{n}y_i}{n}
 \end{align*}
 
-The process of finding the frontiers and a goal point is done every 10 seconds or every time the robot reaches the goal point, that way when the frontier moves the robot will follow it.
+The process of finding the frontiers and a goal point is done every 20 seconds or every time the robot reaches the goal point, that way when the frontier moves the robot will follow it.
 
 \section{Reaching the goal}
 
@@ -210,10 +210,10 @@ To compute the attractive force we use this method:
 To compute the repulsive force we use the following method:
 
 \begin{enumerate}
-    \item We consider a circle area around the robot with a radius of 6.
-    \item In this circle we select the 5 closest obstacle, is considered an obstacle a cell with a value greater or equal to 0.75.
-    \item Then we compute the 5 corresponding vectors using the same method as for the attractive force.
-    \item After that we have to add the 5 of them into one vector, to do so we simply sum all the x and y together to obtain the final repulsive vector.
+    \item We consider a circle area around the robot with a radius of 10.
+    \item In this circle we select the 10 closest obstacle, is considered an obstacle a cell with a value greater or equal to 0.75.
+    \item Then we compute the 10 corresponding vectors using the same method as for the attractive force.
+    \item After that we have to add the 10 of them into one vector, to do so we simply sum all the x and y together to obtain the final repulsive vector.
 \end{enumerate}
 
 To obtain the general force to apply to the robot we add the x and y of both attractive and repulsive forces together.
