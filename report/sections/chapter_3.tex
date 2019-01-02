@@ -190,9 +190,37 @@ The coordinates of the centroid of a frontier is calculated in that way, with $x
 
 The process of finding the frontiers and a goal point is done every 10 seconds or every time the robot reaches the goal point, that way when the frontier moves the robot will follow it.
 
-\section{Build the path}
+\section{Reaching the goal}
 
-Now that we are able to define a goal point we still have to build the path that the robot must follow to try to reach it.
+\subsection{Computation of the force to apply}
 
-\section{Follow the path}
+Now that we are able to define a goal point we still have to find a way to reach it while avoiding the obstacles.
+
+At first we thought about building a path from the map and then implement an algorithm to avoid the obstacles while tracking the path.
+That solution would have worked well but we decided to use a potential field, in that way we have to compute the attractive and repulsive forces to apply to the robot to reach the goal while avoiding the obstacles.
+
+To compute the attractive force we use this method:
+
+\begin{enumerate}
+    \item The first step is to compute the length of the vector, we compute the distance in the grid between the robot and the goal and we apply a weight of 0.4.
+    \item Then we compute the angle of the vector, the formula is $atan2(\Delta y, \Delta x)$.
+    \item To finish we compute the coordinates of the vector using those formulas: $x: length * cos(angle)$, $y: length * sin(angle)$.
+\end{enumerate}
+
+To compute the repulsive force we use the following method:
+
+\begin{enumerate}
+    \item We consider a circle area around the robot with a radius of 6.
+    \item In this circle we select the 5 closest obstacle, is considered an obstacle a cell with a value greater or equal to 0.75.
+    \item Then we compute the 5 corresponding vectors using the same method as for the attractive force.
+    \item After that we have to add the 5 of them into one vector, to do so we simply sum all the x and y together to obtain the final repulsive vector.
+\end{enumerate}
+
+To obtain the general force to apply to the robot we add the x and y of both attractive and repulsive forces together.
+
+In the following figure we can see the forces applied on the robot, in green is the attractive force, in red is the repulsive force and in magenta is the general force.
+
+\subsection{Convert the force into commands for the robot}
+
+Once the force to apply to the robot computed we have to make the robot orientates itself in the direction of the vector and adapt its speed to the situation.
 

@@ -5,7 +5,28 @@ from logging import getLogger
 logger = getLogger('potential_field')
 
 class PotentialField:
+    """
+    Class that implements a PotentialField, used to compute the force to apply to the robot to make it reach the goal point while avoiding obstacles.
+    """
+
     def __init__(self, robot, robot_map, weight_attr = 0.4, weight_rep = 0.6, radius_obs = 6, max_obs = 5, trigger_obs = 0.75):
+        """
+        Instantiates a PotentialField.
+        :param robot: The robot.
+        :type robot: Robot
+        :param robot_map: The map of the environment.
+        :type robot_map: Map
+        :param weight_attr: The weight to apply to the attractive force.
+        :type weight_attr: float
+        :param weight_rep: The weight to apply to the repulsive force.
+        :type weight_rep: float
+        :param radius_obs: Radius of the circle to analyze around the robot for obstacles.
+        :type radius_obs: integer
+        :param max_obs: The maximum number of obstacles that will influence the repulsive force.
+        :type max_obs: integer
+        :param trigger_obs: The minimum value to be considered as a relevant obstacle here.
+        :type trigger_obs: float
+        """
         self.__map = robot_map
         self.__robot = robot
         self.__weight_attr = weight_attr
@@ -15,24 +36,50 @@ class PotentialField:
         self.__max_obs = max_obs
 
     def get_forces(self, robot_cell, goal_point):
+        """
+        Gives the attractive, repulsive and general forces to apply to the robot.
+        :param robot_cell: Position of the robot in the grid.
+        :type robot_cell: Position
+        :param goal_point: Position of the goal of the robot in the grid.
+        :type goal_point: Position
+        :return: The 3 forces.
+        :rtype: A dictionary containing the 3 forces, which also are dictionaries.
+        """
         logger.info('Calculate forces')
         forces = {'gen_force': None, 'attr_force': None, 'rep_force': None}
         forces['attr_force'] = self.__get_attractive_force(robot_cell, goal_point)
         forces['rep_force'] = self.__get_repulsive_force(robot_cell)
-        forces['gen_force'] = {'dx': forces['attr_force']['dx'] + forces['rep_force']['dx'], 
-                                'dy': forces['attr_force']['dy'] + forces['rep_force']['dy']}
+        forces['gen_force'] = {'x': forces['attr_force']['x'] + forces['rep_force']['x'], 
+                                'y': forces['attr_force']['y'] + forces['rep_force']['y']}
         return forces
 
     def __get_attractive_force(self, robot_cell, goal_point):
+        """
+        Gives the attractive force to apply to the robot.
+        :param robot_cell: Position of the robot in the grid.
+        :type robot_cell: Position
+        :param goal_point: Position of the goal of the robot in the grid.
+        :type goal_point: Position
+        :return: The attractive force.
+        :rtype: A dictionary containing the coordinates of the attractive vector.
+        """
         if goal_point == None:
-            return {'dx': 0, 'dy': 0}
+            return {'x': 0, 'y': 0}
         length = self.__weight_attr * hypot(robot_cell.x - goal_point.x, robot_cell.y - goal_point.y)
         dx = goal_point.x - robot_cell.x
         dy = goal_point.y - robot_cell.y
         angle = atan2(dy, dx)
-        return {'dx': length * cos(angle), 'dy': length * sin(angle)}
+        return {'x': length * cos(angle), 'y': length * sin(angle)}
 
     def __get_repulsive_force(self, robot_cell):
+        """
+        Gives the repulsive force to apply to the robot.
+        Obtained by summing the repulsive forces applied by the 5 closest obstacles (if they exist) to the robot.
+        :param robot_cell: Position of the robot in the grid.
+        :type robot_cell: Position
+        :return: The repulsive force.
+        :rtype: A dictionary containing the coordinates of the repulsive vector.
+        """
         circle = filled_midpoint_circle(robot_cell.x, robot_cell.y, self.__radius_obs)
         closest_obstacles = [None, None, None, None, None]
         min_dists = [inf, inf, inf, inf, inf]
@@ -47,7 +94,7 @@ class PotentialField:
                         min_dists[i] = dist
                         closest_obstacles[i] = obstacle
                         break
-        result = {'dx': 0, 'dy': 0}
+        result = {'x': 0, 'y': 0}
         for obstacle in closest_obstacles:
             if obstacle != None:
                 dist = hypot(robot_cell.x - obstacle.x, robot_cell.y - obstacle.y)
@@ -55,6 +102,6 @@ class PotentialField:
                 dx = obstacle.x - robot_cell.x
                 dy = obstacle.y - robot_cell.y
                 angle = atan2(dy, dx)
-                result['dx'] += -length * cos(angle)
-                result['dy'] += -length * sin(angle)
+                result['x'] += -length * cos(angle)
+                result['y'] += -length * sin(angle)
         return result

@@ -6,11 +6,29 @@ from logging import getLogger
 logger = getLogger('goal_planner')
 
 class GoalPlanner:
+    """
+    Class that implement a GoalPlanner, used to find a new goal from the frontiers between the explored and unknown world.
+    """
+
     def __init__(self, robot_map, min_frontier_points = 20):
+        """
+        Instantiates a GoalPlanner.
+        :param robot_map: The map of the environment.
+        :type robot_map: Map
+        :param min_frontier_points: Minimum points in a frontier to be relevant.
+        :type min_frontier_points: integer
+        """
         self.__map = robot_map
         self.__min_frontier_points = min_frontier_points
 
     def get_goal_point(self, robot_cell):
+        """
+        Function that gives the user a new goal point by choosing the centroid of the closest frontier.
+        :param robot_cell: Position of the robot in the grid.
+        :type robot_cell: Position
+        :return: The goal point and the frontiers.
+        :rtype: A set of one Position and a 2D list of Position objects.
+        """
         logger.info('Search new goal')
         frontiers = self.__get_frontiers(robot_cell)
         if frontiers:
@@ -22,6 +40,15 @@ class GoalPlanner:
         return (None, None)
 
     def __find_closest_frontier(self, frontiers, robot_cell):
+        """
+        Function that finds the closest frontier in regard of the robot.
+        :param frontiers: A list of the frontiers.
+        :type frontiers: A 2D list of Position objects.
+        :param robot_cell: Position of the robot in the grid.
+        :type robot_cell: Position
+        :return: The closest frontier from the robot.
+        :rtype: A list of Position objects.
+        """
         logger.info('Search closest frontier')
         closest_frontier = frontiers[0]
         if len(frontiers) == 1:
@@ -38,6 +65,12 @@ class GoalPlanner:
     def __get_frontiers(self, robot_cell):
         """
         https://arxiv.org/pdf/1806.03581.pdf
+        This is an implementation of the Wavefront Frontier Finder algorithm that can be found in the scientific paper above.
+        Gives the frontiers between the explored and unknown world that could be reached by the robot.
+        :param robot_cell: Position of the robot in the grid.
+        :type robot_cell: Position
+        :return: A list of all the frontiers.
+        :rtype: A 2D list of Position objects.
         """
         logger.info('Search frontiers')
         frontiers = []
@@ -80,12 +113,26 @@ class GoalPlanner:
         return frontiers
                             
     def __has_open_neighbour(self, cell):
+        """
+        Tells if the selected cell has an open (empty) neighbour or not.
+        :param cell: Cell in the grid.
+        :type cell: Position
+        :return: True if the cell has an open neighbour, False otherwise.
+        :rtype: boolean
+        """
         for n in moore_neighbourhood(cell, self.__map.grid_width, self.__map.grid_height):
             if self.__map.is_empty(n):
                 return True
         return False
     
     def __is_frontier_point(self, cell):
+        """
+        Tells if the selected cell is a frontier point or not.
+        :param cell: Cell in the grid.
+        :type cell: Position
+        :return: True if the cell is a frontier point, False otherwise.
+        :rtype: boolean
+        """
         if self.__map.is_unknown(cell):
             for neighbour in von_neumann_neighbourhood(cell, self.__map.grid_width, self.__map.grid_height):
                 if self.__map.is_empty(neighbour):

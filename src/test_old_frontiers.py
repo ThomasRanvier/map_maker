@@ -3,6 +3,40 @@ from mapping.map import Map
 from utils.position import Position
 import time
 
+"""
+Test of the old way of finding the frontiers, to run it paste the following code in map.py.
+
+def __get_frontiers(self):
+    frontiers = []
+    for x in range(self.grid_width):
+        for y in range(self.grid_height):
+            cell = Position(x, y)
+            if self.is_unknown(cell):
+                for neighbour in von_neumann_neighbourhood(cell, self.grid_width, self.grid_height):
+                    if neighbour not in frontiers and self.is_empty(neighbour):
+                        frontiers.append(neighbour)
+    return frontiers
+
+def __build_frontier(self, frontiers, current_frontier, cell):
+    neighbours = moore_neighbourhood(cell, self.grid_width, self.grid_height)
+    for neighbour in neighbours:
+        if neighbour in frontiers:
+            current_frontier.append(neighbour)
+            frontiers.remove(neighbour)
+            self.__build_frontier(frontiers, current_frontier, neighbour)
+
+def get_divided_frontiers(self):
+    frontiers = self.__get_frontiers()
+    divided_frontiers = [frontiers]
+    while frontiers:
+        current_frontier = []
+        cell = frontiers.pop(0)
+        current_frontier.append(cell)
+        self.__build_frontier(frontiers, current_frontier, cell)
+        divided_frontiers.append(current_frontier)
+    return divided_frontiers
+"""
+
 robot_pos = Position(9, 9)
 lower_left_pos = Position(-5.0, -5.0)
 upper_right_pos = Position(5.0, 5.0)

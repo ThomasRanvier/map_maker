@@ -8,11 +8,29 @@ from logging import getLogger
 logger = getLogger('robot')
 
 class Robot:
+    """
+    Class that implements a Robot, it is used as an interface to communicate directly with the MRDS server.
+    """
+
     def __init__(self, url):
+        """
+        Instantiates a Robot.
+        :param url: The url of the MRDS server.
+        :type url: string
+        """
         self.__url = url
         self.HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
 
     def post_speed(self, angular_speed, linear_speed):
+        """
+        Post the angular and linear speeds to the MRDS server, it will apply them to the robot.
+        :param angular_speed: The angular speed to apply.
+        :type angular_speed: float
+        :param linear_speed: The linear speed to apply.
+        :type linear_speed: float
+        :return: The response of the request.
+        :rtype: response
+        """
         params = json.dumps({'TargetAngularSpeed': angular_speed, 'TargetLinearSpeed': linear_speed})
         mrds = http.client.HTTPConnection(self.__url)
         mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
@@ -27,6 +45,11 @@ class Robot:
 
     @property
     def position(self):
+        """
+        Requests the position of the robot and gives it in a Position object.
+        :return: The position of the robot.
+        :rtype: Position 
+        """
         mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/localization')
         response = mrds.getresponse()
@@ -41,6 +64,11 @@ class Robot:
 
     @property
     def lasers(self):
+        """
+        Requests the lasers responses and gives a list of Laser objects.
+        :return: The lasers results.
+        :rtype: A list of Laser objects.
+        """
         laser_echoes = self.__get_laser_echoes()
         laser_angles = self.__get_laser_angles()
         if laser_echoes != None and laser_angles != None:
@@ -53,6 +81,11 @@ class Robot:
             return None
 
     def __get_laser_echoes(self):
+        """
+        Requests the lasers echoes.
+        :return: The lasers echoes.
+        :rtype: Lasers echoes.
+        """
         mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/laser/echoes')
         response = mrds.getresponse()
@@ -66,6 +99,11 @@ class Robot:
             return None
 
     def __get_laser_angles(self):
+        """
+        Requests the lasers angles.
+        :return: The lasers angles.
+        :rtype: Lasers angles.
+        """
         mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/laser/properties')
         response = mrds.getresponse()
@@ -82,4 +120,3 @@ class Robot:
         else:
             logger.info('Impossible to get the robot laser angles')
             return None
-

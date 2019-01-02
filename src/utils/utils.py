@@ -1,32 +1,42 @@
 from math import atan2, pi
 from utils.position import Position
 
-def filled_midpoint_circle(x0, y0, radius):
+def filled_midpoint_circle(x_center, y_center, radius):
     """
     https://stackoverflow.com/questions/10878209/midpoint-circle-algorithm-for-filled-circles
+    This function is an implementation of the algorithm that can be found above.
+    It gives the user a list of all the points in a circle of a defined radius and a defined center.
+    :param x_center: X coordinate of the center of the circle.
+    :type x_center: integer
+    :param y_center: Y coordinate of the center of the circle.
+    :type y_center: integer
+    :param radius: Radius of the circle.
+    :type radius: integer
+    :return: A list of all the points that compose the circle.
+    :rtype: A list of Position objects.
     """
     x = radius
     y = 0
     radius_err = 1 - x
     circle = []
     while x >= y:
-        start_x = -x + x0
-        end_x = x + x0
+        start_x = -x + x_center
+        end_x = x + x_center
         for ix in range(start_x, end_x + 1):
-            circle.append(Position(ix, y + y0))
+            circle.append(Position(ix, y + y_center))
         if y != 0:
             for ix in range(start_x, end_x + 1):
-                circle.append(Position(ix, -y + y0))
+                circle.append(Position(ix, -y + y_center))
         y += 1
         if radius_err < 0:
             radius_err += 2 * y + 1
         else:
             if x >= y:
-                start_x = -y + 1 + x0
-                end_x = y - 1 + x0
+                start_x = -y + 1 + x_center
+                end_x = y - 1 + x_center
                 for ix in range(start_x, end_x + 1):
-                    circle.append(Position(ix, x + y0))
-                    circle.append(Position(ix, -x + y0))
+                    circle.append(Position(ix, x + y_center))
+                    circle.append(Position(ix, -x + y_center))
             x -= 1
             radius_err += 2 * (y - x + 1)
     return circle
@@ -34,6 +44,18 @@ def filled_midpoint_circle(x0, y0, radius):
 def bresenham_line(x1, y1, x2, y2):
     """
     http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm
+    This function is a slightly modified version of the algorithm that can be found above.
+    It gives the user a list of all the points that are in a line between the 2 given points.
+    :param x1: X coordinate of the first point.
+    :type x1: integer
+    :param y1: Y coordinate of the first point.
+    :type y1: integer
+    :param x2: X coordinate of the second point.
+    :type x2: integer
+    :param y2: Y coordinate of the second point.
+    :type y2: integer
+    :return: A list of the points that compose the line.
+    :rtype: A list of Position objects.
     """
     dx = x2 - x1
     dy = y2 - y1
@@ -64,9 +86,25 @@ def bresenham_line(x1, y1, x2, y2):
     return points
 
 def distance_2(pos_1, pos_2):
+    """
+    This functions gives the square distance between two positions.
+    :param pos_1: First position.
+    :type pos_1: Position
+    :param pos_2: Second position.
+    :type pos_2: Position
+    :return: Square distance
+    :rtype: float
+    """
     return (pos_2.x - pos_1.x)**2 + (pos_2.y - pos_1.y)**2
 
 def centroid(points):
+    """
+    Computes the centroid of the list of points.
+    :param points: A list of points.
+    :type points: A list of Position objects.
+    :return: The position of the centroid.
+    :rtype: Position
+    """
     count = 0.0
     x_sum = 0.0
     y_sum = 0.0
@@ -77,6 +115,17 @@ def centroid(points):
     return Position(x_sum / count, y_sum / count)
 
 def von_neumann_neighbourhood(cell, grid_width, grid_height):
+    """
+    Gives the cells of the Von Neumann neighbourhood of the cell.
+    :param cell: The cell that we want the neighbourhood of.
+    :type cell: Position
+    :param grid_width: The width of the grid.
+    :type grid_width: integer
+    :param grid_height: The height of the grid.
+    :type grid_height: integer
+    :return: A list of the neighbours.
+    :rtype: A list of Position objects.
+    """
     neighbours = []
     if cell.x > 0:
         neighbours.append(Position(cell.x - 1, cell.y))
@@ -89,15 +138,18 @@ def von_neumann_neighbourhood(cell, grid_width, grid_height):
     return neighbours
 
 def moore_neighbourhood(cell, grid_width, grid_height):
-    neighbours = []
-    if cell.x > 0:
-        neighbours.append(Position(cell.x - 1, cell.y))
-    if cell.y > 0:
-        neighbours.append(Position(cell.x, cell.y - 1))
-    if cell.x < grid_width - 1:
-        neighbours.append(Position(cell.x + 1, cell.y))
-    if cell.y < grid_height - 1:
-        neighbours.append(Position(cell.x, cell.y + 1))
+    """
+    Gives the cells of the Moore neighbourhood of the cell.
+    :param cell: The cell that we want the neighbourhood of.
+    :type cell: Position
+    :param grid_width: The width of the grid.
+    :type grid_width: integer
+    :param grid_height: The height of the grid.
+    :type grid_height: integer
+    :return: A list of the neighbours.
+    :rtype: A list of Position objects.
+    """
+    neighbours = von_neumann_neighbourhood(cell, grid_width, grid_height)
     if cell.x > 0 and cell.y > 0:
         neighbours.append(Position(cell.x - 1, cell.y - 1))
     if cell.x > 0 and cell.y < grid_height - 1:
@@ -109,6 +161,13 @@ def moore_neighbourhood(cell, grid_width, grid_height):
     return neighbours
 
 def orientation_to_angle(orientation):
+    """
+    Converts the orientation of the robot into an angle in radians.
+    :param orientation: Orientation of the robot.
+    :type orientation: Orientation of the robot.
+    :return: The angle in radians.
+    :rtype: float
+    """
     head = heading(orientation)
     angle = atan2(head['Y'], head['X'])
     while angle > pi:

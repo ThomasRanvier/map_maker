@@ -23,7 +23,7 @@ For all those cells we compute an increment that is added or subtracted to them 
         \end{itemize}
     \item Then we compute an increment factor in regard of the distance between the robot and the cell to update:
         $$
-        inc\_factor\_iro\_dist = 1 - abs(distance / max\_lasers\_distance)
+        inc\_factor\_iro\_dist = 1 - abs(\dfrac{distance}{max\_lasers\_distance})
         $$
     \item The final increment is computed by multiplying the factor with the defined increment:
         $$

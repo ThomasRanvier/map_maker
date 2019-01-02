@@ -15,6 +15,19 @@ logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,l
 logger = logging.getLogger(__name__)
 
 def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter):
+    """
+    Tells if the goal has been reached or not.
+    :param goal_point: The goal point.
+    :type goal_point: Position
+    :param robot_cell: The robot position in the grid.
+    :type robot_cell: Position
+    :param distance_to_trigger_goal_m: Distance under which the robot triggers the goal, in meters.
+    :type distance_to_trigger_goal_m: float
+    :param size_of_cell_in_meter: Size of a cell of the grid in meters.
+    :type size_of_cell_in_meter: float
+    :return: True if the goal is reached, False otherwise.
+    :rtype: boolean
+    """
     if goal_point != None:
         dist_2 = distance_2(robot_cell, goal_point)
         trigger_2 = (distance_to_trigger_goal_m * (1.0 / size_of_cell_in_meter))**2

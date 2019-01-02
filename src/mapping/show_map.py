@@ -8,13 +8,27 @@ from logging import getLogger
 logger = getLogger('show_map')
 
 class ShowMap:
-    def __init__(self, grid, show_gui = True, save_map_time = 5, name = 'map.png', robot_size = 3):
+    """
+    Class that implements the ShowMap object.
+    """
+
+    def __init__(self, grid, show_gui = True, save_map_time = 5, name = 'map.png'):
+        """
+        Instantiates a ShowMap.
+        :param grid: The grid of the environment with certainty values.
+        :type grid: 2D Numpy array
+        :param show_gui: True if we want to show the gui, False otherwise.
+        :type show_gui: boolean
+        :param save_map_time: Delay between each save of the map.
+        :type save_map_time: float
+        :param name: Name of the map file.
+        :type name: string
+        """
         if not show_gui:
             matplotlib.use('Agg')
         import matplotlib.pyplot as plt
         self.__save_map_time = save_map_time
         self.__name = name
-        self.__robot_size = robot_size
         self.__image = Image.fromarray(grid * 255)
         plt.rcParams['toolbar'] = 'None'
         self.__fig, self.__ax = plt.subplots(1, 1)
@@ -27,7 +41,20 @@ class ShowMap:
         self.__save()
         self.__start_time = time.time()
 
-    def update(self, map_to_display, robot_cell, goal_point = None, path = None, frontiers = None, forces = None):
+    def update(self, map_to_display, robot_cell, goal_point = None, frontiers = None, forces = None):
+        """
+        Function that updates the gui.
+        :param map_to_display: The map of the environment to display.
+        :type map_to_display: Map
+        :param robot_cell: The cell of the robot in the grid.
+        :type robot_cell: Position
+        :param goal_point: The goal point.
+        :type goal_point: Position
+        :param frontiers: The frontiers.
+        :type frontiers: A list of Position objects.
+        :param forces: The forces.
+        :type forces: A dictionary of dictionaries representing vectors.
+        """
         import matplotlib.pyplot as plt
         plt.pause(0.02)
         grid = np.matrix(map_to_display.grid)
@@ -39,20 +66,17 @@ class ShowMap:
         self.__implot = self.__ax.imshow(self.__image)
         self.__ax.set_xticks([])
         self.__ax.set_yticks([])
-        self.__ax.plot(robot_cell.x, map_to_display.grid_height - 1 - robot_cell.y, 'rs', markersize=self.__robot_size)
+        self.__ax.plot(robot_cell.x, map_to_display.grid_height - 1 - robot_cell.y, 'rs', markersize=3)
         if forces != None:
             y = map_to_display.grid_height - 1 - robot_cell.y
             if forces['rep_force'] != None:
-                self.__ax.arrow(robot_cell.x, y, forces['rep_force']['dx'], -forces['rep_force']['dy'], head_width=1, head_length=2, fc='r', ec='r')
+                self.__ax.arrow(robot_cell.x, y, forces['rep_force']['x'], -forces['rep_force']['y'], head_width=1, head_length=2, fc='r', ec='r')
             if forces['attr_force'] != None:
-                self.__ax.arrow(robot_cell.x, y, forces['attr_force']['dx'], -forces['attr_force']['dy'], head_width=1, head_length=2, fc='g', ec='g')
+                self.__ax.arrow(robot_cell.x, y, forces['attr_force']['x'], -forces['attr_force']['y'], head_width=1, head_length=2, fc='g', ec='g')
             if forces['gen_force'] != None:
-                self.__ax.arrow(robot_cell.x, y, forces['gen_force']['dx'], -forces['gen_force']['dy'], head_width=1, head_length=2, fc='m', ec='m')
+                self.__ax.arrow(robot_cell.x, y, forces['gen_force']['x'], -forces['gen_force']['y'], head_width=1, head_length=2, fc='m', ec='m')
         if goal_point != None:
             self.__ax.plot(goal_point.x, map_to_display.grid_height - 1 - goal_point.y, 'bh', markersize=8)
-        if path != None:
-            for point in path:
-                self.__ax.plot(point.x, map_to_display.grid_height - 1 - point.y, 'g+', markersize=2)
         if frontiers != None:
             index = 0
             for frontier in frontiers:
@@ -69,6 +93,9 @@ class ShowMap:
             self.__start_time = time.time()
 
     def __save(self):
+        """
+        Function that saves the map to a file.
+        """
         pass
         """
         data = np.fromstring(self.__fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
