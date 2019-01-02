@@ -45,13 +45,10 @@ def cartographer_job(queue_cartographer, queue_main):
         while not queue_cartographer.empty():
             robot_map, robot = queue_cartographer.get()
         if robot_map != None and robot != None:
-            logger.info('Cartographer working')
             robot_pos = robot.position
             robot_lasers = robot.lasers
             robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
             queue_main.put(robot_map)
-        else:
-            logger.info('Cartographer waiting')
 
 if __name__ == '__main__':
     url = 'localhost:50000'
@@ -67,7 +64,6 @@ if __name__ == '__main__':
     controller = Controller(robot)
     potential_field = PotentialField(robot)
     goal_planner = GoalPlanner()
-    #cartographer = Cartographer()
 
     queue_cartographer = Queue()
     queue_main = Queue()
@@ -86,16 +82,16 @@ if __name__ == '__main__':
 
     controller.turn_around()
     while True:
+        #Communicate with the cartographer
         queue_cartographer.put([robot_map, robot])
         new_robot_map = None
         while not queue_main.empty():
             new_robot_map = queue_main.get()
         if new_robot_map != None:
             robot_map = new_robot_map
+        #Rest of the program
         robot_pos = robot.position
-        #robot_lasers = robot.lasers
         robot_cell = robot_map.to_grid_pos(robot_pos)
-        #robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
         forces = potential_field.get_forces(robot_cell, goal_point, robot_map)
         controller.apply_force(forces['gen_force'], robot_pos)
         goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
@@ -105,3 +101,4 @@ if __name__ == '__main__':
             start = time.time()
             delay = 20
         show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
+    cartographer_process.terminate()
