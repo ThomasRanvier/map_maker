@@ -45,10 +45,13 @@ def cartographer_job(queue_cartographer, queue_main):
         while not queue_cartographer.empty():
             robot_map, robot = queue_cartographer.get()
         if robot_map != None and robot != None:
+            logger.info('Cartographer working')
             robot_pos = robot.position
             robot_lasers = robot.lasers
             robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
             queue_main.put(robot_map)
+        else:
+            logger.info('Cartographer waiting')
 
 if __name__ == '__main__':
     url = 'localhost:50000'
@@ -83,6 +86,7 @@ if __name__ == '__main__':
 
     controller.turn_around()
     while True:
+        queue_cartographer.put(robot_map, robot)
         new_robot_map = None
         while not queue_main.empty():
             new_robot_map = queue_main.get()
