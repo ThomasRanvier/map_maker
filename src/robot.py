@@ -13,7 +13,7 @@ class Robot:
     Class that implements a Robot, it is used as an interface to communicate directly with the MRDS server.
     """
 
-    def __init__(self, url, min_delay = 0.05):
+    def __init__(self, url, min_delay = 0.1):
         """
         Instantiates a Robot.
         :param url: The url of the MRDS server.
