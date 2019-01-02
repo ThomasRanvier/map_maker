@@ -43,11 +43,11 @@ def cartographer_job(queue_cartographer, queue_sm, robot_map, robot):
         robot_pos = robot.position
         robot_lasers = robot.lasers
         robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
-        queue_cartographer.put([robot_map, robot_pos])
-        queue_sm.put([robot_map, robot_pos])
+        queue_cartographer.put(robot_map)
+        queue_sm.put(robot_map)
         time.sleep(0.1)
 
-def show_map_job(queue_sm, queue_sm_optionals, robot_map, robot_pos):
+def show_map_job(queue_sm, queue_sm_optionals, robot_map, robot):
     show_map = ShowMap(robot_map.grid)
     frontiers = None
     forces = None
@@ -55,9 +55,10 @@ def show_map_job(queue_sm, queue_sm_optionals, robot_map, robot_pos):
     while True:
         start = time.time()
         while not queue_sm.empty():
-            robot_map, robot_pos = queue_sm.get()
+            robot_map = queue_sm.get()
         while not queue_sm_optionals.empty():
             frontiers, forces, goal_point = queue_sm_optionals.get()
+        robot_pos = robot.position
         robot_cell = robot_map.to_grid_pos(robot_pos)
         show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
         sleep = 0.2 - (time.time() - start)
@@ -80,7 +81,6 @@ if __name__ == '__main__':
 
     frontiers = None
     goal_point = None
-    robot_pos = robot.position
     start = time.time()
     delay = 10
 
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     cartographer_process.daemon = True
     cartographer_process.start()
 
-    show_map_process = Process(target=show_map_job, args=(queue_sm, queue_sm_optionals, robot_map, robot_pos))
+    show_map_process = Process(target=show_map_job, args=(queue_sm, queue_sm_optionals, robot_map, robot))
     show_map_process.daemon = True
     show_map_process.start()
 
@@ -102,8 +102,9 @@ if __name__ == '__main__':
     while True:
         #Communicate with the cartographer
         while not queue_cartographer.empty():
-            robot_map, robot_pos = queue_cartographer.get()
+            robot_map = queue_cartographer.get()
         #Rest of the program
+        robot_pos = robot.position
         robot_cell = robot_map.to_grid_pos(robot_pos)
         forces = potential_field.get_forces(robot_cell, goal_point, robot_map)
         controller.apply_force(forces['gen_force'], robot_pos)

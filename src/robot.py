@@ -4,6 +4,7 @@ from utils.laser import Laser
 from utils.utils import orientation_to_angle
 from math import pi
 from logging import getLogger
+import time
 
 logger = getLogger('robot')
 
@@ -12,7 +13,7 @@ class Robot:
     Class that implements a Robot, it is used as an interface to communicate directly with the MRDS server.
     """
 
-    def __init__(self, url):
+    def __init__(self, url, min_delay = 0.05):
         """
         Instantiates a Robot.
         :param url: The url of the MRDS server.
@@ -20,6 +21,11 @@ class Robot:
         """
         self.__url = url
         self.HEADERS = {"Content-type": "application/json", "Accept": "text/json"}
+        self.__min_delay = min_delay
+        self.__timer_position = 0
+        self.__timer_lasers = 0
+        self.__last_position = None
+        self.__last_lasers = None
 
     def post_speed(self, angular_speed, linear_speed):
         """
@@ -50,6 +56,9 @@ class Robot:
         :return: The position of the robot.
         :rtype: Position 
         """
+        if time.time() - self.__timer_position < self.__min_delay:
+            return self.__last_position
+        self.__timer_position = time.time()
         mrds = http.client.HTTPConnection(self.__url)
         mrds.request('GET', '/lokarria/localization')
         response = mrds.getresponse()
@@ -57,7 +66,8 @@ class Robot:
             pose_data = response.read()
             response.close()
             pos = json.loads(pose_data.decode())['Pose']
-            return Position(pos['Position']['X'], pos['Position']['Y'], pos['Position']['Z'], orientation_to_angle(pos['Orientation']))
+            self.__last_position = Position(pos['Position']['X'], pos['Position']['Y'], pos['Position']['Z'], orientation_to_angle(pos['Orientation']))
+            return self.__last_position
         else:
             logger.info('Impossible to get the robot pose')
             return None
@@ -69,13 +79,17 @@ class Robot:
         :return: The lasers results.
         :rtype: A list of Laser objects.
         """
+        if time.time() - self.__timer_lasers < self.__min_delay:
+            return self.__last_lasers
+        self.__timer_lasers = time.time()
         laser_echoes = self.__get_laser_echoes()
         laser_angles = self.__get_laser_angles()
         if laser_echoes != None and laser_angles != None:
             lasers = []
             for i in range(len(laser_echoes)):
                 lasers.append(Laser(laser_echoes[i], laser_angles[i]))
-            return lasers
+            self.__last_lasers = lasers
+            return self.__last_lasers
         else:
             logger.info('Impossible to get the robot lasers')
             return None
