@@ -43,7 +43,6 @@ class Robot:
         response = mrds.getresponse()
         status = response.status
         if status == 204:
-            logger.info('Update robot speed')
             return response
         else:
             logger.info('Impossible to post robot speed')
