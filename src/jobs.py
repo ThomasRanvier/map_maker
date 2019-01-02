@@ -29,6 +29,6 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         robot_pos = robot.position
         robot_cell = robot_map.to_grid_pos(robot_pos)
         show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
-        sleep = 0.2 - (time.time() - start)
+        sleep = 0.5 - (time.time() - start)
         if sleep > 0:
             time.sleep(sleep)
