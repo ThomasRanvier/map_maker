@@ -80,9 +80,12 @@ class ShowMap:
         if frontiers != None:
             index = 0
             for frontier in frontiers:
+                count = 0
                 for point in frontier:
-                    color = ['gh', 'ch', 'mh', 'yh', 'kh']
-                    self.__ax.plot(point.x, map_to_display.grid_height - 1 - point.y, color[index % 5], markersize=1)
+                    count += 1
+                    if count % 3 == 0:
+                        color = ['gh', 'ch', 'mh', 'yh', 'kh']
+                        self.__ax.plot(point.x, map_to_display.grid_height - 1 - point.y, color[index % 5], markersize=1)
                 index += 1
         self.__fig.canvas.draw()
         elapsed_time = time.time() - self.__start_time

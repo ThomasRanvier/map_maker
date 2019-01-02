@@ -60,7 +60,6 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         robot_pos = robot.position
         robot_cell = robot_map.to_grid_pos(robot_pos)
         show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
-        time.sleep(0.1)
 
 if __name__ == '__main__':
     url = 'localhost:50000'
