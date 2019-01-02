@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     frontiers = None
     goal_point = None
-    start = time.time()
+    start_planning = time.time()
     delay = 8
 
     controller.turn_around()
@@ -77,10 +77,10 @@ if __name__ == '__main__':
         forces = potential_field.get_forces(robot_cell, goal_point, robot_map)
         controller.apply_force(forces['gen_force'], robot_pos)
         goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
-        if time.time() - start >= delay or goal_reached:
+        if time.time() - start_planning >= delay or goal_reached:
             controller.stop()
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
-            start = time.time()
+            start_planning = time.time()
             delay = 20
         while not queue_sm_optionals.empty():
             queue_sm_optionals.get()

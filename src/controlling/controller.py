@@ -8,7 +8,7 @@ class Controller:
     Class that implements a Controller, used as an interface to communicate easily with the Robot object which communicates directly with the MRDS server.
     """
 
-    def __init__(self, robot, max_ang_speed = 3, max_linear_speed = 1, ang_speed_weight = 1.5):
+    def __init__(self, robot, max_ang_speed = 3, max_linear_speed = 1, ang_speed_weight = 0.8, turn_around_delay = 8):
         """
         Instantiates a Controller.
         :param robot: The robot to interface.
@@ -24,6 +24,8 @@ class Controller:
         self.__max_ang_speed = max_ang_speed
         self.__max_linear_speed = max_linear_speed
         self.__ang_speed_weight = ang_speed_weight
+        self.__timer = 0
+        self.__turn_around_delay = turn_around_delay
     
     def apply_force(self, force, robot_pos):
         """
@@ -33,23 +35,29 @@ class Controller:
         :param robot_pos: The position of the robot in the real world.
         :type robot_pos: Position
         """
-        force_length = hypot(force['x'], force['y'])
-        force_angle = atan2(force['y'], force['x'])
-        theta = sin(force_angle - robot_pos.angle)
-        ang_speed = self.__max_ang_speed * theta * self.__ang_speed_weight
-        ang_speed = min(max(ang_speed, -self.__max_ang_speed), self.__max_ang_speed)
-        self.__robot.post_speed(ang_speed, 1)
+        if time.time() - self.__timer < self.__turn_around_delay:
+            return
+        elif force['x'] == 0 and force['y'] == 0:
+            self.stop()
+        else:
+            force_length = hypot(force['x'], force['y'])
+            force_angle = atan2(force['y'], force['x'])
+            theta = sin(force_angle - robot_pos.angle)
+            ang_speed = self.__max_ang_speed * theta * self.__ang_speed_weight
+            ang_speed = min(max(ang_speed, -self.__max_ang_speed), self.__max_ang_speed)
+            self.__robot.post_speed(ang_speed, 1)
 
     def turn_around(self):
         """
-        Makes the robot turn in circles, slow enough to have a precise lasers reading.
+        Makes the robot turn in circles, slow enough to have a precise lasers reading, overrules the timer.
         """
+        self.__timer = time.time()
         logger.info('Make the robot turn around')
         self.__robot.post_speed(0.75, 0.5)
 
     def stop(self):
         """
-        Makes the robot stop moving.
+        Makes the robot stop moving, overrules the timer.
         """
         logger.info('Stop the robot')
         self.__robot.post_speed(0, 0)
