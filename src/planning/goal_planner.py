@@ -69,7 +69,7 @@ class GoalPlanner:
                 if len(frontier) > max_frontier:
                     max_frontier = len(frontier)
                     closest_frontier = frontier
-            self.__queue_fl_closest_frontier.put(closest_frontier)
+            #DO NOT SEND ANYTHING TO FRONTIER LIMITER
             return closest_frontier
         else:
             logger.info('Search closest frontier')

@@ -2,7 +2,7 @@ import time
 from mapping.cartographer import Cartographer
 from mapping.show_map import ShowMap
 from logging import getLogger
-from utils.utils import filled_midpoint_circle, centroid
+from utils.utils import filled_midpoint_circle
 
 logger = getLogger('jobs')
 
@@ -78,12 +78,13 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
     :type max_positions: integer
     :param delta_m: The delta in meter bellow which the robot is detected as stuck.
     :type delta_m: float
-    :param radius: The radius (in cells of the grid) around the goal in which the cells are added to the ignored cells set.
+    :param radius: The radius (in cells of the grid) around the closest frontier in which the cells are added to the ignored cells set.
     :type radius: integer
     """
     last_positions = []
     ignored_cells = set([])
     closest_frontier = None
+    stuck_count = 0
     while True:
         stuck = False
         while not queue_fl_closest_frontier.empty():
@@ -112,12 +113,20 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
                 logger.info('Delta y: ' + str(delta_y))
                 if delta_x <= delta_m and delta_y <= delta_m:
                     stuck = True
-                    logger.info('Robot is detected as stuck, closest frontier ignored')
-                    last_positions = []
-                    goal = centroid(closest_frontier)
-                    for p in filled_midpoint_circle(int(goal.x), int(goal.y), radius):
-                        if robot_map.is_in_bound(p):
-                            ignored_cells.add(p)
+                    stuck_count += 1
+                    if stuck_count == 2:
+                        logger.info('Robot is detected as stuck twice in a row, delete closest_frontier')
+                        last_positions = []
+                        for p in closest_frontier:
+                            for n in filled_midpoint_circle(p.x, p.y, radius):
+                                if robot_map.is_in_bound(n):
+                                    ignored_cells.add(n)
+                        stuck = False
+                        stuck_count = 0
+                    else:
+                        logger.info('Robot is detected as stuck, go to biggest frontier')
+                else:
+                    stuck_count = 0
         while not queue_fl_ignored_cells.empty():
             queue_fl_ignored_cells.get()
         queue_fl_ignored_cells.put(ignored_cells)
