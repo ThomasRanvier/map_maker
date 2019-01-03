@@ -9,16 +9,9 @@ from multiprocessing import Queue, Process
 from jobs import show_map_job, cartographer_job, frontiers_limiter_job
 import time
 import logging
-import signal
 
 logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-def terminate_all(sig, frame):
-    cartographer_d.terminate()
-    show_map_d.terminate()
-    frontiers_limiter_d.terminate()
-    sys.exit(0)
 
 def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter):
     """
@@ -44,14 +37,12 @@ def is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_
     return False
 
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, terminate_all)
-
     url = 'localhost:50000'
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 4
-    lower_left_pos = Position(-65.0, -65.0)
-    upper_right_pos = Position(65.0, 65.0)
+    lower_left_pos = Position(-60.0, -60.0)
+    upper_right_pos = Position(58.0, 58.0)
 
     queue_cartographer = Queue()
     queue_sm_map = Queue()
@@ -114,4 +105,6 @@ if __name__ == '__main__':
         sleep = 0.1 - (time.time() - start_loop)
         if sleep > 0:
             time.sleep(sleep)
-    terminate_all(None, None)
+    cartographer_d.terminate()
+    show_map_d.terminate()
+    frontiers_limiter_d.terminate()
