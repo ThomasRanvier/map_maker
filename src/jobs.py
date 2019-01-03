@@ -68,9 +68,12 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
         while not queue_fl_closest_frontier.empty():
             closest_frontier = queue_fl_closest_frontier.get()
         if closest_frontier != None:
-            last_positions.append(robot.position)
+            robot_pos = robot.position
+            logger.info('Last pos: ' + str(robot_pos))
+            last_positions.append(robot_pos)
             if len(last_positions) > max_positions:
                 last_positions.pop(0)
+                logger.info('First pos of array: ' + str(last_positions[0]))
                 min_x, max_x = last_positions[0].x
                 min_y, max_y = last_positions[0].y
                 for pos in last_positions:
