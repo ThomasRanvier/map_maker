@@ -79,8 +79,9 @@ if __name__ == '__main__':
     controller.turn_around()
     while explore_on:
         stuck = False
+        restart = False
         if not queue_fl_stuck.empty():
-            stuck = queue_fl_stuck.get()
+            stuck, restart = queue_fl_stuck.get()
         start_loop = time.time()
         while not queue_cartographer.empty():
             robot_map = queue_cartographer.get()
@@ -89,7 +90,7 @@ if __name__ == '__main__':
         forces = potential_field.get_forces(robot_cell, goal_point, robot_map)
         controller.apply_force(forces['gen_force'], robot_pos)
         goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
-        if time.time() - start_planning >= delay or goal_reached or stuck:
+        if time.time() - start_planning >= delay or goal_reached or restart:
             controller.stop()
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map, stuck)
             if goal_point == None and frontiers == None:

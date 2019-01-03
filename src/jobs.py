@@ -87,6 +87,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
     stuck_count = 0
     while True:
         stuck = False
+        restart = False
         while not queue_fl_closest_frontier.empty():
             closest_frontier = queue_fl_closest_frontier.get()
         if closest_frontier != None:
@@ -115,6 +116,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
                 if delta_x <= delta_m and delta_y <= delta_m:
                     last_positions = []
                     stuck = True
+                    restart = True
                     stuck_count += 1
                     if stuck_count == 2:
                         logger.info('Robot is detected as stuck twice in a row, delete closest_frontier')
@@ -131,6 +133,6 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
         while not queue_fl_ignored_cells.empty():
             queue_fl_ignored_cells.get()
         queue_fl_ignored_cells.put(ignored_cells)
-        if stuck:
-            queue_fl_stuck.put(True)
+        if restart:
+            queue_fl_stuck.put([stuck, True])
         time.sleep(1)
