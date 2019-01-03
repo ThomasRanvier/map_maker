@@ -203,7 +203,7 @@ That solution would have worked well but we decided to use a potential field, in
 To compute the attractive force we use this method:
 
 \begin{enumerate}
-    \item The first step is to compute the length of the vector, we compute the distance in the grid between the robot and the goal and we apply a weight of 0.4 and then limit the maximum length to 24.
+    \item The first step is to compute the length of the vector, we compute the distance in the grid between the robot and the goal and we apply a weight of 0.4 and then limit the maximum length to 18.
     \item Then we compute the angle of the vector, the formula is $atan2(\Delta y, \Delta x)$.
     \item To finish we compute the coordinates of the vector using those formulas: $x: length * cos(angle)$, $y: length * sin(angle)$.
 \end{enumerate}

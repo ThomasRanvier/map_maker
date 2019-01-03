@@ -6,3 +6,10 @@ Sometimes a frontier is found in an inaccessible place, then the robot will go t
 
 To fix this issue we had to find a way to detect when the robot stays stuck and then delete the frontier that it is trying to reach.
 
+We created a new process called 'frontiers limiter' that would be executed in the back ground, it runs every second and memorise the actual position of the robot.
+It communicates with the goal planner which send to it the last closest frontier as soon as it is computed, the frontiers limiter sends to the goal planner a list of all the cells to ignore when it is building the frontiers.
+It only memorise the last 20 positions of the robot, which make it delete every position older than 20 seconds.
+Once it has memorised 20 positions it computes $\Delta x$ and $\Delta y$ and if those $\Delta$s are bellow 5 meters for both of them the robot is considered as stuck, because it means that the robot stayed in a square of 5 meters by 5 meters for the last 20 seconds.
+Once the robot is detected as stuck the frontier limiter will go through all the points of the closest frontier and add all the cells in a radius of 5 around each point to the list of cells to ignore, then it sends the updated list to the goal planner.
+In that way the goal planner will ignore the cells in the list when it is building the frontiers.
+
