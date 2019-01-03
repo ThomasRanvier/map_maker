@@ -168,6 +168,6 @@ class GoalPlanner:
         """
         if robot_map.is_unknown(cell):
             for neighbour in von_neumann_neighbourhood(cell, robot_map.grid_width, robot_map.grid_height):
-                if robot_map.grid[neighbour.x][neighbour.y] <= 0.25:#is_empty(neighbour):
+                if robot_map.grid[neighbour.x][neighbour.y] <= 0.4:#is_empty(neighbour):
                     return True
         return False
