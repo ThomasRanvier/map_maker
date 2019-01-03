@@ -10,6 +10,7 @@ We created a new process called 'frontiers limiter' that would be executed in th
 It communicates with the goal planner which send to it the last closest frontier as soon as it is computed, the frontiers limiter sends to the goal planner a list of all the cells to ignore when it is building the frontiers.
 It only memorise the last 20 positions of the robot, which make it delete every position older than 20 seconds.
 Once it has memorised 20 positions it computes $\Delta x$ and $\Delta y$ and if those $\Delta$s are bellow 5 meters for both of them the robot is considered as stuck, because it means that the robot stayed in a square of 5 meters by 5 meters for the last 20 seconds.
-Once the robot is detected as stuck the frontier limiter will go through all the points of the closest frontier and add all the cells in a radius of 5 around each point to the list of cells to ignore, then it sends the updated list to the goal planner.
-In that way the goal planner will ignore the cells in the list when it is building the frontiers.
+Once the robot is detected as stuck the frontier limiter will find the goal point and add all the cells in a radius of 12 cells around the goal to the list of cells to ignore, then it sends the updated list to the goal planner.
+It also tells through a queue that the robot is stuck, then the search of the new goal point will select the biggest frontier and not the closest, useful if the robot is stuck in the kind of garage for example.
+In that way the goal planner will ignore the cells in the list when it is building the frontiers in the future.
 

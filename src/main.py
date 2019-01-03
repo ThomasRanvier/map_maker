@@ -49,6 +49,7 @@ if __name__ == '__main__':
     queue_sm_optionals = Queue()
     queue_fl_closest_frontier = Queue()
     queue_fl_ignored_cells = Queue()
+    queue_fl_stuck = Queue()
 
     robot = Robot(url)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
@@ -64,7 +65,7 @@ if __name__ == '__main__':
     show_map_d.daemon = True
     show_map_d.start()
 
-    frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_closest_frontier, queue_fl_ignored_cells, robot_map, robot))
+    frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_closest_frontier, queue_fl_ignored_cells, queue_fl_stuck, robot_map, robot))
     frontiers_limiter_d.daemon = True
     frontiers_limiter_d.start()
 
@@ -75,6 +76,9 @@ if __name__ == '__main__':
 
     controller.turn_around()
     while True:
+        stuck = False
+        if not queue_fl_stuck.empty():
+            stuck = queue_fl_stuck.get()
         start_loop = time.time()
         while not queue_cartographer.empty():
             robot_map = queue_cartographer.get()
@@ -83,9 +87,9 @@ if __name__ == '__main__':
         forces = potential_field.get_forces(robot_cell, goal_point, robot_map)
         controller.apply_force(forces['gen_force'], robot_pos)
         goal_reached = is_goal_reached(goal_point, robot_cell, distance_to_trigger_goal_m, size_of_cell_in_meter)
-        if time.time() - start_planning >= delay or goal_reached:
+        if time.time() - start_planning >= delay or goal_reached or stuck:
             controller.stop()
-            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
+            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map, stuck)
             start_planning = time.time()
             delay = 20
         while not queue_sm_optionals.empty():

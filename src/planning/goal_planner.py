@@ -24,50 +24,64 @@ class GoalPlanner:
         self.__queue_fl_ignored_cells = queue_fl_ignored_cells
         self.__min_frontier_points = min_frontier_points
 
-    def get_goal_point(self, robot_cell, robot_map):
+    def get_goal_point(self, robot_cell, robot_map, stuck):
         """
         Function that gives the user a new goal point by choosing the centroid of the closest frontier.
         :param robot_cell: Position of the robot in the grid.
         :type robot_cell: Position
         :param robot_map: The map of the environment.
         :type robot_map: Map
+        :param stuck: True if the robot is stuck, False otherwise.
+        :type stuck: boolean
         :return: The goal point and the frontiers.
         :rtype: A set of one Position and a 2D list of Position objects.
         """
         logger.info('Search new goal')
         frontiers = self.__get_frontiers(robot_cell, robot_map)
         if frontiers:
-            closest_frontier = self.__find_closest_frontier(frontiers, robot_cell)
+            closest_frontier = self.__find_closest_frontier(frontiers, robot_cell, stuck)
             goal_point = centroid(closest_frontier)
             logger.info('New goal defined')
             return (goal_point, frontiers)
         logger.info('No frontiers found')
         return (None, None)
 
-    def __find_closest_frontier(self, frontiers, robot_cell):
+    def __find_closest_frontier(self, frontiers, robot_cell, stuck):
         """
         Function that finds the closest frontier in regard of the robot.
         :param frontiers: A list of the frontiers.
         :type frontiers: A 2D list of Position objects.
         :param robot_cell: Position of the robot in the grid.
         :type robot_cell: Position
+        :param stuck: True if the robot is stuck, False otherwise.
+        :type stuck: boolean
         :return: The closest frontier from the robot.
         :rtype: A list of Position objects.
         """
-        logger.info('Search closest frontier')
         closest_frontier = frontiers[0]
         if len(frontiers) == 1:
             self.__queue_fl_closest_frontier.put(closest_frontier)
             return closest_frontier
-        min_distance = inf
-        for frontier in frontiers:
-            for point in frontier:
-                dist = distance_2(robot_cell, point)
-                if dist < min_distance:
-                    min_distance = dist
+        if stuck:
+            logger.info('Search biggest frontier')
+            max_frontier = len(frontiers[0])
+            for frontier in frontiers:
+                if len(frontier) > max_frontier:
+                    max_frontier = len(frontier)
                     closest_frontier = frontier
-        self.__queue_fl_closest_frontier.put(closest_frontier)
-        return closest_frontier
+            self.__queue_fl_closest_frontier.put(closest_frontier)
+            return closest_frontier
+        else:
+            logger.info('Search closest frontier')
+            min_distance = inf
+            for frontier in frontiers:
+                for point in frontier:
+                    dist = distance_2(robot_cell, point)
+                    if dist < min_distance:
+                        min_distance = dist
+                        closest_frontier = frontier
+            self.__queue_fl_closest_frontier.put(closest_frontier)
+            return closest_frontier
 
     def __get_frontiers(self, robot_cell, robot_map):
         """
