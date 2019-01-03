@@ -74,8 +74,10 @@ if __name__ == '__main__':
     start_planning = time.time()
     delay = 6
 
+    explore_on = True
+
     controller.turn_around()
-    while True:
+    while explore_on:
         stuck = False
         if not queue_fl_stuck.empty():
             stuck = queue_fl_stuck.get()
@@ -90,8 +92,10 @@ if __name__ == '__main__':
         if time.time() - start_planning >= delay or goal_reached or stuck:
             controller.stop()
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map, stuck)
+            if goal_point == None and frontiers == None:
+                explore_on = False
             start_planning = time.time()
-            delay = 14
+            delay = 20
         while not queue_sm_optionals.empty():
             queue_sm_optionals.get()
         queue_sm_optionals.put([frontiers, forces, goal_point])
@@ -100,3 +104,4 @@ if __name__ == '__main__':
             time.sleep(sleep)
     cartographer_d.terminate()
     show_map_d.terminate()
+    frontiers_limiter_d.terminate()
