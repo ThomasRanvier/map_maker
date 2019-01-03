@@ -23,7 +23,7 @@ class Controller:
         """
         self.__robot = robot
         self.__max_ang_speed = max_ang_speed
-        self.__max_linear_speed = max_linear_speed
+        #self.__max_linear_speed = max_linear_speed
         self.__ang_speed_weight = ang_speed_weight
         self.__timer = 0
         self.__turn_around_delay = turn_around_delay
@@ -46,7 +46,7 @@ class Controller:
             theta = sin(force_angle - robot_pos.angle)
             ang_speed = self.__max_ang_speed * theta * self.__ang_speed_weight
             ang_speed = min(max(ang_speed, -self.__max_ang_speed), self.__max_ang_speed)
-            self.__robot.post_speed(ang_speed, min(self.__max_linear_speed, -0.2 * min(3, abs(ang_speed)) + 1.3))
+            self.__robot.post_speed(ang_speed, max(0, 0.5 + log(-x + self.__max_ang_speed)
 
     def turn_around(self):
         """
