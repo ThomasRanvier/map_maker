@@ -92,6 +92,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
                 logger.info('Delta y: ' + str(delta_y))
                 if delta_x <= delta_m and delta_y <= delta_m:
                     logger.info('Robot is detected as stuck')
+                    last_positions = []
                     for p in closest_frontier:
                         for n in filled_midpoint_circle(p.x, p.y, radius):
                             if robot_map.is_in_bound(n):
