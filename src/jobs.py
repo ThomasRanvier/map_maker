@@ -60,7 +60,7 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         if sleep > 0:
             time.sleep(sleep)
 
-def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot_map, robot, max_positions = 20, delta_m = 6, radius = 5):
+def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot_map, robot, max_positions = 20, delta_m = 5, radius = 5):
     last_positions = []
     ignored_cells = set([])
     closest_frontier = None
@@ -69,13 +69,14 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
             closest_frontier = queue_fl_closest_frontier.get()
         if closest_frontier != None:
             robot_pos = robot.position
-            logger.info('Last pos: ' + str(robot_pos))
+            logger.info('Last pos:' + str(robot_pos))
             last_positions.append(robot_pos)
             if len(last_positions) > max_positions:
                 last_positions.pop(0)
-                logger.info('First pos of array: ' + str(last_positions[0]))
-                min_x, max_x = last_positions[0].x
-                min_y, max_y = last_positions[0].y
+                min_x = last_positions[0].x
+                max_x = min_x
+                min_y = last_positions[0].y
+                max_y = min_y
                 for pos in last_positions:
                     if min_x > pos.x:
                         min_x = pos.x
@@ -85,8 +86,10 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
                         max_x = pos.x
                     if max_x < pos.y:
                         max_x = pos.y
-                delta_x = max_x - min_x
-                delta_y = max_y - min_y
+                delta_x = abs(max_x - min_x)
+                delta_y = abs(max_y - min_y)
+                logger.info('Delta x: ' + str(delta_x))
+                logger.info('Delta y: ' + str(delta_y))
                 if delta_x <= delta_m and delta_y <= delta_m:
                     logger.info('Robot is detected as stuck')
                     for p in closest_frontier:
