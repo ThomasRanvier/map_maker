@@ -1,5 +1,5 @@
 from logging import getLogger
-from math import hypot, atan2, sin
+from math import hypot, atan2, sin, log10
 import time
 
 logger = getLogger('controller')
@@ -46,7 +46,7 @@ class Controller:
             theta = sin(force_angle - robot_pos.angle)
             ang_speed = self.__max_ang_speed * theta * self.__ang_speed_weight
             ang_speed = min(max(ang_speed, -self.__max_ang_speed), self.__max_ang_speed)
-            self.__robot.post_speed(ang_speed, max(0, 0.5 + log(-x + self.__max_ang_speed)))
+            self.__robot.post_speed(ang_speed, max(0, 0.5 + log10(-x + self.__max_ang_speed)))
 
     def turn_around(self):
         """
