@@ -91,7 +91,7 @@ if __name__ == '__main__':
             controller.stop()
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map, stuck)
             start_planning = time.time()
-            delay = 20
+            delay = 14
         while not queue_sm_optionals.empty():
             queue_sm_optionals.get()
         queue_sm_optionals.put([frontiers, forces, goal_point])
