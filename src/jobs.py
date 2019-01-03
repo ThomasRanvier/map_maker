@@ -84,8 +84,8 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
                         min_y = pos.y
                     if max_x < pos.x:
                         max_x = pos.x
-                    if max_x < pos.y:
-                        max_x = pos.y
+                    if max_y < pos.y:
+                        max_y = pos.y
                 delta_x = abs(max_x - min_x)
                 delta_y = abs(max_y - min_y)
                 logger.info('Delta x: ' + str(delta_x))
