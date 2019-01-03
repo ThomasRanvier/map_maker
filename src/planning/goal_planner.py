@@ -10,12 +10,18 @@ class GoalPlanner:
     Class that implement a GoalPlanner, used to find a new goal from the frontiers between the explored and unknown world.
     """
 
-    def __init__(self, min_frontier_points = 16):
+    def __init__(self, queue_fl_closest_frontier, queue_fl_ignored_cells, min_frontier_points = 16):
         """
         Instantiates a GoalPlanner.
+        :param queue_fl_closest_frontier: The queue where to put the closest frontier found.
+        :type queue_fl_closest_frontier: Queue
+        :param queue_fl_ignored_cells: The queue where to get the cells to ignore.
+        :type queue_fl_ignored_cells: Queue
         :param min_frontier_points: Minimum points in a frontier to be relevant.
         :type min_frontier_points: integer
         """
+        self.__queue_fl_closest_frontier = queue_fl_closest_frontier
+        self.__queue_fl_ignored_cells = queue_fl_ignored_cells
         self.__min_frontier_points = min_frontier_points
 
     def get_goal_point(self, robot_cell, robot_map):
@@ -51,6 +57,7 @@ class GoalPlanner:
         logger.info('Search closest frontier')
         closest_frontier = frontiers[0]
         if len(frontiers) == 1:
+            self.__queue_fl_closest_frontier.put(closest_frontier)
             return closest_frontier
         min_distance = inf
         for frontier in frontiers:
@@ -59,6 +66,7 @@ class GoalPlanner:
                 if dist < min_distance:
                     min_distance = dist
                     closest_frontier = frontier
+        self.__queue_fl_closest_frontier.put(closest_frontier)
         return closest_frontier
 
     def __get_frontiers(self, robot_cell, robot_map):
@@ -74,6 +82,9 @@ class GoalPlanner:
         :rtype: A 2D list of Position objects.
         """
         logger.info('Search frontiers')
+        ignored_cells = None
+        while not self.__queue_fl_ignored_cells.empty():
+            ignored_cells = self.__queue_fl_ignored_cells.get()
         frontiers = []
         queue_m = []
         map_open = set([])
@@ -96,7 +107,10 @@ class GoalPlanner:
                     if q in map_close and q in frontier_close:
                         continue
                     if self.__is_frontier_point(q, robot_map):
-                        frontier.add(q)
+                        if ignored_cells == None:
+                            frontier.add(q)
+                        elif q not in ignored_cells:
+                            frontier.add(q)
                         for w in moore_neighbourhood(q, robot_map.grid_width, robot_map.grid_height):
                             if w not in frontier_open and w not in map_close and w not in frontier_close:
                                 queue_f.append(w)

@@ -9,21 +9,20 @@ class Controller:
     Class that implements a Controller, used as an interface to communicate easily with the Robot object which communicates directly with the MRDS server.
     """
 
-    def __init__(self, robot, max_ang_speed = 3, max_linear_speed = 1, ang_speed_weight = 0.8, turn_around_delay = 8):
+    def __init__(self, robot, max_ang_speed = 3, ang_speed_weight = 0.8, turn_around_delay = 6):
         """
         Instantiates a Controller.
         :param robot: The robot to interface.
         :type robot: Robot
         :param max_ang_speed: The robot max angular speed.
         :type max_ang_speed: float
-        :param max_linear_speed: The robot max linear speed.
-        :type max_linear_speed: float
         :param ang_speed_weight: The weight to apply to the angular speed.
         :type ang_speed_weight: float
+        :param turn_around_delay: The delay applied between the action of turning around and the action of applying the forces to the robot.
+        :type turn_around_delay: float
         """
         self.__robot = robot
         self.__max_ang_speed = max_ang_speed
-        #self.__max_linear_speed = max_linear_speed
         self.__ang_speed_weight = ang_speed_weight
         self.__timer = 0
         self.__turn_around_delay = turn_around_delay

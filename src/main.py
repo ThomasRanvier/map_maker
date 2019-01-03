@@ -6,7 +6,7 @@ from utils.utils import distance_2
 from controlling.controller import Controller
 from controlling.potential_field import PotentialField
 from multiprocessing import Queue, Process
-from jobs import show_map_job, cartographer_job
+from jobs import show_map_job, cartographer_job, frontiers_limiter_job
 import time
 import logging
 
@@ -44,28 +44,34 @@ if __name__ == '__main__':
     lower_left_pos = Position(-80.0, -80.0)
     upper_right_pos = Position(80.0, 80.0)
 
+    queue_cartographer = Queue()
+    queue_sm_map = Queue()
+    queue_sm_optionals = Queue()
+    queue_fl_closest_frontier = Queue()
+    queue_fl_ignored_cells = Queue()
+
     robot = Robot(url)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
     controller = Controller(robot)
     potential_field = PotentialField(robot)
-    goal_planner = GoalPlanner()
-
-    queue_cartographer = Queue()
-    queue_sm_map = Queue()
-    queue_sm_optionals = Queue()
+    goal_planner = GoalPlanner(queue_fl_closest_frontier, queue_fl_ignored_cells)
 
     cartographer_d = Process(target=cartographer_job, args=(queue_cartographer, queue_sm_map, robot_map, robot))
-    cartographer_d.daemon = False
+    cartographer_d.daemon = True
     cartographer_d.start()
 
     show_map_d = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
-    show_map_d.daemon = False
+    show_map_d.daemon = True
     show_map_d.start()
+
+    frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_closest_frontier, queue_fl_ignored_cells, robot_map, robot))
+    frontiers_limiter_d.daemon = True
+    frontiers_limiter_d.start()
 
     frontiers = None
     goal_point = None
     start_planning = time.time()
-    delay = 8
+    delay = 6
 
     controller.turn_around()
     while True:

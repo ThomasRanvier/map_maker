@@ -1,0 +1,8 @@
+At this point the robot was able to explore and discover its environment by itself, but there were some details that we could improve.
+
+\section{Inaccessible frontiers}
+
+Sometimes a frontier is found in an inaccessible place, then the robot will go the closest to the frontier it can and the closest frontier will always remain an inaccessible one, the robot will then stay stuck.
+
+To fix this issue we had to find a way to detect when the robot stays stuck and then delete the frontier that it is trying to reach.
+

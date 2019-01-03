@@ -1,6 +1,10 @@
 import time
 from mapping.cartographer import Cartographer
 from mapping.show_map import ShowMap
+from logging import getLogger
+from utils.utils import filled_midpoint_circle
+
+logger = getLogger('jobs')
 
 def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
     """
@@ -55,3 +59,38 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         sleep = 0.5 - (time.time() - start)
         if sleep > 0:
             time.sleep(sleep)
+
+def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot_map, robot, positions_memorised = 20, delta_m = 6, radius = 5):
+    last_positions = []
+    ignored_cells = set([])
+    closest_frontier = None
+    while True:
+        while not queue_fl_closest_frontier.empty():
+            closest_frontier = queue_fl_closest_frontier.get()
+        if closest_frontier != None:
+            last_positions.append(robot.position)
+            if len(last_positions > positions_memorised):
+                last_positions.pop(0)
+                min_x, max_x = last_positions[0].x
+                min_y, max_y = last_positions[0].y
+                for pos in last_positions:
+                    if min_x > pos.x:
+                        min_x = pos.x
+                    if min_y > pos.y:
+                        min_y = pos.y
+                    if max_x < pos.x:
+                        max_x = pos.x
+                    if max_x < pos.y:
+                        max_x = pos.y
+                delta_x = max_x - min_x
+                delta_y = max_y - min_y
+                if delta_x <= delta_m and delta_y <= delta_m:
+                    logger.info('Robot is detected as stuck')
+                    for p in closest_frontier:
+                        for n in filled_midpoint_circle(p.x, p.y, radius):
+                            if robot_map.is_in_bound(n):
+                                ignored_cells.add(n)
+        while not queue_fl_ignored_cells.empty():
+            queue_fl_ignored_cells.get()
+        queue_fl_ignored_cells.put(ignored_cells)
+        time.sleep(1)
