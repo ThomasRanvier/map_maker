@@ -60,7 +60,7 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         if sleep > 0:
             time.sleep(sleep)
 
-def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot_map, robot, positions_memorised = 20, delta_m = 6, radius = 5):
+def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot_map, robot, max_positions = 20, delta_m = 6, radius = 5):
     last_positions = []
     ignored_cells = set([])
     closest_frontier = None
@@ -69,7 +69,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
             closest_frontier = queue_fl_closest_frontier.get()
         if closest_frontier != None:
             last_positions.append(robot.position)
-            if len(last_positions > positions_memorised):
+            if len(last_positions) > max_positions:
                 last_positions.pop(0)
                 min_x, max_x = last_positions[0].x
                 min_y, max_y = last_positions[0].y
