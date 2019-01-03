@@ -60,7 +60,7 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         if sleep > 0:
             time.sleep(sleep)
 
-def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, queue_fl_stuck, robot_map, robot, max_positions = 20, delta_m = 5, radius = 6):
+def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, queue_fl_stuck, robot_map, robot, max_positions = 18, delta_m = 5, radius = 6):
     """
     This is the job that tells to the goal planner all the cells to ignore when it is building the frontiers.
     It detects when the robot is stuck and then adds all the cells around the closest frontier in a radius of 'radius' and sends that updated list to the goal planner.

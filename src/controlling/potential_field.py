@@ -9,7 +9,7 @@ class PotentialField:
     Class that implements a PotentialField, used to compute the force to apply to the robot to make it reach the goal point while avoiding obstacles.
     """
 
-    def __init__(self, robot, max_attr = 18, weight_attr = 0.4, weight_rep = 3.5, radius_obs = 7, max_obs = 10, trigger_obs = 0.75):
+    def __init__(self, robot, max_attr = 18, weight_attr = 0.4, weight_rep = 3.5, radius_obs = 10, max_obs = 10, trigger_obs = 0.75):
         """
         Instantiates a PotentialField.
         :param robot: The robot.

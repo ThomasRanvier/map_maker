@@ -95,7 +95,10 @@ if __name__ == '__main__':
             if goal_point == None and frontiers == None:
                 explore_on = False
             start_planning = time.time()
-            delay = 20
+            if stuck:
+                delay = 60
+            else:
+                delay = 20
         while not queue_sm_optionals.empty():
             queue_sm_optionals.get()
         queue_sm_optionals.put([frontiers, forces, goal_point])
