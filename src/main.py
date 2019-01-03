@@ -41,8 +41,8 @@ if __name__ == '__main__':
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 4
-    lower_left_pos = Position(-80.0, -80.0)
-    upper_right_pos = Position(80.0, 80.0)
+    lower_left_pos = Position(-65.0, -65.0)
+    upper_right_pos = Position(65.0, 65.0)
 
     queue_cartographer = Queue()
     queue_sm_map = Queue()
@@ -96,7 +96,7 @@ if __name__ == '__main__':
                 explore_on = False
             start_planning = time.time()
             if stuck:
-                delay = 60
+                delay = 120
             else:
                 delay = 20
         while not queue_sm_optionals.empty():
