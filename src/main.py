@@ -42,7 +42,7 @@ if __name__ == '__main__':
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 4
     lower_left_pos = Position(-60.0, -60.0)
-    upper_right_pos = Position(58.0, 58.0)
+    upper_right_pos = Position(55.0, 55.0)
 
     queue_cartographer = Queue()
     queue_sm_map = Queue()

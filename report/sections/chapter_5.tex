@@ -15,3 +15,12 @@ That can either fix the situation or the robot will still be stuck.
 If the robot is detected as being stuck twice in a row this time the closest frontier will be deleted in this way: we go through all the points in the frontier and add all the cells in a radius of 6 cells around each point to the list of cells to ignore, then it sends the updated list to the goal planner.
 In that way the goal planner will ignore the cells in the list when it is building the frontiers in the future.
 
+\section{Disadvantages of using potential fields}
+
+We knew that using potential fields could be a problem because of the local minimums in which the robot could stay stuck.
+Despite that we decided that we wanted to try to implement it to try and see by ourselves what kind of problems we could encounter and the solutions that we could find.
+
+We found a solution which works most of the time for the inaccessible frontiers but there still is an issue that we could not solve.
+It is when the robot goes in the garage area, here the robot usually wants to go to a frontier that is outside of the garage and it stays stuck inside.
+It is a problem that we would not have had if we chose to implement a path planning and a path tracking process.
+
