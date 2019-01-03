@@ -115,7 +115,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
                     logger.info('Robot is detected as stuck, closest frontier ignored')
                     last_positions = []
                     goal = centroid(closest_frontier)
-                    for p in filled_midpoint_circle(goal.x, goal.y, radius):
+                    for p in filled_midpoint_circle(int(goal.x), int(goal.y), radius):
                         if robot_map.is_in_bound(p):
                             ignored_cells.add(p)
         while not queue_fl_ignored_cells.empty():
