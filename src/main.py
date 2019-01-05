@@ -91,6 +91,8 @@ if __name__ == '__main__':
             controller.apply_force(forces['gen_force'], robot_pos)
         progressed, finished = has_progressed(path, robot_cell, distance_to_trigger_goal_m * scale)
         
+        if progressed or finished:
+            start_path_planning = time.time()
         if finished or (not progressed and time.time() - start_path_planning >= path_planning_delay):
             controller.stop()
             logger.info('New path planning, finished: ' + str(finished) + ', progressed: ' + str(progressed) + ', timer: ' + str(time.time() - start_path_planning))
