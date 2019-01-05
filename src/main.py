@@ -100,6 +100,7 @@ if __name__ == '__main__':
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
             path = path_planner.get_path(robot_cell, robot_map, goal_point)
             if path == []:
+                logger.info('Over')
                 over = True
         queue_sm_optionals.put([frontiers, forces, path])
         sleep = 0.1 - (time.time() - start_loop)
