@@ -100,7 +100,7 @@ if __name__ == '__main__':
             controller.apply_force(forces['gen_force'], robot_pos)
         else:
             controller.stop()
-        progressed, finished = has_progressed(path, robot_pos, distance_to_trigger_goal_m * scale)
+        progressed, finished = has_progressed(path, robot_cell, distance_to_trigger_goal_m * scale)
         queue_pp_progression.put([robot_map, progressed, finished])
         queue_sm_optionals.put([frontiers, forces, path])
         sleep = 0.1 - (time.time() - start_loop)
