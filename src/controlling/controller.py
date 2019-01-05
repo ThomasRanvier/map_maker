@@ -61,5 +61,4 @@ class Controller:
         """
         if time.time() - self.__timer < self.__turn_around_delay:
             return
-        logger.info('Stop the robot')
         self.__robot.post_speed(0, 0)
