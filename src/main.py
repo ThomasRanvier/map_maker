@@ -44,7 +44,7 @@ if __name__ == '__main__':
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 3.0
     distance_between_subgoals_m = 5.0
-    lower_left_pos = Position(-60.0, -60.0)
+    lower_left_pos = Position(-65.0, -65.0)
     upper_right_pos = Position(55.0, 55.0)
     path_planning_delay = 20
 
