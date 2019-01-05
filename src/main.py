@@ -27,6 +27,7 @@ def has_progressed(path, robot_cell, distance_to_trigger_goal):
     :return: A set of booleans, progressed: True if robot has made progress, False otherwise, finished: True if finished, False otherwise.
     :rtype: A set of 2 booleans.
     """
+    logger.info('Path len: ' + str(len(path)))
     if path != []:
         dist = hypot(path[0].x - robot_cell.x, path[0].y - robot_cell.y)
         has_progressed = (dist <= distance_to_trigger_goal)
