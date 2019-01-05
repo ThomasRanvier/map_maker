@@ -98,6 +98,8 @@ if __name__ == '__main__':
         else:
             controller.stop()
         progressed, finished = has_progressed(path, robot_cell, distance_to_trigger_goal_m * scale)
+        while not queue_pp_progression.empty():
+            queue_pp_progression.get()
         queue_pp_progression.put([robot_map, progressed, finished])
         queue_sm_optionals.put([frontiers, forces, path])
         sleep = 0.1 - (time.time() - start_loop)
