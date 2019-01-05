@@ -43,7 +43,7 @@ if __name__ == '__main__':
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 3.0
-    distance_between_subgoals_m = 8.0
+    distance_between_subgoals_m = 5.0
     lower_left_pos = Position(-60.0, -60.0)
     upper_right_pos = Position(55.0, 55.0)
     path_planning_delay = 20
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     path_planner = PathPlanner(distance_to_trigger_goal_m * scale, distance_between_subgoals_m * scale)
 
     cartographer_d = Process(target=cartographer_job, args=(queue_cartographer, queue_sm_map, robot_map, robot))
-    cartographer_d.daemon = True
+    cartographer_d.daemon = False
     cartographer_d.start()
 
     show_map_d = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     show_map_d.start()
 
     frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_closest_frontier, queue_fl_ignored_cells, robot))
-    frontiers_limiter_d.daemon = True
+    frontiers_limiter_d.daemon = False
     frontiers_limiter_d.start()
     
     frontiers = None
