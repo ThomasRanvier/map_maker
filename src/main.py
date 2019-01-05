@@ -48,11 +48,11 @@ if __name__ == '__main__':
     upper_right_pos = Position(55.0, 55.0)
     path_planning_delay = 16
 
-    queue_cartographer = Queue()
-    queue_sm_map = Queue()
-    queue_sm_optionals = Queue()
-    queue_fl_closest_frontier = Queue()
-    queue_fl_ignored_cells = Queue()
+    queue_cartographer = Queue(200)
+    queue_sm_map = Queue(200)
+    queue_sm_optionals = Queue(200)
+    queue_fl_closest_frontier = Queue(200)
+    queue_fl_ignored_cells = Queue(200)
 
     robot = Robot(url)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)

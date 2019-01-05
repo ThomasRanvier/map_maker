@@ -28,9 +28,6 @@ def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
         robot_lasers = robot.lasers
         logger.info('Update map')
         robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
-        logger.info('Get queue')
-        while not queue_cartographer.empty():
-            queue_cartographer.get()
         logger.info('Put map in main queue')
         queue_cartographer.put(robot_map)
         logger.info('Put map in sm queue')
