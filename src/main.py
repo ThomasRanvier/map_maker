@@ -82,15 +82,6 @@ if __name__ == '__main__':
     controller.turn_around()
     time.sleep(10)
     while not over:
-        if not cartographer_d.is_alive():
-            logger.info('\n|--------------------|\nCartographer died\n|--------------------|')
-            cartographer_d.start()
-        if not show_map_d.is_alive():
-            logger.info('\n|--------------------|\nShow map died\n|--------------------|')
-            show_map_d.start()
-        if not frontiers_limiter_d.is_alive():
-            logger.info('\n|--------------------|\nFrontiers limiter died\n|--------------------|')
-            frontiers_limiter_d.start()
         start_loop = time.time()
         while not queue_cartographer.empty():
             robot_map = queue_cartographer.get()
