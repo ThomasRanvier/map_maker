@@ -7,7 +7,7 @@ from utils.utils import distance_2
 from controlling.controller import Controller
 from controlling.potential_field import PotentialField
 from multiprocessing import Queue, Process
-from jobs import show_map_job, cartographer_job, frontiers_limiter_job, path_planner_job
+from jobs import show_map_job, cartographer_job, frontiers_limiter_job
 from math import hypot
 import time
 import logging
