@@ -118,7 +118,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
         queue_fl_ignored_cells.put(ignored_cells)
         time.sleep(1)
 
-def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_planner, delay, robot, controller):
+def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_planner, delay, robot):
     """
     Path planner job.
     Recompute a new path every 8 seconds, except if the robot makes progression, then the 8 seconds resets.
@@ -135,8 +135,6 @@ def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_pla
     :type delay: float
     :param robot: The Robot interface.
     :type robot: Robot
-    :param controller: The controller, used to stop the robot while the path is computed.
-    :type controller: Controller
     """
     start = time.time()
     while not over:
@@ -146,7 +144,6 @@ def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_pla
         if progressed or finished:
             start = time.time()
         if finished or (not progressed and time.time() - start >= delay):
-            controller.stop()
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
             path = path_planner.get_path(robot_cell, robot_map, goal_point)
             if path == []:

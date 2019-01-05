@@ -75,7 +75,7 @@ if __name__ == '__main__':
     frontiers_limiter_d.daemon = True
     frontiers_limiter_d.start()
 
-    path_planner_d = Process(target=path_planner_job, args=(queue_pp_progression, queue_pp_path, goal_planner, path_planner, path_planning_delay, robot, controller))
+    path_planner_d = Process(target=path_planner_job, args=(queue_pp_progression, queue_pp_path, goal_planner, path_planner, path_planning_delay, robot))
     path_planner_d.daemon = True
     path_planner_d.start()
 
@@ -95,6 +95,8 @@ if __name__ == '__main__':
         if path != []:
             forces = potential_field.get_forces(robot_cell, path[0], robot_map)
             controller.apply_force(forces['gen_force'], robot_pos)
+        else:
+            controller.stop()
         progressed, finished = has_progressed(path, robot_pos, distance_to_trigger_goal_m * scale)
         queue_pp_progression.put([robot_map, progressed, finished])
         queue_sm_optionals.put([frontiers, forces, path])
