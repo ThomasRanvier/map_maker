@@ -53,8 +53,6 @@ if __name__ == '__main__':
     queue_sm_optionals = Queue()
     queue_fl_closest_frontier = Queue()
     queue_fl_ignored_cells = Queue()
-    queue_pp_progression = Queue()
-    queue_pp_path = Queue()
 
     robot = Robot(url)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
@@ -74,13 +72,7 @@ if __name__ == '__main__':
     frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_closest_frontier, queue_fl_ignored_cells, robot))
     frontiers_limiter_d.daemon = True
     frontiers_limiter_d.start()
-
-"""
-    path_planner_d = Process(target=path_planner_job, args=(queue_pp_progression, queue_pp_path, goal_planner, path_planner, path_planning_delay, robot))
-    path_planner_d.daemon = True
-    path_planner_d.start()
-"""
-
+    
     frontiers = None
     path = []
     forces = None
@@ -92,8 +84,6 @@ if __name__ == '__main__':
         start_loop = time.time()
         while not queue_cartographer.empty():
             robot_map = queue_cartographer.get()
-        while not queue_pp_path.empty():
-            frontiers, path = queue_pp_path.get()
         robot_pos = robot.position
         robot_cell = robot_map.to_grid_pos(robot_pos)
         if path != []:
@@ -110,9 +100,6 @@ if __name__ == '__main__':
             if path == []:
                 over = True
 
-        while not queue_pp_progression.empty():
-            queue_pp_progression.get()
-        queue_pp_progression.put([robot_map, progressed, finished])
         queue_sm_optionals.put([frontiers, forces, path])
         sleep = 0.1 - (time.time() - start_loop)
         if sleep > 0:
