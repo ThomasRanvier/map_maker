@@ -22,17 +22,11 @@ def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
     cartographer = Cartographer()
     while True:
         start = time.time()
-        logger.info('Request robot pos')
         robot_pos = robot.position
-        logger.info('Request robot lasers')
         robot_lasers = robot.lasers
-        logger.info('Update map')
         robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
-        logger.info('Put map in main queue')
         queue_cartographer.put(robot_map)
-        logger.info('Put map in sm queue')
         queue_sm_map.put(robot_map)
-        logger.info('Fucking sleep')
         sleep = 0.1 - (time.time() - start)
         if sleep > 0:
             time.sleep(sleep)
