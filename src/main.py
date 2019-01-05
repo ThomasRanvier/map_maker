@@ -80,7 +80,7 @@ if __name__ == '__main__':
     start_path_planning = 0
 
     controller.turn_around()
-    time.sleep(8)
+    time.sleep(10)
     while not over:
         start_loop = time.time()
         while not queue_cartographer.empty():
@@ -94,7 +94,6 @@ if __name__ == '__main__':
         if progressed:
             start_path_planning = time.time()
         if finished or (not progressed and time.time() - start_path_planning >= path_planning_delay):
-            logger.info('New path planning, finished: ' + str(finished) + ', progressed: ' + str(progressed) + ', timer: ' + str(time.time() - start_path_planning))
             start_path_planning = time.time()
             controller.stop()
             robot_cell = robot_map.to_grid_pos(robot.position)
