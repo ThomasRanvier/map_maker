@@ -25,6 +25,8 @@ def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
         robot_pos = robot.position
         robot_lasers = robot.lasers
         robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
+        while not queue_cartographer.empty():
+            queue_cartographer.get()
         queue_cartographer.put(robot_map)
         queue_sm_map.put(robot_map)
         sleep = 0.1 - (time.time() - start)
