@@ -77,7 +77,7 @@ class ShowMap:
                 self.__ax.arrow(robot_cell.x, y, forces['gen_force']['x'], -forces['gen_force']['y'], head_width=1, head_length=2, fc='m', ec='m')
         if path != None:
             for i in range(len(path)):
-                self.__ax.plot(path[i].x, map_to_display.grid_height - 1 - path[i].y, 'bh', markersize=5 if i < len(path) - 1 else 8)
+                self.__ax.plot(path[i].x, map_to_display.grid_height - 1 - path[i].y, 'mh' if i < len(path) - 1 else 'bh', markersize=5 if i < len(path) - 1 else 8)
         if frontiers != None:
             index = 0
             for frontier in frontiers:

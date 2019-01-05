@@ -193,17 +193,16 @@ The process of finding the frontiers and a goal point is done every 14 seconds o
 
 \section{Reaching the goal}
 
-\subsection{Computation of the force to apply}
+\subsection{First approach, the potential field}
 
-Now that we are able to define a goal point we still have to find a way to reach it while avoiding the obstacles.
+Initially we tried to use a potential field to make the robot go toward the goal while avoiding the obstacles around itself.
 
-At first we thought about building a path from the map and then implement an algorithm to avoid the obstacles while tracking the path.
-That solution would have worked well but we decided to use a potential field, in that way we have to compute the attractive and repulsive forces to apply to the robot to reach the goal while avoiding the obstacles.
+\subsubsection{Computation of the force to apply}
 
 To compute the attractive force we use this method:
 
 \begin{enumerate}
-    \item The first step is to compute the length of the vector, we compute the distance in the grid between the robot and the goal and we apply a weight of 0.4 and then limit the maximum length to 18.
+    \item The first step is to compute the length of the vector, we compute the distance in the grid between the robot and the goal and we apply a weight of 0.5 and then limit the maximum length to 14.
     \item Then we compute the angle of the vector, the formula is $atan2(\Delta y, \Delta x)$.
     \item To finish we compute the coordinates of the vector using those formulas: $x: length * cos(angle)$, $y: length * sin(angle)$.
 \end{enumerate}
@@ -211,10 +210,10 @@ To compute the attractive force we use this method:
 To compute the repulsive force we use the following method:
 
 \begin{enumerate}
-    \item We consider a circle area around the robot with a radius of 10.
-    \item In this circle we select the 10 closest obstacle, is considered an obstacle a cell with a value greater or equal to 0.75.
-    \item Then we compute the 10 corresponding vectors using the same method as for the attractive force. Except that we apply a logarithmic function to the computed length and then apply a weight of 3.5 to each of the computed vectors.
-    \item After that we have to add the 10 of them into one vector, to do so we simply sum all the x and y together to obtain the final repulsive vector.
+    \item We consider a circle area around the robot with a radius of 7 cells.
+    \item In this circle we select the 6 closest obstacle, is considered an obstacle a cell with a value greater or equal to 0.75.
+    \item Then we compute the 6 corresponding vectors using the same method as for the attractive force. Except that we apply a logarithmic function to the computed length and then apply a weight of 3.2 to each of the computed vectors.
+    \item After that we have to add the 6 of them into one vector, to do so we simply sum all the x and y together to obtain the final repulsive vector.
 \end{enumerate}
 
 To obtain the general force to apply to the robot we add the x and y of both attractive and repulsive forces together.
@@ -231,7 +230,7 @@ Only half of the points of the frontiers are displayed out to save some time, th
 \end{figure}
 \FloatBarrier
 
-\subsection{Convert the force into commands for the robot}
+\subsubsection{Convert the force into commands for the robot}
 
 Once the force to apply to the robot computed we have to make the robot orientates itself in the direction of the vector and adapt its speed to the situation.
 
@@ -250,6 +249,28 @@ The coordinates $x$ and $y$ of the force vector to apply are given in parameters
         $$max\_ang\_speed \cdot \Theta \cdot weight$$
     \item[$-$] The angular speed computed is then confined between $-max\_ang\_speed$ and $max\_ang\_speed$.
     \item[$-$] Then we apply the following function to the angular speed to obtain an adapted linear speed:
-        $$max(0, 0.5 + log10(-ang\_speed + max\_ang\_speed))$$
+        $$max(0, 0.5 + log10(-ang\_speed + (max\_ang\_speed - 0.5)))$$
 \end{itemize}
 
+This worked pretty well in all open fields areas, but we had some problems of local minimums.
+Indeed when the goal was right behind an obstacle the robot could stay stuck behind the obstacle.
+Or when the robot was inside the 'garage' it was almost impossible for it to go out.
+
+After seeing all those issues we decided to keep the potential field way for guiding the robot and that we were going to build a path to make the robot follow subgoals between its position and the goal.
+
+\subsection{Building a path}
+
+To build a path between the goal and the robot we decided to use a very classical algorithm called A*, we implemented the pseudocode from the wikipedia page.
+
+We had almost nothing to add or change to adapt it to our case, we just made sure that the path would only include empty cells (value below 0.5).
+
+On the figure bellow we can see the path between the goal and the robot, the big blue hexagon is the goal and the more little ones are the subgoals.
+The robot goes to the first subgoal of the path and when it is in reach of it the subgoal is deleted, then the first subgoal becomes the next one until it reaches the goal.
+
+\begin{figure}[h]
+    \centering\includegraphics[width=0.5\textwidth]{path.png}
+    \label{fig:path}
+    \caption{Path while exploring}
+\end{figure}
+
+With this method the robot can now explore anywhere, it can even go in the garage and then go out without any trouble.
