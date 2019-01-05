@@ -80,7 +80,7 @@ if __name__ == '__main__':
     start_path_planning = 0
 
     controller.turn_around()
-    sleep(8)
+    time.sleep(8)
     while not over:
         start_loop = time.time()
         while not queue_cartographer.empty():
