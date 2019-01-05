@@ -148,10 +148,8 @@ def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_pla
         if new_infos:
             if progressed or finished:
                 start = time.time()
-            logger.info('Timer: ' + str(time.time() - start))
-            #logger.info('Finished: ' + str(finished))
-            #logger.info('Progressed: ' + str(progressed))
             if robot_map != None and finished or (not progressed and time.time() - start >= delay):
+                logger.info('New path planning : ' + str(time.time() - start))
                 robot_cell = robot_map.to_grid_pos(robot.position)
                 goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
                 path = path_planner.get_path(robot_cell, robot_map, goal_point)
