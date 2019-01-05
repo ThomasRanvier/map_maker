@@ -28,8 +28,10 @@ def has_progressed(path, robot_cell, distance_to_trigger_goal):
     :rtype: A set of 2 booleans.
     """
     logger.info('Path len: ' + str(len(path)))
-    if len(path) > 0:
+    if path != []:
         dist = hypot(path[0].x - robot_cell.x, path[0].y - robot_cell.y)
+        logger.info('Dist: ' + str(dist))
+        logger.info('Trigger: ' + str(distance_to_trigger_goal))
         has_progressed = (dist <= distance_to_trigger_goal)
         if has_progressed:
             path.pop(0)
@@ -93,7 +95,7 @@ if __name__ == '__main__':
             frontiers, path = queue_pp_path.get()
         robot_pos = robot.position
         robot_cell = robot_map.to_grid_pos(robot_pos)
-        if len(path) > 0:
+        if path != []:
             forces = potential_field.get_forces(robot_cell, path[0], robot_map)
             controller.apply_force(forces['gen_force'], robot_pos)
         else:
