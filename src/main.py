@@ -46,7 +46,7 @@ if __name__ == '__main__':
     distance_between_subgoals_m = 8.0
     lower_left_pos = Position(-60.0, -60.0)
     upper_right_pos = Position(55.0, 55.0)
-    path_planning_delay = 8
+    path_planning_delay = 20
 
     queue_cartographer = Queue()
     queue_sm_map = Queue()
@@ -76,10 +76,11 @@ if __name__ == '__main__':
     frontiers = None
     path = []
     forces = None
-    start_path_planning = time.time()
     over = False
+    start_path_planning = 0
 
     controller.turn_around()
+    sleep(8)
     while not over:
         start_loop = time.time()
         while not queue_cartographer.empty():
@@ -90,19 +91,17 @@ if __name__ == '__main__':
             forces = potential_field.get_forces(robot_cell, path[0], robot_map)
             controller.apply_force(forces['gen_force'], robot_pos)
         progressed, finished = has_progressed(path, robot_cell, distance_to_trigger_goal_m * scale)
-        
         if progressed:
             start_path_planning = time.time()
         if finished or (not progressed and time.time() - start_path_planning >= path_planning_delay):
+            logger.info('New path planning, finished: ' + str(finished) + ', progressed: ' + str(progressed) + ', timer: ' + str(time.time() - start_path_planning))
             start_path_planning = time.time()
             controller.stop()
-            logger.info('New path planning, finished: ' + str(finished) + ', progressed: ' + str(progressed) + ', timer: ' + str(time.time() - start_path_planning))
             robot_cell = robot_map.to_grid_pos(robot.position)
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
             path = path_planner.get_path(robot_cell, robot_map, goal_point)
             if path == []:
                 over = True
-
         queue_sm_optionals.put([frontiers, forces, path])
         sleep = 0.1 - (time.time() - start_loop)
         if sleep > 0:
