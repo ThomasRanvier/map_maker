@@ -28,13 +28,18 @@ def has_progressed(path, robot_cell, distance_to_trigger_goal):
     :rtype: A set of 2 booleans.
     """
     if path != []:
-        dist = hypot(path[0].x - robot_cell.x, path[0].y - robot_cell.y)
-        has_progressed = (dist <= distance_to_trigger_goal)
+        has_progressed = False
+        for i in range(len(path) - 1, -1, -1):
+            dist = hypot(path[i].x - robot_cell.x, path[i].y - robot_cell.y)
+            has_progressed = (dist <= distance_to_trigger_goal)
+            if has_progressed:
+                for ii in range(i, -1, -1):
+                    path.pop(ii)
+                break
         if has_progressed:
-            path.pop(0)
             logger.info('Has progressed')
-            if path == []:
-                logger.info('Has finished')
+        if path == []:
+            logger.info('Has finished')
         return (has_progressed, path == [])
     return (False, False)
 
