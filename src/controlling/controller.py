@@ -57,7 +57,9 @@ class Controller:
 
     def stop(self):
         """
-        Makes the robot stop moving, overrules the timer.
+        Makes the robot stop moving.
         """
+        if time.time() - self.__timer < self.__turn_around_delay:
+            return
         logger.info('Stop the robot')
         self.__robot.post_speed(0, 0)

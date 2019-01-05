@@ -137,7 +137,7 @@ def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_pla
     :type robot: Robot
     """
     start = time.time()
-    while not over:
+    while True:
         while not queue_path_planner.empty():
             robot_map, progressed, finished = queue_path_planner.get()
         robot_cell = robot_map.to_grid_pos(robot.position)
