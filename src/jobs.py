@@ -150,5 +150,4 @@ def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_pla
                 sys.exit()
             else:
                 queue_pp_path.put([frontiers, path])
-        if finished or progressed:
         time.sleep(0.05)
