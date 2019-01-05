@@ -97,10 +97,7 @@ class ShowMap:
         """
         Function that saves the map to a file.
         """
-        pass
-        """
         data = np.fromstring(self.__fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
         data = data.reshape(self.__fig.canvas.get_width_height()[::-1] + (3,))
         img = Image.fromarray(data)
         img.convert('RGB').save(self.__name, "PNG")
-        """
