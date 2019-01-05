@@ -10,7 +10,7 @@ class GoalPlanner:
     Class that implement a GoalPlanner, used to find a new goal from the frontiers between the explored and unknown world.
     """
 
-    def __init__(self, queue_fl_closest_frontier, queue_fl_ignored_cells, min_frontier_points = 12):
+    def __init__(self, queue_fl_closest_frontier, queue_fl_ignored_cells, min_frontier_points = 20):
         """
         Instantiates a GoalPlanner.
         :param queue_fl_closest_frontier: The queue where to put the closest frontier found.
