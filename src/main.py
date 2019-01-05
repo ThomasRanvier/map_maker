@@ -75,16 +75,20 @@ if __name__ == '__main__':
     frontiers_limiter_d.daemon = True
     frontiers_limiter_d.start()
 
+"""
     path_planner_d = Process(target=path_planner_job, args=(queue_pp_progression, queue_pp_path, goal_planner, path_planner, path_planning_delay, robot))
     path_planner_d.daemon = True
     path_planner_d.start()
+"""
 
     frontiers = None
     path = []
     forces = None
+    start_path_planning = time.time()
+    over = False
 
     controller.turn_around()
-    while path_planner_d.is_alive():
+    while not over:
         start_loop = time.time()
         while not queue_cartographer.empty():
             robot_map = queue_cartographer.get()
@@ -98,6 +102,15 @@ if __name__ == '__main__':
         else:
             controller.stop()
         progressed, finished = has_progressed(path, robot_cell, distance_to_trigger_goal_m * scale)
+        
+        if finished or (not progressed and time.time() - start_path_planning >= path_planning_delay):
+            logger.info('New path planning, finished: ' + str(finished) + ', progressed: ' + str(progressed) + ', timer: ' + str(time.time() - start_path_planning))
+            robot_cell = robot_map.to_grid_pos(robot.position)
+            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
+            path = path_planner.get_path(robot_cell, robot_map, goal_point)
+            if path == []:
+                over = True
+
         while not queue_pp_progression.empty():
             queue_pp_progression.get()
         queue_pp_progression.put([robot_map, progressed, finished])
