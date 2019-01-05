@@ -61,7 +61,7 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         if sleep > 0:
             time.sleep(sleep)
 
-def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot, max_positions = 10, delta_m = 4.2, radius = 6):
+def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot, max_positions = 20, delta_m = 4, radius = 6):
     """
     This is the job that tells to the goal planner all the cells to ignore when it is building the frontiers.
     It detects when the robot is stuck and then adds all the cells around the closest frontier in a radius of 'radius' and sends that updated list to the goal planner.
@@ -104,7 +104,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
                         max_y = pos.y
                 delta_x = abs(max_x - min_x)
                 delta_y = abs(max_y - min_y)
-                if delta_x <= delta_m + 2 and delta_y <= delta_m + 2:
+                if delta_x <= delta_m + 2 and delta_y <= delta_m + 1:
                     logger.info('Delta x: ' + str(delta_x))
                     logger.info('Delta y: ' + str(delta_y))
                 if delta_x <= delta_m and delta_y <= delta_m:
@@ -137,13 +137,16 @@ def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_pla
     :type robot: Robot
     """
     start = time.time()
+    robot_map = None
     while True:
+        progressed = False
+        finished = False
         while not queue_pp_progression.empty():
             robot_map, progressed, finished = queue_pp_progression.get()
-        robot_cell = robot_map.to_grid_pos(robot.position)
         if progressed or finished:
             start = time.time()
-        if finished or (not progressed and time.time() - start >= delay):
+        if robot_map != None and finished or (not progressed and time.time() - start >= delay):
+            robot_cell = robot_map.to_grid_pos(robot.position)
             goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
             path = path_planner.get_path(robot_cell, robot_map, goal_point)
             if path == []:
