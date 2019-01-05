@@ -41,19 +41,19 @@ class ShowMap:
         self.__save()
         self.__start_time = time.time()
 
-    def update(self, map_to_display, robot_cell, goal_point = None, frontiers = None, forces = None):
+    def update(self, map_to_display, robot_cell, frontiers = None, forces = None, path = None):
         """
         Function that updates the gui.
         :param map_to_display: The map of the environment to display.
         :type map_to_display: Map
         :param robot_cell: The cell of the robot in the grid.
         :type robot_cell: Position
-        :param goal_point: The goal point.
-        :type goal_point: Position
         :param frontiers: The frontiers.
         :type frontiers: A list of Position objects.
         :param forces: The forces.
         :type forces: A dictionary of dictionaries representing vectors.
+        :param path: The path.
+        :type path: A list of Position objects.
         """
         import matplotlib.pyplot as plt
         plt.pause(0.02)
@@ -75,8 +75,9 @@ class ShowMap:
                 self.__ax.arrow(robot_cell.x, y, forces['attr_force']['x'], -forces['attr_force']['y'], head_width=1, head_length=2, fc='g', ec='g')
             if forces['gen_force'] != None:
                 self.__ax.arrow(robot_cell.x, y, forces['gen_force']['x'], -forces['gen_force']['y'], head_width=1, head_length=2, fc='m', ec='m')
-        if goal_point != None:
-            self.__ax.plot(goal_point.x, map_to_display.grid_height - 1 - goal_point.y, 'bh', markersize=8)
+        if path != None:
+            for i in range(len(path)):
+                self.__ax.plot(path[i].x, map_to_display.grid_height - 1 - path[i].y, 'bh', markersize=5 if i < len(path) - 1 else 8)
         if frontiers != None:
             index = 0
             for frontier in frontiers:

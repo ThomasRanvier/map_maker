@@ -1,4 +1,5 @@
 import time
+import sys
 from mapping.cartographer import Cartographer
 from mapping.show_map import ShowMap
 from logging import getLogger
@@ -52,15 +53,15 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         while not queue_sm_map.empty():
             robot_map = queue_sm_map.get()
         while not queue_sm_optionals.empty():
-            frontiers, forces, goal_point = queue_sm_optionals.get()
+            frontiers, forces, path = queue_sm_optionals.get()
         robot_pos = robot.position
         robot_cell = robot_map.to_grid_pos(robot_pos)
-        show_map.update(robot_map, robot_cell, frontiers=frontiers, goal_point=goal_point, forces=forces)
+        show_map.update(robot_map, robot_cell, frontiers=frontiers, path=path, forces=forces)
         sleep = 0.5 - (time.time() - start)
         if sleep > 0:
             time.sleep(sleep)
 
-def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, queue_fl_stuck, robot_map, robot, max_positions = 18, delta_m = 5, radius = 6):
+def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot, max_positions = 10, delta_m = 4.2, radius = 6):
     """
     This is the job that tells to the goal planner all the cells to ignore when it is building the frontiers.
     It detects when the robot is stuck and then adds all the cells around the closest frontier in a radius of 'radius' and sends that updated list to the goal planner.
@@ -68,10 +69,6 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
     :type queue_fl_closest_frontier: Queue
     :param queue_fl_ignored_cells: The queue where this job puts the updated list of cells to ignore.
     :type queue_fl_ignored_cells: Queue
-    :param queue_fl_stuck: The queue where this job puts True if the robot is stuck, used by main to request new search of frontiers
-    :type queue_fl_stuck: Queue
-    :param robot_map: The map.
-    :type robot_map: Map
     :param robot: The robot to request the position.
     :type robot: Robot
     :param max_positions: The number of positions to memorise before analysing the deltas.
@@ -84,10 +81,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
     last_positions = []
     ignored_cells = set([])
     closest_frontier = None
-    stuck_count = 0
     while True:
-        stuck = False
-        restart = False
         while not queue_fl_closest_frontier.empty():
             closest_frontier = queue_fl_closest_frontier.get()
         if closest_frontier != None:
@@ -115,24 +109,49 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, que
                     logger.info('Delta y: ' + str(delta_y))
                 if delta_x <= delta_m and delta_y <= delta_m:
                     last_positions = []
-                    stuck = True
-                    restart = True
-                    stuck_count += 1
-                    if stuck_count == 2:
-                        logger.info('Robot is detected as stuck twice in a row, delete closest_frontier')
-                        for p in closest_frontier:
-                            for n in filled_midpoint_circle(p.x, p.y, radius):
-                                if robot_map.is_in_bound(n):
-                                    ignored_cells.add(n)
-                        stuck = False
-                        stuck_count = 0
-                    else:
-                        logger.info('Robot is detected as stuck, go to biggest frontier')
-                else:
-                    stuck_count = 0
+                    logger.info('Robot is detected as stuck, delete closest frontier')
+                    for p in closest_frontier:
+                        for n in filled_midpoint_circle(p.x, p.y, radius):
+                            ignored_cells.add(n)
         while not queue_fl_ignored_cells.empty():
             queue_fl_ignored_cells.get()
         queue_fl_ignored_cells.put(ignored_cells)
-        if restart:
-            queue_fl_stuck.put([stuck, True])
         time.sleep(1)
+
+def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_planner, delay, robot, controller):
+    """
+    Path planner job.
+    Recompute a new path every 8 seconds, except if the robot makes progression, then the 8 seconds resets.
+    If the robot finishes the path the path planner computes a new one directly and the 8 seonds are reset.
+    :param queue_pp_progression: Queue where this job gets important informations about the progression of the robot.
+    :type queue_pp_progression: Queue
+    :param queue_pp_path: Queue where this job puts the path to follow and frontiers to display.
+    :type queue_pp_path: Queue
+    :param goal_planner: The goal planner, initialised with the queues to communicate with the frontiers limiter job.
+    :type goal_planner: GoalPlanner
+    :param path_planner:The path planner.
+    :type path_planner: PathPlanner
+    :param delay: The delay value.
+    :type delay: float
+    :param robot: The Robot interface.
+    :type robot: Robot
+    :param controller: The controller, used to stop the robot while the path is computed.
+    :type controller: Controller
+    """
+    start = time.time()
+    while not over:
+        while not queue_path_planner.empty():
+            robot_map, progressed, finished = queue_path_planner.get()
+        robot_cell = robot_map.to_grid_pos(robot.position)
+        if progressed or finished:
+            start = time.time()
+        if finished or (not progressed and time.time() - start >= delay):
+            controller.stop()
+            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
+            path = path_planner.get_path(robot_cell, robot_map, goal_point)
+            if path == []:
+                sys.exit()
+            else:
+                queue_pp_path.put([frontiers, path])
+        if finished or progressed:
+        time.sleep(0.05)

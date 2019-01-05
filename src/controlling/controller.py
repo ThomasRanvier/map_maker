@@ -9,7 +9,7 @@ class Controller:
     Class that implements a Controller, used as an interface to communicate easily with the Robot object which communicates directly with the MRDS server.
     """
 
-    def __init__(self, robot, max_ang_speed = 3, ang_speed_weight = 0.8, turn_around_delay = 6):
+    def __init__(self, robot, max_ang_speed = 3, ang_speed_weight = 0.8, turn_around_delay = 8):
         """
         Instantiates a Controller.
         :param robot: The robot to interface.
@@ -26,6 +26,7 @@ class Controller:
         self.__ang_speed_weight = ang_speed_weight
         self.__timer = 0
         self.__turn_around_delay = turn_around_delay
+        self.__stopping = False
     
     def apply_force(self, force, robot_pos):
         """
@@ -35,7 +36,7 @@ class Controller:
         :param robot_pos: The position of the robot in the real world.
         :type robot_pos: Position
         """
-        if time.time() - self.__timer < self.__turn_around_delay:
+        if self.__stopping or time.time() - self.__timer < self.__turn_around_delay:
             return
         elif force['x'] == 0 and force['y'] == 0:
             self.stop()
@@ -59,5 +60,9 @@ class Controller:
         """
         Makes the robot stop moving, overrules the timer.
         """
+        self.__stopping = True
         logger.info('Stop the robot')
+        time.sleep(0.05)
         self.__robot.post_speed(0, 0)
+        time.sleep(0.05)
+        self.__stopping = False
