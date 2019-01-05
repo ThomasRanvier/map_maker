@@ -21,15 +21,21 @@ def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
     """
     cartographer = Cartographer()
     while True:
-        logger.info('Alive')
         start = time.time()
+        logger.info('Request robot pos')
         robot_pos = robot.position
+        logger.info('Request robot lasers')
         robot_lasers = robot.lasers
+        logger.info('Update map')
         robot_map = cartographer.update(robot_map, robot_pos, robot_lasers)
+        logger.info('Get queue')
         while not queue_cartographer.empty():
             queue_cartographer.get()
+        logger.info('Put map in main queue')
         queue_cartographer.put(robot_map)
+        logger.info('Put map in sm queue')
         queue_sm_map.put(robot_map)
+        logger.info('Fucking sleep')
         sleep = 0.1 - (time.time() - start)
         if sleep > 0:
             time.sleep(sleep)
@@ -52,7 +58,6 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
     forces = None
     path = None
     while True:
-        logger.info('Alive')
         start = time.time()
         while not queue_sm_map.empty():
             robot_map = queue_sm_map.get()
@@ -86,7 +91,6 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
     ignored_cells = set([])
     closest_frontier = None
     while True:
-        logger.info('Alive')
         while not queue_fl_closest_frontier.empty():
             closest_frontier = queue_fl_closest_frontier.get()
         if closest_frontier != None:
