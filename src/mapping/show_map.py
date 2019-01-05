@@ -29,6 +29,7 @@ class ShowMap:
         import matplotlib.pyplot as plt
         self.__save_map_time = save_map_time
         self.__name = name
+        logger.info(np.shape(grid))
         self.__image = Image.fromarray(grid * 255)
         plt.rcParams['toolbar'] = 'None'
         self.__fig, self.__ax = plt.subplots(1, 1)
