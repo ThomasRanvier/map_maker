@@ -47,7 +47,7 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
     show_map = ShowMap(robot_map.grid)
     frontiers = None
     forces = None
-    goal_point = None
+    path = None
     while True:
         start = time.time()
         while not queue_sm_map.empty():
