@@ -104,7 +104,7 @@ def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, rob
                         max_y = pos.y
                 delta_x = abs(max_x - min_x)
                 delta_y = abs(max_y - min_y)
-                if delta_x <= delta_m + 2 and delta_y <= delta_m + 1:
+                if delta_x <= delta_m + 1 and delta_y <= delta_m + 1:
                     logger.info('Delta x: ' + str(delta_x))
                     logger.info('Delta y: ' + str(delta_y))
                 if delta_x <= delta_m and delta_y <= delta_m:
@@ -139,18 +139,25 @@ def path_planner_job(queue_pp_progression, queue_pp_path, goal_planner, path_pla
     start = time.time()
     robot_map = None
     while True:
+        new_infos = False
         progressed = False
         finished = False
         while not queue_pp_progression.empty():
             robot_map, progressed, finished = queue_pp_progression.get()
-        if progressed or finished:
-            start = time.time()
-        if robot_map != None and finished or (not progressed and time.time() - start >= delay):
-            robot_cell = robot_map.to_grid_pos(robot.position)
-            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
-            path = path_planner.get_path(robot_cell, robot_map, goal_point)
-            if path == []:
-                sys.exit()
-            else:
-                queue_pp_path.put([frontiers, path])
-        time.sleep(0.05)
+            new_infos = True
+        if new_infos:
+            if progressed or finished:
+                start = time.time()
+            logger.info('Timer: ' + str(time.time() - start))
+            logger.info('Finished: ' + str(finished))
+            logger.info('Progressed: ' + str(progressed))
+            if robot_map != None and finished or (not progressed and time.time() - start >= delay):
+                robot_cell = robot_map.to_grid_pos(robot.position)
+                goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
+                path = path_planner.get_path(robot_cell, robot_map, goal_point)
+                if path == []:
+                    sys.exit()
+                else:
+                    queue_pp_path.put([frontiers, path])
+        else:
+            time.sleep(0.1)
