@@ -1,6 +1,29 @@
 from math import atan2, pi
 from utils.position import Position
 
+def get_deltas(points, max_pos):
+    """
+    The function used to compute the deltas in x and y axis.
+    :param points: The list of the points.
+    :type points: A list of Position objects.
+    :param max_pos: The number of positions to compare.
+    :type max_pos: float
+    """
+    min_x = points[len(points) - 1].x
+    max_x = min_x
+    min_y = points[len(points) - 1].y
+    max_y = min_y
+    for i in range(len(points) - 1 - max_pos, len(points) - 1):
+        if min_x > points[i].x:
+            min_x = points[i].x
+        if min_y > points[i].y:
+            min_y = points[i].y
+        if max_x < points[i].x:
+            max_x = points[i].x
+        if max_y < points[i].y:
+            max_y = points[i].y
+    return (abs(max_x - min_x), abs(max_y - min_y))
+
 def filled_midpoint_circle(x_center, y_center, radius):
     """
     https://stackoverflow.com/questions/10878209/midpoint-circle-algorithm-for-filled-circles

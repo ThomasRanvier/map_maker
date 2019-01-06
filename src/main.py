@@ -36,12 +36,12 @@ def has_progressed(path, robot_cell, distance_to_trigger_goal):
                 for ii in range(i, -1, -1):
                     path.pop(ii)
                 break
-        if has_progressed:
-            logger.info('Has progressed')
+        #if has_progressed:
+        #    logger.info('Has progressed')
         if path == []:
             logger.info('Has finished')
-        return (has_progressed, path == [])
-    return (False, False)
+        return has_progressed
+    return False
 
 if __name__ == '__main__':
     url = 'localhost:50000'
@@ -50,20 +50,20 @@ if __name__ == '__main__':
     distance_to_trigger_goal_m = 3.0
     distance_between_subgoals_m = 5.0
     lower_left_pos = Position(-65.0, -65.0)
-    upper_right_pos = Position(55.0, 55.0)
-    path_planning_delay = 16
+    upper_right_pos = Position(60.0, 60.0)
+    path_planning_delay = 14
 
-    queue_cartographer = Queue(200)
-    queue_sm_map = Queue(200)
-    queue_sm_optionals = Queue(200)
-    queue_fl_closest_frontier = Queue(200)
-    queue_fl_ignored_cells = Queue(200)
+    queue_cartographer = Queue(500)
+    queue_sm_map = Queue(500)
+    queue_sm_optionals = Queue(500)
+    queue_fl_current_frontier = Queue(500)
+    queue_fl_ignored_cells = Queue(500)
 
     robot = Robot(url)
     robot_map = Map(lower_left_pos, upper_right_pos, scale)
     controller = Controller(robot)
     potential_field = PotentialField(robot)
-    goal_planner = GoalPlanner(queue_fl_closest_frontier, queue_fl_ignored_cells)
+    goal_planner = GoalPlanner(queue_fl_current_frontier, queue_fl_ignored_cells)
     path_planner = PathPlanner(distance_to_trigger_goal_m * scale, distance_between_subgoals_m * scale)
 
     cartographer_d = Process(target=cartographer_job, args=(queue_cartographer, queue_sm_map, robot_map, robot))
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     show_map_d.daemon = True
     show_map_d.start()
 
-    frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_closest_frontier, queue_fl_ignored_cells, robot))
+    frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_current_frontier, queue_fl_ignored_cells, robot))
     frontiers_limiter_d.daemon = True
     frontiers_limiter_d.start()
     
@@ -95,10 +95,12 @@ if __name__ == '__main__':
         if path != []:
             forces = potential_field.get_forces(robot_cell, path[0], robot_map)
             controller.apply_force(forces['gen_force'], robot_pos)
-        progressed, finished = has_progressed(path, robot_cell, distance_to_trigger_goal_m * scale)
-        if progressed:
-            start_path_planning = time.time()
-        if finished or (not progressed and time.time() - start_path_planning >= path_planning_delay):
+        """
+        Test: Recompute path every 5 seconds, no matter if progressed or anything. Search for biggest frontier and not closest.
+        We run has_progressed just to update the path, if this test is good we can delete the return statements.
+        """
+        progressed = has_progressed(path, robot_cell, distance_to_trigger_goal_m * scale)
+        if path == [] or time.time() - start_path_planning >= 5:
             start_path_planning = time.time()
             controller.stop()
             robot_cell = robot_map.to_grid_pos(robot.position)
@@ -107,6 +109,19 @@ if __name__ == '__main__':
             if path == []:
                 logger.info('Over')
                 over = True
+        """
+        if progressed:
+            start_path_planning = time.time()
+        if path == [] or (not progressed and time.time() - start_path_planning >= path_planning_delay):
+            start_path_planning = time.time()
+            controller.stop()
+            robot_cell = robot_map.to_grid_pos(robot.position)
+            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
+            path = path_planner.get_path(robot_cell, robot_map, goal_point)
+            if path == []:
+                logger.info('Over')
+                over = True
+        """
         queue_sm_optionals.put([frontiers, forces, path])
         sleep = 0.1 - (time.time() - start_loop)
         if sleep > 0:

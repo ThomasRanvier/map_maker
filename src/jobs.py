@@ -3,7 +3,7 @@ import sys
 from mapping.cartographer import Cartographer
 from mapping.show_map import ShowMap
 from logging import getLogger
-from utils.utils import filled_midpoint_circle
+from utils.utils import filled_midpoint_circle, get_deltas
 
 logger = getLogger('jobs')
 
@@ -61,59 +61,65 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
         if sleep > 0:
             time.sleep(sleep)
 
-def frontiers_limiter_job(queue_fl_closest_frontier, queue_fl_ignored_cells, robot, max_positions = 30, delta_m = 5, radius = 6):
+def frontiers_limiter_job(queue_fl_current_frontier, queue_fl_ignored_cells, robot, max_positions_immobile = 5, max_positions_stuck = 20, delta_m_immobile = 0.2, delta_m_stuck = 3.5, radius = 6):
     """
     This is the job that tells to the goal planner all the cells to ignore when it is building the frontiers.
-    It detects when the robot is stuck and then adds all the cells around the closest frontier in a radius of 'radius' and sends that updated list to the goal planner.
-    :param queue_fl_closest_frontier: The queue where the goal planner puts the closest frontier.
-    :type queue_fl_closest_frontier: Queue
+    It detects when the robot is stuck and then adds all the cells around the current frontier in a radius of 'radius' and sends that updated list to the goal planner.
+    :param queue_fl_current_frontier: The queue where the goal planner puts the current frontier.
+    :type queue_fl_current_frontier: Queue
     :param queue_fl_ignored_cells: The queue where this job puts the updated list of cells to ignore.
     :type queue_fl_ignored_cells: Queue
     :param robot: The robot to request the position.
     :type robot: Robot
-    :param max_positions: The number of positions to memorise before analysing the deltas.
-    :type max_positions: integer
-    :param delta_m: The delta in meter bellow which the robot is detected as stuck.
-    :type delta_m: float
-    :param radius: The radius (in cells of the grid) around the closest frontier in which the cells are added to the ignored cells set.
+    :param max_positions_immobile: The number of positions to memorise before analysing the deltas to detect if the robot is immobile.
+    :type max_positions_immobile: A list of Position objects.
+    :param max_positions_stuck: The number of positions to memorise before analysing the deltas to detect if the robot is stuck.
+    :type max_positions_stuck: A list of Position objects.
+    :param delta_m_immobile: The delta in meter below which the robot is detected as immobile.
+    :type delta_m_immobile: float
+    :param delta_m_stuck: The delta in meter below which the robot is detected as stuck.
+    :type delta_m_stuck: float
+    :param radius: The radius (in cells of the grid) around the current frontier in which the cells are added to the ignored cells set.
     :type radius: integer
     """
+    def delete_frontier(frontier, ignored_cells, last_positions):
+        """
+        The function used to delete the frontier when the robot is either detected as stuck or immobile.
+        :param frontier: The frontier.
+        :type frontier: A list of Position objects.
+        :param ignored_cells: The list of cells to ignore for the goal planner.
+        :type ignored_cells: A list of Position objects.
+        :param last_positions: The list of the last positions.
+        :type last_positions: A list of Position objects.
+        """
+        last_positions = []
+        for p in frontier:
+            for n in filled_midpoint_circle(p.x, p.y, radius):
+                ignored_cells.add(n)
+
     last_positions = []
     ignored_cells = set([])
-    closest_frontier = None
+    current_frontier = None
     while True:
-        while not queue_fl_closest_frontier.empty():
-            closest_frontier = queue_fl_closest_frontier.get()
-        if closest_frontier != None:
+        while not queue_fl_current_frontier.empty():
+            current_frontier = queue_fl_current_frontier.get()
+        if current_frontier != None:
             robot_pos = robot.position
             last_positions.append(robot_pos)
-            if len(last_positions) > max_positions:
+            immobile = False
+            if len(last_positions) >= max_positions_immobile:
+                delta_x, delta_y = get_deltas(last_positions, max_positions_immobile)
+                if delta_x <= delta_m_immobile and delta_y <= delta_m_immobile:
+                    immobile = True
+                    logger.info('Robot is detected as immobile, delete current frontier')
+                    delete_frontier(current_frontier, ignored_cells, last_positions)
+            if not immobile and len(last_positions) > max_positions_stuck:
                 last_positions.pop(0)
-                min_x = last_positions[0].x
-                max_x = min_x
-                min_y = last_positions[0].y
-                max_y = min_y
-                for pos in last_positions:
-                    if min_x > pos.x:
-                        min_x = pos.x
-                    if min_y > pos.y:
-                        min_y = pos.y
-                    if max_x < pos.x:
-                        max_x = pos.x
-                    if max_y < pos.y:
-                        max_y = pos.y
-                delta_x = abs(max_x - min_x)
-                delta_y = abs(max_y - min_y)
-                if delta_x <= delta_m + 1 and delta_y <= delta_m + 1:
-                    logger.info('Delta x: ' + str(delta_x))
-                    logger.info('Delta y: ' + str(delta_y))
-                if delta_x <= delta_m and delta_y <= delta_m:
-                    last_positions = []
-                    logger.info('Robot is detected as stuck, delete closest frontier')
-                    for p in closest_frontier:
-                        for n in filled_midpoint_circle(p.x, p.y, radius):
-                            ignored_cells.add(n)
-        while not queue_fl_ignored_cells.empty():
-            queue_fl_ignored_cells.get()
+                delta_x, delta_y = get_deltas(last_positions, max_positions_stuck)
+                if delta_x <= delta_m_stuck + 1 and delta_y <= delta_m_stuck + 1:
+                    logger.info('Delta x: ' + str(delta_x) + ', delta y: ' + str(delta_y))
+                if delta_x <= delta_m_stuck and delta_y <= delta_m_stuck:
+                    logger.info('Robot is detected as stuck, delete current frontier')
+                    delete_frontier(current_frontier, ignored_cells, last_positions)
         queue_fl_ignored_cells.put(ignored_cells)
         time.sleep(1)

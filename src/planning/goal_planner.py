@@ -1,5 +1,5 @@
 from utils.position import Position
-from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2, centroid
+from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2, centroid, get_deltas
 from math import inf
 from logging import getLogger
 
@@ -38,7 +38,7 @@ class GoalPlanner:
         logger.info('Search new goal')
         frontiers = self.__get_frontiers(robot_cell, robot_map)
         if frontiers:
-            closest_frontier = self.__find_closest_frontier(frontiers, robot_cell)
+            closest_frontier = self.__find_biggest_frontier(frontiers, robot_cell)#self.__find_closest_frontier(frontiers, robot_cell)
             goal_point = centroid(closest_frontier)
             logger.info('New goal defined')
             return (goal_point, frontiers)
@@ -68,6 +68,30 @@ class GoalPlanner:
                 closest_frontier = frontier
         self.__queue_fl_closest_frontier.put(closest_frontier)
         return closest_frontier
+
+    def __find_biggest_frontier(self, frontiers, robot_cell):
+        """
+        Function that finds the biggest frontier.
+        :param frontiers: A list of the frontiers.
+        :type frontiers: A 2D list of Position objects.
+        :param robot_cell: Position of the robot in the grid.
+        :type robot_cell: Position
+        :return: The biggest frontier.
+        :rtype: A list of Position objects.
+        """
+        biggest_frontier = frontiers[0]
+        if len(frontiers) == 1:
+            self.__queue_fl_closest_frontier.put(biggest_frontier)
+            return biggest_frontier
+        logger.info('Search biggest frontier')
+        max_size = -inf
+        for frontier in frontiers:
+            delta_x, delta_y = get_deltas(frontier, len(frontier))
+            if delta_x + delta_y > max_size:
+                max_size = delta_x + delta_y
+                biggest_frontier = frontier
+        self.__queue_fl_closest_frontier.put(biggest_frontier)
+        return biggest_frontier
 
     def __get_frontiers(self, robot_cell, robot_map):
         """
