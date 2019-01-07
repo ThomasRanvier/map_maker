@@ -1,6 +1,6 @@
 from utils.position import Position
 from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2, centroid, get_deltas
-from math import inf
+from math import inf, hypot
 from logging import getLogger
 
 logger = getLogger('goal_planner')
@@ -69,13 +69,15 @@ class GoalPlanner:
         self.__queue_fl_closest_frontier.put(closest_frontier)
         return closest_frontier
 
-    def __find_biggest_frontier(self, frontiers, robot_cell):
+    def __find_biggest_frontier(self, frontiers, robot_cell, max_distance = 150):
         """
-        Function that finds the biggest frontier.
+        Function that finds the biggest frontier (Under max_distance).
         :param frontiers: A list of the frontiers.
         :type frontiers: A 2D list of Position objects.
         :param robot_cell: Position of the robot in the grid.
         :type robot_cell: Position
+        :param max_distance: The maximum distance under which the frontiers are considered.
+        :type max_distance: integer
         :return: The biggest frontier.
         :rtype: A list of Position objects.
         """
@@ -86,10 +88,11 @@ class GoalPlanner:
         logger.info('Search biggest frontier')
         max_size = -inf
         for frontier in frontiers:
-            delta_x, delta_y = get_deltas(frontier, len(frontier))
-            if delta_x + delta_y > max_size:
-                max_size = delta_x + delta_y
-                biggest_frontier = frontier
+            if centroid(frontier) <= max_distance:
+                delta_x, delta_y = get_deltas(frontier, len(frontier))
+                if delta_x + delta_y > max_size:
+                    max_size = delta_x + delta_y
+                    biggest_frontier = frontier
         self.__queue_fl_closest_frontier.put(biggest_frontier)
         return biggest_frontier
 

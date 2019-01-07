@@ -26,6 +26,7 @@ class PathPlanner:
     def get_path(self, robot_cell, robot_map, goal_point):
         """
         Gives a path that tries to avoid the obstacles while going to the goal point.
+        It is an implementation of the A* algorithm, just modified to make sure the path doesn't include any obstacles.
         :param robot_cell: Cell of the robot.
         :type robot_cell: Position
         :param robot_map: Map of the environment.
