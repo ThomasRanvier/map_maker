@@ -88,7 +88,8 @@ class GoalPlanner:
         logger.info('Search biggest frontier')
         max_size = -inf
         for frontier in frontiers:
-            if hypot(robot_cell, centroid(frontier)) <= max_distance:
+            middle = centroid(frontier)
+            if hypot(robot_cell.x - middle.x, middle.y - robot_cell.y) <= max_distance:
                 delta_x, delta_y = get_deltas(frontier, len(frontier))
                 if delta_x + delta_y > max_size:
                     max_size = delta_x + delta_y
