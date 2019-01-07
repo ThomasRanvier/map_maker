@@ -15,17 +15,15 @@ import logging
 logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def has_progressed(path, robot_cell, distance_to_trigger_goal):
+def update_path(path, robot_cell, distance_to_trigger_goal):
     """
-    Tells if the robot has progressed on the path or not.
+    Update the path depending on if the robot has progressed in it or not.
     :param path: The path to follow.
     :type path: A list of Position objects.
     :param robot_cell: The position of the robot in the grid.
     :type robot_cell: Position
     :param distance_to_trigger_goal: Distance under which the robot triggers the goal.
     :type distance_to_trigger_goal: float
-    :return: A set of booleans, progressed: True if robot has made progress, False otherwise, finished: True if finished, False otherwise.
-    :rtype: A set of 2 booleans.
     """
     if path != []:
         has_progressed = False
@@ -36,12 +34,8 @@ def has_progressed(path, robot_cell, distance_to_trigger_goal):
                 for ii in range(i, -1, -1):
                     path.pop(ii)
                 break
-        #if has_progressed:
-        #    logger.info('Has progressed')
         if path == []:
             logger.info('Has finished')
-        return has_progressed
-    return False
 
 if __name__ == '__main__':
     url = 'localhost:50000'
@@ -95,11 +89,7 @@ if __name__ == '__main__':
         if path != []:
             forces = potential_field.get_forces(robot_cell, path[0], robot_map)
             controller.apply_force(forces['gen_force'], robot_pos)
-        """
-        Test: Recompute path every 5 seconds, no matter if progressed or anything. Search for biggest frontier and not closest.
-        We run has_progressed just to update the path, if this test is good we can delete the return statements.
-        """
-        progressed = has_progressed(path, robot_cell, distance_to_trigger_goal_m * scale)
+        update_path(path, robot_cell, distance_to_trigger_goal_m * scale)
         if path == [] or time.time() - start_path_planning >= 5:
             start_path_planning = time.time()
             controller.stop()
@@ -109,23 +99,9 @@ if __name__ == '__main__':
             if path == []:
                 logger.info('Over')
                 over = True
-        """
-        if progressed:
-            start_path_planning = time.time()
-        if path == [] or (not progressed and time.time() - start_path_planning >= path_planning_delay):
-            start_path_planning = time.time()
-            controller.stop()
-            robot_cell = robot_map.to_grid_pos(robot.position)
-            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
-            path = path_planner.get_path(robot_cell, robot_map, goal_point)
-            if path == []:
-                logger.info('Over')
-                over = True
-        """
         queue_sm_optionals.put([frontiers, forces, path])
         sleep = 0.1 - (time.time() - start_loop)
         if sleep > 0:
             time.sleep(sleep)
     cartographer_d.terminate()
-    show_map_d.terminate()
     frontiers_limiter_d.terminate()
