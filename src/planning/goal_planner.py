@@ -111,7 +111,10 @@ class GoalPlanner:
             obs_count = 0
             for point in line:
                 if not robot_map.is_empty(point):
-                    obs_count += 1
+                    if robot_map.is_unknown(point):
+                        obs_count += 1
+                    else:
+                        obs_count += 50
             if obs_count < min_obs:
                 min_obs = obs_count
                 most_accessible_frontier = frontier
