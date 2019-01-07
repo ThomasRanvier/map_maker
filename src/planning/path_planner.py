@@ -55,7 +55,7 @@ class PathPlanner:
             if dist_cur < min_dist:
                 min_dist = dist_cur
                 closest = current
-            if dist <= self.__trigger_dist or depth >= self.__max_depth:
+            if dist_cur <= self.__trigger_dist or depth >= self.__max_depth:
                 logger.info('Path defined')
                 return self.__reconstruct_path(came_from, closest)#current)
             open_set.remove(current)
