@@ -110,7 +110,7 @@ class GoalPlanner:
             line = bresenham_line(robot_cell.x, robot_cell.y, int(middle.x), int(middle.y))
             obs_count = 0
             for point in line:
-                if not robot_map.is_empty():
+                if not robot_map.is_empty(point):
                     obs_count += 1
             if obs_count < min_obs:
                 min_obs = obs_count
