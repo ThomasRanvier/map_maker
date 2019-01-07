@@ -36,6 +36,7 @@ def update_path(path, robot_cell, distance_to_trigger_goal):
                 break
         if path == []:
             logger.info('Has finished')
+    return path
 
 if __name__ == '__main__':
     url = 'localhost:50000'
@@ -89,7 +90,7 @@ if __name__ == '__main__':
         if path != []:
             forces = potential_field.get_forces(robot_cell, path[0], robot_map)
             controller.apply_force(forces['gen_force'], robot_pos)
-        update_path(path, robot_cell, distance_to_trigger_goal_m * scale)
+        path = update_path(path, robot_cell, distance_to_trigger_goal_m * scale)
         if path == [] or time.time() - start_path_planning >= 5:
             start_path_planning = time.time()
             controller.stop()

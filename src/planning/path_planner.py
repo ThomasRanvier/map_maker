@@ -43,15 +43,21 @@ class PathPlanner:
         f_score = {robot_cell: distance_2(robot_cell, goal_point)}
         depth = 1
         current = None
+        closest = None
+        min_dist = inf
         while not len(open_set) == 0:
             min_score = inf
             for cell in open_set:
                 if f_score[cell] < min_score:
                     min_score = f_score[cell]
                     current = cell
-            if distance_2(current, goal_point) <= self.__trigger_dist or depth >= self.__max_depth:
+            dist_cur = distance_2(current, goal_point)
+            if dist_cur < min_dist:
+                min_dist = dist_cur
+                closest = current
+            if dist <= self.__trigger_dist or depth >= self.__max_depth:
                 logger.info('Path defined')
-                return self.__reconstruct_path(came_from, current)
+                return self.__reconstruct_path(came_from, closest)#current)
             open_set.remove(current)
             closed_set.add(current)
             for neighbour in von_neumann_neighbourhood(current, robot_map.grid_width, robot_map.grid_height):
@@ -66,7 +72,7 @@ class PathPlanner:
                 open_set.add(neighbour)
             depth += 1
         logger.info('Impossible to define path')
-        return self.__reconstruct_path(came_from, current)
+        return self.__reconstruct_path(came_from, closest)#current)
 
     def __reconstruct_path(self, came_from, current):
         """
