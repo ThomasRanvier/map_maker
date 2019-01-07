@@ -1,5 +1,5 @@
 from utils.position import Position
-from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2, centroid, get_deltas
+from utils.utils import von_neumann_neighbourhood, moore_neighbourhood, distance_2, centroid, get_deltas, bresenham_line
 from math import inf, hypot
 from logging import getLogger
 
@@ -10,17 +10,17 @@ class GoalPlanner:
     Class that implement a GoalPlanner, used to find a new goal from the frontiers between the explored and unknown world.
     """
 
-    def __init__(self, queue_fl_closest_frontier, queue_fl_ignored_cells, min_frontier_points = 20):
+    def __init__(self, queue_fl_current_frontier, queue_fl_ignored_cells, min_frontier_points = 20):
         """
         Instantiates a GoalPlanner.
-        :param queue_fl_closest_frontier: The queue where to put the closest frontier found.
-        :type queue_fl_closest_frontier: Queue
+        :param queue_fl_current_frontier: The queue where to put the closest frontier found.
+        :type queue_fl_current_frontier: Queue
         :param queue_fl_ignored_cells: The queue where to get the cells to ignore.
         :type queue_fl_ignored_cells: Queue
         :param min_frontier_points: Minimum points in a frontier to be relevant.
         :type min_frontier_points: integer
         """
-        self.__queue_fl_closest_frontier = queue_fl_closest_frontier
+        self.__queue_fl_current_frontier = queue_fl_current_frontier
         self.__queue_fl_ignored_cells = queue_fl_ignored_cells
         self.__min_frontier_points = min_frontier_points
         self.__ignored_cells = None
@@ -38,8 +38,9 @@ class GoalPlanner:
         logger.info('Search new goal')
         frontiers = self.__get_frontiers(robot_cell, robot_map)
         if frontiers:
-            closest_frontier = self.__find_closest_frontier(frontiers, robot_cell)#self.__find_closest_frontier(frontiers, robot_cell)
-            goal_point = centroid(closest_frontier)
+            #closest_frontier = self.__find_closest_frontier(frontiers, robot_cell)#self.__find_closest_frontier(frontiers, robot_cell)
+            most_accessible_frontier = self.__find_most_accessible_frontier(frontiers, robot_cell, robot_map)
+            goal_point = centroid(most_accessible_frontier)
             logger.info('New goal defined')
             return (goal_point, frontiers)
         logger.info('No frontiers found')
@@ -57,7 +58,7 @@ class GoalPlanner:
         """
         closest_frontier = frontiers[0]
         if len(frontiers) == 1:
-            self.__queue_fl_closest_frontier.put(closest_frontier)
+            self.__queue_fl_current_frontier.put(closest_frontier)
             return closest_frontier
         logger.info('Search closest frontier')
         min_distance = inf
@@ -66,7 +67,7 @@ class GoalPlanner:
             if dist < min_distance:
                 min_distance = dist
                 closest_frontier = frontier
-        self.__queue_fl_closest_frontier.put(closest_frontier)
+        self.__queue_fl_current_frontier.put(closest_frontier)
         return closest_frontier
 
     def __find_biggest_frontier(self, frontiers, robot_cell, max_distance = 150):
@@ -83,7 +84,7 @@ class GoalPlanner:
         """
         biggest_frontier = frontiers[0]
         if len(frontiers) == 1:
-            self.__queue_fl_closest_frontier.put(biggest_frontier)
+            self.__queue_fl_current_frontier.put(biggest_frontier)
             return biggest_frontier
         logger.info('Search biggest frontier')
         max_size = -inf
@@ -94,8 +95,28 @@ class GoalPlanner:
                 if delta_x + delta_y > max_size:
                     max_size = delta_x + delta_y
                     biggest_frontier = frontier
-        self.__queue_fl_closest_frontier.put(biggest_frontier)
+        self.__queue_fl_current_frontier.put(biggest_frontier)
         return biggest_frontier
+
+    def __find_most_accessible_frontier(self, frontiers, robot_cell, robot_map):
+        most_accessible_frontier = frontiers[0]
+        if len(frontiers) == 1:
+            self.__queue_fl_current_frontier.put(most_accessible_frontier)
+            return most_accessible_frontier 
+        logger.info('Search most accessible frontier.')
+        min_obs = inf
+        for frontier in frontiers:
+            middle = centroid(frontier)
+            line = bresenham_line(robot_cell.x, robot_cell.y, int(middle.x), int(middle.y))
+            obs_count = 0
+            for point in line:
+                if not robot_map.is_empty():
+                    obs_count += 1
+            if obs_count < min_obs:
+                min_obs = obs_count
+                most_accessible_frontier = frontier
+        self.__queue_fl_current_frontier.put(most_accessible_frontier)
+        return most_accessible_frontier
 
     def __get_frontiers(self, robot_cell, robot_map):
         """
