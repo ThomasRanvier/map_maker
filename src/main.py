@@ -12,6 +12,15 @@ from math import hypot
 import time
 import logging
 import sys
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("url", type=str, help="The url of the MRDS server with the port, the format is url:port")
+parser.add_argument("lower_left_pos_x", type=int, help="The X coordinate of the lower left position.")
+parser.add_argument("lower_left_pos_y", type=int, help="The Y coordinate of the lower left position.")
+parser.add_argument("upper_right_pos_x", type=int, help="The X coordinate of the upper right position.")
+parser.add_argument("upper_right_pos_y", type=int, help="The Y coordinate of the upper right position.")
+args = parser.parse_args()
 
 logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -40,13 +49,13 @@ def update_path(path, robot_cell, distance_to_trigger_goal):
     return path
 
 if __name__ == '__main__':
-    url = sys.argv[1]#'localhost:50000'
+    url = args.url
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 3.0
     distance_between_subgoals_m = 5.0
-    lower_left_pos = Position(int(sys.argv[2]), int(sys.argv[3]))#-65.0, -65.0)
-    upper_right_pos = Position(int(sys.argv[4]), int(sys.argv[5]))#60.0, 60.0)
+    lower_left_pos = Position(args.lower_left_pos_x, args.lower_left_pos_y)
+    upper_right_pos = Position(args.upper_right_pos_x, args.upper_right_pos_y)
     path_planning_delay = 14
 
     queue_cartographer = Queue(500)
