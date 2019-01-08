@@ -30,7 +30,7 @@ class ShowMap:
         self.__save_map_time = save_map_time
         self.__name = name
         #self.__image = Image.new('L', (len(grid), len(grid[0])))
-        self.__image = Image.fromarray([*zip(*grid)] * 255)
+        self.__image = Image.fromarray(np.transpose(grid) * 255)
         w, h = self.__image.size
         logger.info('Image size, w: ' + str(w) + ', h: ' + str(h))
         plt.rcParams['toolbar'] = 'None'
