@@ -29,7 +29,7 @@ class ShowMap:
         import matplotlib.pyplot as plt
         self.__save_map_time = save_map_time
         self.__name = name
-        self.__image = Image.fromarray(list(map(list, zip(*grid))) * 255)
+        self.__image = Image.fromarray([list(i) for i in zip(*grid)] * 255)
         w, h = self.__image.size
         logger.info('Image size, w: ' + str(w) + ', h: ' + str(h))
         plt.rcParams['toolbar'] = 'None'
