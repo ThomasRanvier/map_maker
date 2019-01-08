@@ -12,9 +12,21 @@ from math import hypot
 import time
 import logging
 import sys
+import signal
 
 logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+cartographer_d, show_map_d, frontiers_limiter_d = None, None, None
+
+def sigint_handler(sig, frame):
+    """
+    Handle the Ctrl-C (SIGINT) signal. Terminate all subworkers.
+    """
+    cartographer_d.terminate()
+    show_map_d.terminate()
+    frontiers_limiter_d.terminate()
+    sys.exit(1)
 
 def update_path(path, robot_cell, distance_to_trigger_goal):
     """
@@ -80,33 +92,30 @@ if __name__ == '__main__':
     over = False
     start_path_planning = 0
 
-    try:
-        controller.turn_around()
-        time.sleep(10)
-        while not over:
-            start_loop = time.time()
-            while not queue_cartographer.empty():
-                robot_map = queue_cartographer.get()
-            robot_pos = robot.position
-            robot_cell = robot_map.to_grid_pos(robot_pos)
-            if path != []:
-                forces = potential_field.get_forces(robot_cell, path[0], robot_map)
-                controller.apply_force(forces['gen_force'], robot_pos)
-            path = update_path(path, robot_cell, distance_to_trigger_goal_m * scale)
-            if path == [] or time.time() - start_path_planning >= 5:
-                start_path_planning = time.time()
-                controller.stop()
-                robot_cell = robot_map.to_grid_pos(robot.position)
-                goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
-                path = path_planner.get_path(robot_cell, robot_map, goal_point)
-                if path == []:
-                    logger.info('Over')
-                    over = True
-            queue_sm_optionals.put([frontiers, forces, path])
-            sleep = 0.1 - (time.time() - start_loop)
-            if sleep > 0:
-                time.sleep(sleep)
-    except KeyboardInterrupt:
-        cartographer_d.terminate()
-        show_map_d.terminate()
-        frontiers_limiter_d.terminate()
+    signal.signal(signal.SIGINT, sigint_handler)
+
+    controller.turn_around()
+    time.sleep(10)
+    while not over:
+        start_loop = time.time()
+        while not queue_cartographer.empty():
+            robot_map = queue_cartographer.get()
+        robot_pos = robot.position
+        robot_cell = robot_map.to_grid_pos(robot_pos)
+        if path != []:
+            forces = potential_field.get_forces(robot_cell, path[0], robot_map)
+            controller.apply_force(forces['gen_force'], robot_pos)
+        path = update_path(path, robot_cell, distance_to_trigger_goal_m * scale)
+        if path == [] or time.time() - start_path_planning >= 5:
+            start_path_planning = time.time()
+            controller.stop()
+            robot_cell = robot_map.to_grid_pos(robot.position)
+            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
+            path = path_planner.get_path(robot_cell, robot_map, goal_point)
+            if path == []:
+                logger.info('Over')
+                over = True
+        queue_sm_optionals.put([frontiers, forces, path])
+        sleep = 0.1 - (time.time() - start_loop)
+        if sleep > 0:
+            time.sleep(sleep)
