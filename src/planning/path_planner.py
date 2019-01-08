@@ -9,7 +9,7 @@ class PathPlanner:
     Class that implements an algorithm of path planning, used to smooth out the potential field controller.
     """
 
-    def __init__(self, trigger_dist, dist_between_subgoals , max_depth = 500):
+    def __init__(self, trigger_dist, dist_between_subgoals , max_depth = 1000):
         """
         Instantiates a PathPlanner.
         :param trigger_dist: Trigger distance from the goal where we can stop.
@@ -57,7 +57,7 @@ class PathPlanner:
                 closest = current
             if dist_cur <= self.__trigger_dist or depth >= self.__max_depth:
                 logger.info('Path defined')
-                return self.__reconstruct_path(came_from, closest)#current)
+                return self.__reconstruct_path(came_from, closest)
             open_set.remove(current)
             closed_set.add(current)
             for neighbour in von_neumann_neighbourhood(current, robot_map.grid_width, robot_map.grid_height):
@@ -72,7 +72,7 @@ class PathPlanner:
                 open_set.add(neighbour)
             depth += 1
         logger.info('Impossible to define path')
-        return self.__reconstruct_path(came_from, closest)#current)
+        return self.__reconstruct_path(came_from, closest)
 
     def __reconstruct_path(self, came_from, current):
         """
