@@ -81,9 +81,6 @@ if __name__ == '__main__':
     start_path_planning = 0
 
     try:
-        cartographer_d.join()
-        show_map_d.join()
-        frontiers_limiter_d.join()
         controller.turn_around()
         time.sleep(10)
         while not over:
