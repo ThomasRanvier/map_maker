@@ -11,6 +11,7 @@ from jobs import show_map_job, cartographer_job, frontiers_limiter_job
 from math import hypot
 import time
 import logging
+import sys
 
 logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -39,13 +40,13 @@ def update_path(path, robot_cell, distance_to_trigger_goal):
     return path
 
 if __name__ == '__main__':
-    url = 'localhost:50000'
+    url = sys.argv[1]#'localhost:50000'
     size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 3.0
     distance_between_subgoals_m = 5.0
-    lower_left_pos = Position(-65.0, -65.0)
-    upper_right_pos = Position(60.0, 60.0)
+    lower_left_pos = Position(sys.argv[2], sys.argv[3])#-65.0, -65.0)
+    upper_right_pos = Position(sys.argv[4], sys.argv[5])#60.0, 60.0)
     path_planning_delay = 14
 
     queue_cartographer = Queue(500)
