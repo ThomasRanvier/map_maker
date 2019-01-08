@@ -30,6 +30,8 @@ class ShowMap:
         self.__save_map_time = save_map_time
         self.__name = name
         self.__image = Image.fromarray(grid * 255)
+        w, h = self.__image.size
+        logger.info('Image size, w: ' + str(w) + ', h: ' + str(h))
         plt.rcParams['toolbar'] = 'None'
         self.__fig, self.__ax = plt.subplots(1, 1)
         self.__fig.suptitle(self.__name)
@@ -61,6 +63,7 @@ class ShowMap:
         for x in range(map_to_display.grid_width):
             for y in range(map_to_display.grid_height):
                 value = grid[x, y]
+                logger.info('Pixel, x: ' + str(x) + ', y: ' + y + ', corrected y: ' + str(map_to_display.grid_height - 1 - y))
                 self.__image.putpixel((x, map_to_display.grid_height - 1 - y), abs(255 - (value * 255)))
         self.__ax.clear()
         self.__implot = self.__ax.imshow(self.__image)
