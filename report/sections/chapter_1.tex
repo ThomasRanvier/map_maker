@@ -1,5 +1,7 @@
 \section{Code structure}
 
+\textcolor{red}{\textbf{If the program crashes or if you see that the robot keeps moving when it should have stopped you should kill the remaining python processes before being able to launch the program again.}}
+
 Our program is divided in three main modules, the mapping module, the planning module and the controller module.
 The role of the first one is to build the map of the environment of the robot using the echoes of the lasers.
 The role of the second one is to plan the goal of the robot and the path that the robot must follow in order to explore the world.
@@ -13,5 +15,5 @@ The received informations are directly adapted to our needs and stored using our
 For this assignment we used Python 3 as programming language, to run the program you can use the following syntax:
 
 \begin{lstlisting}[language=bash]
-> python3 main.py url x\_1 y\_1 x\_2 y\_2 show\_gui
+> python3 main.py url x_1 y_1 x_2 y_2 show_gui
 \end{lstlisting}
