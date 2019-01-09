@@ -38,9 +38,9 @@ class GoalPlanner:
         logger.info('Search new goal')
         frontiers = self.__get_frontiers(robot_cell, robot_map)
         if frontiers:
-            #closest_frontier = self.__find_closest_frontier(frontiers, robot_cell)#self.__find_closest_frontier(frontiers, robot_cell)
-            most_accessible_frontier = self.__find_most_accessible_frontier(frontiers, robot_cell, robot_map)
-            goal_point = centroid(most_accessible_frontier)
+            closest_frontier = self.__find_closest_frontier(frontiers, robot_cell)#self.__find_biggest_frontier(frontiers, robot_cell)
+            #most_accessible_frontier = self.__find_most_accessible_frontier(frontiers, robot_cell, robot_map)
+            goal_point = centroid(closest_frontier)
             logger.info('New goal defined')
             return (goal_point, frontiers)
         logger.info('No frontiers found')
