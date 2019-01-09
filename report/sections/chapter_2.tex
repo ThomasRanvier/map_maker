@@ -6,7 +6,7 @@ All the values are initialized to $0.5$ which is the average value between $0$ a
 
 To update this grid we created a class 'Cartographer' that uses the echoes of the lasers.
 For each laser echoe we compute the distance between the robot cell and the cell hit by the laser in the grid.
-Then we use the 'Bresenham' algorithm to update all the cells in between the two above.
+Then we use the 'Bresenham' algorithm\cite{bresenham} to update all the cells in between the two above.
 For all those cells we compute an increment that is added or subtracted to them using the following procedure:
 
 \begin{enumerate}

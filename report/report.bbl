@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+
+\bibitem{bresenham}
+Bresenham line algorithm, 2018.
+\newblock
+  \url{http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm#Python}.
+
+\bibitem{wavefront}
+Abhishek~Kathpal Anirudh~Topiwala, Pranav~Inani.
+\newblock {\em Frontier Based Exploration for Autonomous Robot}.
+\newblock PhD thesis, University of Maryland, 2019.
+\newblock \url{https://arxiv.org/pdf/1806.03581.pdf}.
+
+\bibitem{astar}
+A* search algorihtm, 2019.
+\newblock \url{https://en.wikipedia.org/wiki/A*_search_algorithm}.
+
+\bibitem{midpoint}
+colinday.
+\newblock Midpoint circle algorithm for filled circles, 2014.
+\newblock
+  \url{https://stackoverflow.com/questions/10878209/midpoint-circle-algorithm-for-filled-circles}.
+
+\end{thebibliography}

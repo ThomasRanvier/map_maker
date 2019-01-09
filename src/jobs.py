@@ -31,7 +31,7 @@ def cartographer_job(queue_cartographer, queue_sm_map, robot_map, robot):
         if sleep > 0:
             time.sleep(sleep)
 
-def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
+def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot, show_gui):
     """
     ShowMap's job, used to display the map with useful informations to the screen.
     Slow process so being in a subprocess saves a lot of time.
@@ -43,8 +43,10 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot):
     :type robot_map: Map
     :param robot: The robot used to communicate with the MRDS server.
     :type robot: Robot
+    :param show_gui: Boolean to display or not the GUI.
+    :type show_gui: boolean
     """
-    show_map = ShowMap(robot_map.grid)
+    show_map = ShowMap(robot_map.grid, show_gui=show_gui)
     frontiers = None
     forces = None
     path = None

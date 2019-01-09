@@ -21,6 +21,7 @@ parser.add_argument("lower_left_pos_x", type=int, help="The X coordinate of the 
 parser.add_argument("lower_left_pos_y", type=int, help="The Y coordinate of the lower left position.")
 parser.add_argument("upper_right_pos_x", type=int, help="The X coordinate of the upper right position.")
 parser.add_argument("upper_right_pos_y", type=int, help="The Y coordinate of the upper right position.")
+parser.add_argument("show_gui", type=bool, help="1 if you want to show the GUI, 0 otherwise.")
 args = parser.parse_args()
 
 logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)
@@ -87,7 +88,7 @@ if __name__ == '__main__':
     cartographer_d.daemon = True
     cartographer_d.start()
 
-    show_map_d = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot))
+    show_map_d = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot, args.show_gui))
     show_map_d.daemon = True
     show_map_d.start()
 

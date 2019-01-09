@@ -6,9 +6,6 @@
 
 \input{sections/titlepage}
 
-\chapter*{Abstract}
-\input{sections/abstract}
-
 \tableofcontents
 
 \chapter{Context}
@@ -29,11 +26,11 @@
 \chapter{Results}
 \input{sections/chapter_6}
 
-\chapter*{Conclusion}
-\addcontentsline{toc}{chapter}{Conclusion}
-\input{sections/conclusion}
-
 \listofalgorithms
 \addcontentsline{toc}{chapter}{List of algorithms}
+
+\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{biblio}
 
 \end{document}
