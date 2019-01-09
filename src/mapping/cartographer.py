@@ -7,7 +7,7 @@ class Cartographer:
     Class that implements a Cartographer, used to update the map of the environment using the lasers echoes.
     """
     
-    def __init__(self, lasers_distance = 0.15, min_increment = 0.015, increment = 0.15, max_distance = 40, safe_distance_obstacle = 5, safe_distance_empty = 10):
+    def __init__(self, lasers_distance = 0.15, min_increment = 0.015, increment = 0.15, max_distance = 40, safe_distance_obstacle = 20, safe_distance_empty = 25):
         """
         Instantiates a Cartographer.
         :param lasers_distance: Offset of the lasers in regard of the robot.
