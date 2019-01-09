@@ -46,7 +46,7 @@ def show_map_job(queue_sm_map, queue_sm_optionals, robot_map, robot, show_gui):
     :param show_gui: Boolean to display or not the GUI.
     :type show_gui: boolean
     """
-    show_map = ShowMap(robot_map.grid, show_gui=show_gui)
+    show_map = ShowMap(robot_map.grid, show_gui)
     frontiers = None
     forces = None
     path = None
