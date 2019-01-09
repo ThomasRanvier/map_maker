@@ -1,7 +1,7 @@
 The first point on which we worked was to find a way of building a map of the environment of the robot using the lasers echoes.
 
 To do so we created a class 'Map' that contains a grid of values between $0$ and $1$.
-Those values represent probability that there is an obstacle on that cell.
+Those values represent the probability that there is an obstacle on that cell.
 All the values are initialized to $0.5$ which is the average value between $0$ and $1$ since we do not know if there is an obstacle or not at that place.
 
 To update this grid we created a class 'Cartographer' that uses the echoes of the lasers.
@@ -39,12 +39,10 @@ The distance factor is useful because it will make the cells near the robot upda
 
 This is the factory map built moving the robot by hand using the cartographer described above.
 
-\FloatBarrier
-\begin{figure}
-    \centering\includegraphics[width=\textwidth]{explored_map_by_hand.png}
+\begin{figure}[h]
+    \centering\includegraphics[width=0.75\textwidth]{explored_map_by_hand.png}
     \label{fig:explored_map_by_hand}
     \caption{Explored map by hand}
 \end{figure}
-\FloatBarrier
 
 The mapping module also contains the 'ShowMap' class which is used to display the built map.

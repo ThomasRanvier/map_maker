@@ -1,7 +1,5 @@
 \section{Code structure}
 
-\textcolor{red}{\textbf{If the program crashes or if you see that the robot keeps moving when it should have stopped you should kill the remaining python processes before being able to launch the program again.}}
-
 Our program is divided in three main modules, the mapping module, the planning module and the controller module.
 The role of the first one is to build the map of the environment of the robot using the echoes of the lasers.
 The role of the second one is to plan the goal of the robot and the path that the robot must follow in order to explore the world.
@@ -12,8 +10,23 @@ The received informations are directly adapted to our needs and stored using our
 
 \section{How to run our program}
 
+\textcolor{red}{\textbf{If the program crashes or if you see that the robot keeps moving when it should have stopped you should kill the remaining python processes before being able to launch the program again.}}
+
 For this assignment we used Python 3 as programming language, to run the program you can use the following syntax:
 
-\begin{lstlisting}[language=bash]
-> python3 main.py url x_1 y_1 x_2 y_2 show_gui
+\begin{lstlisting}[language=bash, basicstyle=\small]
+usage:python3 main.py [-h] url lower_left_pos_x 
+    lower_left_pos_y upper_right_pos_x upper_right_pos_y show_gui
+
+positional arguments:
+  url                The url of the MRDS server with the port, 
+                     the format is url:port
+  lower_left_pos_x   The X coordinate of the lower left position.
+  lower_left_pos_y   The Y coordinate of the lower left position.
+  upper_right_pos_x  The X coordinate of the upper right position.
+  upper_right_pos_y  The Y coordinate of the upper right position.
+  show_gui           1 if you want to show the GUI, 0 otherwise.
+
+optional arguments:
+  -h, --help         show this help message and exit
 \end{lstlisting}

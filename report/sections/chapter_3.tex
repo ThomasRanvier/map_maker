@@ -189,7 +189,7 @@ The coordinates of the centroid of a frontier is calculated in that way, with $x
     &x = \dfrac{\sum_{i=0}^{n}x_i}{n}   &y = \dfrac{\sum_{i=0}^{n}y_i}{n}
 \end{align*}
 
-The process of finding the frontiers and a goal point is done every 14 seconds or every time the robot reaches the goal point, that way when the frontier moves the robot will follow it.
+The process of finding the frontiers and a goal point is done every 5 seconds, that way when the frontier moves the robot will follow it since it updates the point a lot.
 
 \section{Reaching the goal}
 
@@ -232,7 +232,7 @@ Only half of the points of the frontiers are displayed out to save some time, th
 
 \subsubsection{Convert the force into commands for the robot}
 
-Once the force to apply to the robot computed we have to make the robot orientates itself in the direction of the vector and adapt its speed to the situation.
+Once the force to apply to the robot is computed we have to make the robot orientate itself in the direction of the vector and adapt its speed to the situation.
 
 To do this we created a function in Controller called $apply\_force$, this function uses part of the algorithm we previously developed for the 'follow the path' assignment of the 'Fundamentals of artificial intelligence' course.
 
@@ -267,10 +267,12 @@ We had almost nothing to add or change to adapt it to our case, we just made sur
 On the figure bellow we can see the path between the goal and the robot, the big blue hexagon is the goal and the more little ones are the subgoals.
 The robot goes to the first subgoal of the path and when it is in reach of it the subgoal is deleted, then the first subgoal becomes the next one until it reaches the goal.
 
+\FloatBarrier
 \begin{figure}[h]
     \centering\includegraphics[width=0.5\textwidth]{path.png}
     \label{fig:path}
     \caption{Path while exploring}
 \end{figure}
+\FloatBarrier
 
-With this method the robot can now explore anywhere, it can even go in the garage and then go out without any trouble.
+With this method the robot can now explore anywhere, it can even go in the garage and then go out without much trouble.
