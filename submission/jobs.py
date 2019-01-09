@@ -3,7 +3,7 @@ import sys
 from cartographer import Cartographer
 from show_map import ShowMap
 from logging import getLogger
-from utils.utils import filled_midpoint_circle, get_deltas
+from utils import filled_midpoint_circle, get_deltas
 
 logger = getLogger('jobs')
 
