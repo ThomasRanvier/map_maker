@@ -22,6 +22,7 @@ parser.add_argument("lower_left_pos_y", type=int, help="The Y coordinate of the 
 parser.add_argument("upper_right_pos_x", type=int, help="The X coordinate of the upper right position.")
 parser.add_argument("upper_right_pos_y", type=int, help="The Y coordinate of the upper right position.")
 parser.add_argument("show_gui", type=bool, help="1 if you want to show the GUI, 0 otherwise.")
+print(sys.argv[6])
 args = parser.parse_args()
 
 logging.basicConfig(format='%(levelname)s:%(name)s:%(funcName)s: %(message)s' ,level=logging.INFO)

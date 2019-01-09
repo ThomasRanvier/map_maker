@@ -7,7 +7,7 @@ robot_pos = Position(0, 0)
 lower_left_pos = Position(-5.0, -5.0)
 upper_right_pos = Position(5.0, 5.0)
 test_map = Map(lower_left_pos, upper_right_pos, 2.0)
-show_map = ShowMap(test_map.grid, True)
+show_map = ShowMap(test_map.grid, False)
 
 test_map.grid[0][0] = 0
 test_map.grid[1][0] = 0
