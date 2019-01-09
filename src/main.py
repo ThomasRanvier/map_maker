@@ -62,7 +62,7 @@ def update_path(path, robot_cell, distance_to_trigger_goal):
 
 if __name__ == '__main__':
     url = args.url
-    size_of_cell_in_meter = 0.25
+    size_of_cell_in_meter = 0.5
     scale = 1 / size_of_cell_in_meter
     distance_to_trigger_goal_m = 3.0
     distance_between_subgoals_m = 5.0
