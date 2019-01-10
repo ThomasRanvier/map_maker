@@ -63,69 +63,73 @@ def update_path(path, robot_cell, distance_to_trigger_goal):
 
 if __name__ == '__main__':
     url = args.url
-    size_of_cell_in_meter = 0.5
-    scale = 1 / size_of_cell_in_meter
-    distance_to_trigger_goal_m = 3.0
-    distance_between_subgoals_m = 5.0
-    lower_left_pos = Position(args.lower_left_pos_x, args.lower_left_pos_y)
-    upper_right_pos = Position(args.upper_right_pos_x, args.upper_right_pos_y)
-    path_planning_delay = 14
-
-    queue_cartographer = Queue(500)
-    queue_sm_map = Queue(500)
-    queue_sm_optionals = Queue(500)
-    queue_fl_current_frontier = Queue(500)
-    queue_fl_ignored_cells = Queue(500)
-
     robot = Robot(url)
-    robot_map = Map(lower_left_pos, upper_right_pos, scale)
     controller = Controller(robot)
-    potential_field = PotentialField(robot)
-    goal_planner = GoalPlanner(queue_fl_current_frontier, queue_fl_ignored_cells)
-    path_planner = PathPlanner(distance_to_trigger_goal_m * scale, distance_between_subgoals_m * scale)
+    try:
+        controller.stop()
+        size_of_cell_in_meter = 0.5
+        scale = 1 / size_of_cell_in_meter
+        distance_to_trigger_goal_m = 3.0
+        distance_between_subgoals_m = 5.0
+        lower_left_pos = Position(args.lower_left_pos_x, args.lower_left_pos_y)
+        upper_right_pos = Position(args.upper_right_pos_x, args.upper_right_pos_y)
+        path_planning_delay = 14
 
-    cartographer_d = Process(target=cartographer_job, args=(queue_cartographer, queue_sm_map, robot_map, robot))
-    cartographer_d.daemon = True
-    cartographer_d.start()
+        queue_cartographer = Queue(500)
+        queue_sm_map = Queue(500)
+        queue_sm_optionals = Queue(500)
+        queue_fl_current_frontier = Queue(500)
+        queue_fl_ignored_cells = Queue(500)
 
-    show_map_d = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot, args.show_gui == 1))
-    show_map_d.daemon = True
-    show_map_d.start()
+        robot_map = Map(lower_left_pos, upper_right_pos, scale)
+        potential_field = PotentialField(robot)
+        goal_planner = GoalPlanner(queue_fl_current_frontier, queue_fl_ignored_cells)
+        path_planner = PathPlanner(distance_to_trigger_goal_m * scale, distance_between_subgoals_m * scale)
 
-    frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_current_frontier, queue_fl_ignored_cells, robot))
-    frontiers_limiter_d.daemon = True
-    frontiers_limiter_d.start()
-    
-    frontiers = None
-    path = []
-    forces = None
-    over = False
-    start_path_planning = 0
+        cartographer_d = Process(target=cartographer_job, args=(queue_cartographer, queue_sm_map, robot_map, robot))
+        cartographer_d.daemon = True
+        cartographer_d.start()
 
-    signal.signal(signal.SIGINT, sigint_handler)
+        show_map_d = Process(target=show_map_job, args=(queue_sm_map, queue_sm_optionals, robot_map, robot, args.show_gui == 1))
+        show_map_d.daemon = True
+        show_map_d.start()
 
-    controller.turn_around()
-    time.sleep(10)
-    while not over:
-        start_loop = time.time()
-        while not queue_cartographer.empty():
-            robot_map = queue_cartographer.get()
-        robot_pos = robot.position
-        robot_cell = robot_map.to_grid_pos(robot_pos)
-        if path != []:
-            forces = potential_field.get_forces(robot_cell, path[0], robot_map)
-            controller.apply_force(forces['gen_force'], robot_pos)
-        path = update_path(path, robot_cell, distance_to_trigger_goal_m * scale)
-        if path == [] or time.time() - start_path_planning >= 5:
-            start_path_planning = time.time()
-            controller.stop()
-            robot_cell = robot_map.to_grid_pos(robot.position)
-            goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
-            path = path_planner.get_path(robot_cell, robot_map, goal_point)
-            if path == []:
-                logger.info('Over')
-                over = True
-        queue_sm_optionals.put([frontiers, forces, path])
-        sleep = 0.1 - (time.time() - start_loop)
-        if sleep > 0:
-            time.sleep(sleep)
+        frontiers_limiter_d = Process(target=frontiers_limiter_job, args=(queue_fl_current_frontier, queue_fl_ignored_cells, robot))
+        frontiers_limiter_d.daemon = True
+        frontiers_limiter_d.start()
+        
+        frontiers = None
+        path = []
+        forces = None
+        over = False
+        start_path_planning = 0
+
+        signal.signal(signal.SIGINT, sigint_handler)
+
+        controller.turn_around()
+        time.sleep(10)
+        while not over:
+            start_loop = time.time()
+            while not queue_cartographer.empty():
+                robot_map = queue_cartographer.get()
+            robot_pos = robot.position
+            robot_cell = robot_map.to_grid_pos(robot_pos)
+            if path != []:
+                forces = potential_field.get_forces(robot_cell, path[0], robot_map)
+                controller.apply_force(forces['gen_force'], robot_pos)
+            path = update_path(path, robot_cell, distance_to_trigger_goal_m * scale)
+            if path == [] or time.time() - start_path_planning >= 5:
+                start_path_planning = time.time()
+                controller.stop()
+                robot_cell = robot_map.to_grid_pos(robot.position)
+                goal_point, frontiers = goal_planner.get_goal_point(robot_cell, robot_map)
+                path = path_planner.get_path(robot_cell, robot_map, goal_point)
+                if path == []:
+                    logger.info('Over')
+                    over = True
+            queue_sm_optionals.put([frontiers, forces, path])
+            sleep = 0.1 - (time.time() - start_loop)
+            if sleep > 0:
+                time.sleep(sleep)
+    except:
+        print('Cannot connect to MRDS server.', sys.stderr)

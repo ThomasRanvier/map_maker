@@ -11,18 +11,19 @@ The received informations are directly adapted to our needs and stored using our
 \section{How to run our program}
 
 \textcolor{red}{\textbf{If the program crashes or if you see that the robot keeps moving when it should have stopped you should kill the remaining python processes before being able to launch the program again.}}
-
+\\
 For this assignment we used Python 3 as programming language, to run the program run the 'mapper.sh' script with the following syntax:
-
+\\
 \begin{lstlisting}[language=bash, basicstyle=\small]
-mapper.sh $1 $2 $3 $4 $5
+mapper.sh $1 $2 $3 $4 $5 $6
 \end{lstlisting}
 
-The 'mapper.sh' script above launches our program with the 5 parameters.
+The 'mapper.sh' script above launches our program with the 6 parameters.
+The url parameter expects a url without the 'http://'.
 
 If you'd rather not use the script from above you can directly launch the 'main.py' python script.
 The usage of the python program is the following:
-
+\\
 \begin{lstlisting}[language=bash, basicstyle=\small]
 usage:python3 main.py [-h] url lower_left_pos_x 
     lower_left_pos_y upper_right_pos_x upper_right_pos_y show_gui
