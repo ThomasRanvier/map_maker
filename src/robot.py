@@ -40,11 +40,8 @@ class Robot:
         :rtype: response
         """
         params = json.dumps({'TargetAngularSpeed': angular_speed, 'TargetLinearSpeed': linear_speed})
-        try:
-            mrds = http.client.HTTPConnection(self.__url)
-            mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
-        except:
-            print('The connection to the MRDS server is not possible', file=sys.stderr)
+        mrds = http.client.HTTPConnection(self.__url)
+        mrds.request('POST', '/lokarria/differentialdrive', params, self.HEADERS)
         response = mrds.getresponse()
         status = response.status
         if status == 204:
@@ -63,11 +60,8 @@ class Robot:
         if time.time() - self.__timer_position < self.__min_delay:
             return self.__last_position
         self.__timer_position = time.time()
-        try:
-            mrds = http.client.HTTPConnection(self.__url)
-            mrds.request('GET', '/lokarria/localization')
-        except:
-            print('The connection to the MRDS server is not possible', file=sys.stderr)
+        mrds = http.client.HTTPConnection(self.__url)
+        mrds.request('GET', '/lokarria/localization')
         response = mrds.getresponse()
         if (response.status == 200):
             pose_data = response.read()
@@ -107,11 +101,8 @@ class Robot:
         :return: The lasers echoes.
         :rtype: Lasers echoes.
         """
-        try:
-            mrds = http.client.HTTPConnection(self.__url)
-            mrds.request('GET', '/lokarria/laser/echoes')
-        except:
-            print('The connection to the MRDS server is not possible', file=sys.stderr)
+        mrds = http.client.HTTPConnection(self.__url)
+        mrds.request('GET', '/lokarria/laser/echoes')
         response = mrds.getresponse()
         if response.status == 200:
             laser_data = response.read().decode('utf-8')
@@ -128,11 +119,8 @@ class Robot:
         :return: The lasers angles.
         :rtype: Lasers angles.
         """
-        try:
-            mrds = http.client.HTTPConnection(self.__url)
-            mrds.request('GET', '/lokarria/laser/properties')
-        except:
-            print('The connection to the MRDS server is not possible', file=sys.stderr)
+        mrds = http.client.HTTPConnection(self.__url)
+        mrds.request('GET', '/lokarria/laser/properties')
         response = mrds.getresponse()
         if response.status == 200:
             laser_data = response.read().decode('utf-8')
