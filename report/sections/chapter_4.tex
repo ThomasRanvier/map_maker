@@ -1,6 +1,25 @@
-At this point the robot was able to explore and discover its environment by itself, but there were some details that we could improve.
+\section{Controller structure}
+
+Some parts of our controller are deliberative and others are reactive, this is how they are separated:
+
+\begin{itemize}
+    \item[$-$] The path planning is deliberative, indeed it creates a path from the map created by the Cartographer.
+        It uses a frontier detector, a goal planner and the A* algorithm for building the path.
+    \item[$-$] The path tracking however is reactive, indeed it directly computes the forces to apply to the robot to make it follow the path while avoiding the obstacles.
+\end{itemize}
+
+\section{Delegations of the tasks}
+
+We separated the different tasks in that way:
+
+\begin{itemize}
+    \item[$-$] Valentin handled most of the mapping part, and the optimisation of all the code by creating subprocesses and making them communicate with each other in a good way.
+    \item[$-$] Thomas handled most of frontier detection, goal planning, path planning and potential fields to make the robot find a new goal, build a path and follow it while avoiding the obstacles.
+\end{itemize}
 
 \section{Inaccessible frontiers}
+
+At this point the robot was able to explore and discover its environment by itself, but there were some details that we could improve.
 
 Sometimes a frontier is found in an inaccessible place, then the robot will go to the closest frontier it can and the closest frontier will always remain an inaccessible one, the robot will then stay stuck.
 
