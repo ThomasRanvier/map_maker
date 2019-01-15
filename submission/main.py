@@ -134,4 +134,4 @@ if __name__ == '__main__':
             if sleep > 0:
                 time.sleep(sleep)
     except:
-        print('Cannot connect to MRDS server.', sys.stderr)
+        print('Cannot connect to MRDS server.', file=sys.stderr)
