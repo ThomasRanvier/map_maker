@@ -64,6 +64,7 @@ def update_path(path, robot_cell, distance_to_trigger_goal):
 if __name__ == '__main__':
     url = args.url
     url.replace('http://', '')
+    logger.info('Corrected url: ' + url)
     robot = Robot(url)
     controller = Controller(robot)
     try:
